@@ -3,11 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon dist/index.js",
-    "startdev": "set DEBUG=express:* & nodemon --experimental-modules --watch src --delay 1 --exec ts-node src/index.ts",
+    "startdev": "set DEBUG=express:* & nodemon --watch src --delay 1 --exec ts-node src/index.ts",
     "build": "tsc",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint --fix src/**/*.ts"
@@ -39,7 +38,6 @@
     "@types/express": "^4.17.13",
     "@types/mocha": "^9.0.0",
     "@types/node": "^16.11.6",
-    "@types/node-fetch": "^3.0.3",
     "@typescript-eslint/eslint-plugin": "^5.3.0",
     "@typescript-eslint/parser": "^5.3.0",
     "eslint": "^7.32.0",
