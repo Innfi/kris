@@ -1,21 +1,32 @@
 import express, { Request, Response } from 'express';
-import fetch from 'node-fetch';
+import axios from 'axios';
+import dotenv from 'dotenv';
 
-const testUrl = '';
+
+dotenv.config();
+
+const testUrl = process.env.STOCK_URL;
+const apiKey = process.env.API_KEY;
+
 const testFetch = async (): Promise<unknown> => {
-  const response = await fetch(testUrl);
-  return response.json();
+  const response = await axios.get(`${testUrl}${apiKey}`);
+  return response.data;
 };
 
 const app = express();
 
 app.get('/', async (_req: Request, res: Response) => {
-  const resp = await testFetch();
+  res.status(200).send({
+    err: 'ok',
+  }).end();
+});
 
+app.get('/test', async (_req: Request, res: Response) => {
+  const resp = await testFetch();
   res.status(200).send({
     err: 'ok',
     data: resp,
-  }).end();
+  });
 });
 
 app.listen(3000, () => {
