@@ -12,5 +12,15 @@ parserOptions:
 plugins:
   - '@typescript-eslint'
 rules: {
+  "linebreak-style": 0,
   "indent": ["error", 2]
 }
+settings: {
+  'import/resolver': {
+    node: {
+      extensions: [ 'ts' ], 
+      paths: [ 'src' ]
+    }
+  }
+}
+  
