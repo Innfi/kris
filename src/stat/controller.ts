@@ -5,29 +5,39 @@ import {
   useContainer, Get, Req, Res, Param, QueryParam, JsonController,
 } from 'routing-controllers';
 
-import { StatRepository } from './repository';
+import StatRepository from './repository';
 
 useContainer(Container);
 
 @Service()
 @JsonController('/stat')
-export class StatController {
+class StatController {
   constructor(
     protected repo: StatRepository,
   ) {}
 
-  @Get('/:code')
-  async getStats(
-    @Req() _req: Request,
+  @Get('/intraday/:code')
+  async getIntradayStats(
+  @Req() _req: Request,
     @Res() res: Response,
     @Param('code') code: string,
-    @QueryParam('type') type: string,
+    @QueryParam('interval') interval: string,
   ) {
-    console.log(`code: ${code}`);
-    console.log(`type: ${type}`);
+    const data = await this.repo.loadIntraday(code, interval);
 
-    const data = await this.repo.loadIntraday(code);
+    return res.status(200).send({ err: 'ok', data });
+  }
+
+  @Get('/daily/:code')
+  async getDailyStats(
+  @Req() _req: Request,
+    @Res() res: Response,
+    @Param('code') code: string,
+  ) {
+    const data = await this.repo.loadDaily(code);
 
     return res.status(200).send({ err: 'ok', data });
   }
 }
+
+export default StatController;

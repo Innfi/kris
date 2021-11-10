@@ -3,10 +3,10 @@ import express from 'express';
 import { Service } from 'typedi';
 import { useExpressServer } from 'routing-controllers';
 
-import { StatController } from 'stat/controller';
+import StatController from './stat/controller';
 
 @Service()
-export class Trady {
+class Trady {
   app: any;
 
   constructor() {
@@ -26,3 +26,5 @@ export class Trady {
     });
   }
 }
+
+export default Trady;

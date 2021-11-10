@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import assert from 'assert';
 
 import { Spot, SpotDetail } from '../src/model';

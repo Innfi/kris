@@ -1,4 +1,4 @@
-import { Trady } from './app';
+import Trady from './app';
 
 const app = new Trady();
 
