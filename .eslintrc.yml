@@ -8,10 +8,11 @@ parser: '@typescript-eslint/parser'
 parserOptions:
   ecmaVersion: 13
   sourceType: module
-  project: "./tsconfig.json"
+  project: [ "./tsconfig.json", './tsconfig.test.json' ]
 plugins:
   - '@typescript-eslint'
 rules: {
   "linebreak-style": 0,
-  "indent": ["error", 2]
+  "indent": ["error", 2], 
+  "no-console": ["error", { allow: ["warn", "error", "log"] }]
 }
