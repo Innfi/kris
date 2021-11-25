@@ -4,27 +4,26 @@ import fs from 'fs';
 
 import { Spot, SpotDetail } from '../src/model';
 
+enum TimestampType {
+  INITIAL = 0, 
+  DAILY = 1, 
+  WEEKLY = 3,
+};
 
-// interface Snapshot {
-//   time: Date;
-//   open: number;
-//   high: number;
-//   low: number;
-//   close: number;
-//   volume: number;
-// };
+interface Snapshot {
+  time: Date;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+};
 
-// class SeriesData {
-//   snapshots: Snapshot[];
-
-//   constructor(input: string) {
-//     this.parseInput(input);
-//   }
-
-//   protected parseInput(input: string): void {
-//     const rawData = JSON.parse(input);
-//   }
-// };
+interface StockData {
+  symbol: string;
+  timestampType: TimestampType;
+  snapshots: Snapshot[];
+};
 
 describe('test:unit', () => {
   it('parse json: simplest one', () => {
@@ -47,6 +46,26 @@ describe('test:unit', () => {
     assert.strictEqual(detail[keyOpen], dataOpen);
   });
 
+  it('parse json: to machine-friendly values', () => {
+    const input: string = fs.readFileSync('./test/sample.json', 'utf-8');
+    const rawData = JSON.parse(input);
+    const seriesDailyKey = 'Time Series (Daily)';
+    const seriesDaily = rawData[seriesDailyKey];
+
+    const dates: string[] = Object.keys(seriesDaily);
+    const snapshots: Snapshot[] = dates.map((value: string) => {
+      const detailData = seriesDaily[value];
+      return {
+        time: new Date(value),  
+        open: detailData['1. open'], 
+        high: detailData['2. high'], 
+        low: detailData['3. low'], 
+        close: detailData['4. close'], 
+        volume: detailData['5. volume'], 
+      };
+    });
+  });
+
   // it('parse json: try with actual data', async () => {
   //   const input: string = fs.readFileSync('./test/data.json', 'utf-8');
 
@@ -58,22 +77,22 @@ describe('test:unit', () => {
   //   //console.log(`meta: ${JSON.stringify(parsedData["Meta Data"])}`);
   // });
 
-  it('parse json: test with JSON.parse', () => {
-    const input = '{"2021-11-04 20:00:00":{"1. open":"217.0000",'
-      + '"2. high":"218.5000","3. low":"217.0000","4. close":"218.1000",'
-      + '"5. volume":"3010"}}';
+  // it('parse json: test with JSON.parse', () => {
+  //   const input = '{"2021-11-04 20:00:00":{"1. open":"217.0000",'
+  //     + '"2. high":"218.5000","3. low":"217.0000","4. close":"218.1000",'
+  //     + '"5. volume":"3010"}}';
 
-    const result: Spot = JSON.parse(input, (key: string, value: any): any => {
-      if(typeof key === 'string') console.log(`string key: ${key}`);
-      if(typeof value === 'object') console.log(`object: ${JSON.stringify(value)}`);
+  //   const result: Spot = JSON.parse(input, (key: string, value: any): any => {
+  //     if(typeof key === 'string') console.log(`string key: ${key}`);
+  //     if(typeof value === 'object') console.log(`object: ${JSON.stringify(value)}`);
 
-      return value;
-    });
+  //     return value;
+  //   });
 
-    const series = result["2021-11-04 20:00:00"];
-    const keys: string[] = Object.keys(series);
-    keys.forEach(value => { console.log(`value: ${value}`) });
+  //   const series = result["2021-11-04 20:00:00"];
+  //   const keys: string[] = Object.keys(series);
+  //   keys.forEach(value => { console.log(`value: ${value}`) });
 
-    console.log(series["1. open"]);
-  });
+  //   console.log(series["1. open"]);
+  // });
 });
