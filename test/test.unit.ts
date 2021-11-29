@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import assert from 'assert';
 import fs from 'fs';
 
-import { Spot, SpotDetail } from '../src/model';
+import { Spot, SpotDetail } from '../src/stat/model';
 
 enum TimestampType {
   INITIAL = 0, 

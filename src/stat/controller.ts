@@ -7,6 +7,7 @@ import {
 
 import StatRepository from './repository';
 
+
 useContainer(Container);
 
 @Service()
