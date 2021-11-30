@@ -20,8 +20,8 @@ class StatRepository {
 
   }
 
-  //getDaily
-  async getDaily(code: string): Promise<any> {
+  //loadDaily
+  async loadDaily(code: string): Promise<any> {
     
   }
 }

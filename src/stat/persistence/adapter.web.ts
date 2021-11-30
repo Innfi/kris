@@ -15,39 +15,39 @@ class AdapterWeb {
   constructor() {}
 
   // getIntraday
-  async getIntraday(code: string, interval: string): Promise<any> {
+  async getIntraday(symbol: string, interval: string): Promise<any> {
     const response = await axios.get(
-      this.toIntradayUrl(this.timeSeriesIntraday, code, interval),
+      this.toIntradayUrl(this.timeSeriesIntraday, symbol, interval),
     );
     return response.data;
   }
 
   protected toIntradayUrl(
     type: string,
-    code: string,
+    symbol: string,
     interval: string,
   ): string {
     return `${referenceUrl}`
       + `?function=${type}`
-      + `&symbol=${code}`
+      + `&symbol=${symbol}`
       + `&interval=${interval}`
       + `&apikey=${apiKey}`;
   }
 
   // getDaily
-  async getDaily(code: string): Promise<any> {
-    const url = this.toDailyUrl(this.timeSeriesDaily, code);
+  async getDaily(symbol: string): Promise<any> {
+    const url = this.toDailyUrl(this.timeSeriesDaily, symbol);
     const response = await axios.get(url);
     return response.data;
   }
 
   protected toDailyUrl(
     type: string,
-    code: string,
+    symbol: string,
   ): string {
     return `${referenceUrl}`
       + `?function=${type}`
-      + `&symbol=${code}`
+      + `&symbol=${symbol}`
       + `&apikey=${apiKey}`;
   }
 };

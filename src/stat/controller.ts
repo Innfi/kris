@@ -5,7 +5,7 @@ import {
   useContainer, Get, Req, Res, Param, QueryParam, JsonController,
 } from 'routing-controllers';
 
-import StatRepository from './repository';
+import StatRepository from './persistence/repository';
 
 
 useContainer(Container);
