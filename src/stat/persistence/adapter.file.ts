@@ -3,21 +3,20 @@ import { Service } from 'typedi';
 import { StockData, TimestampTypeEnum } from 'stat/model';
 import fs from 'fs';
 
-
 export interface ReadIntradayResult {
   err: string;
   stockData?: StockData;
-};
+}
 
 export interface WriteIntradayResult {
   err: string;
-};
+}
 
 @Service()
 export class AdapterFile {
-  readonly dataPath='./data/';
+  readonly dataPath = './data/';
 
-  //readIntraday
+  // readIntraday
   async readIntraday(
     symbol: string, 
     interval: string
@@ -28,19 +27,19 @@ export class AdapterFile {
     }
 
     const rawData: string = fs.readFileSync(effectiveFilePath, 'utf-8');
-    return this.toGetIntradayResult(rawData); 
+    return this.toGetIntradayResult(rawData);
   }
 
   protected toGetIntradayResult(rawData: string): ReadIntradayResult {    
     try {
       return {
-        err: 'ok', 
-        stockData: JSON.parse(rawData) as StockData
+        err: 'ok',
+        stockData: JSON.parse(rawData) as StockData,
       };
     } catch (err: any) {
-      //TODO: logging;
+      // TODO: logging;
       return {
-        err: 'parse json failed'
+        err: 'parse json failed',
       };
     }
   }
@@ -57,10 +56,10 @@ export class AdapterFile {
     }
 
     try {
-      fs.writeFileSync(effectiveFilePath, JSON.stringify(data));
+      fs.writeFileSync(effectiveFilePath, JSON.stringify(data), 'utf8');
     } catch(error: any) {
       //TODO: logging
-      return { err: 'write error' };
+      return { err: 'file write failed'};
     }
 
     return { err: 'ok' };
@@ -82,5 +81,4 @@ export class AdapterFile {
   ): string {
     return `${symbol}.${type.toString()}.${interval}.json`;
   }
-
-};
+}

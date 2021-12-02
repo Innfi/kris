@@ -10,9 +10,8 @@ const apiKey = process.env.API_KEY;
 @Service()
 class AdapterWeb {
   readonly timeSeriesIntraday = 'TIME_SERIES_INTRADAY';
-  readonly timeSeriesDaily = 'TIME_SERIES_DAILY_ADJUSTED';
 
-  constructor() {}
+  readonly timeSeriesDaily = 'TIME_SERIES_DAILY_ADJUSTED';
 
   // getIntraday
   async getIntraday(symbol: string, interval: string): Promise<any> {
@@ -50,6 +49,6 @@ class AdapterWeb {
       + `&symbol=${symbol}`
       + `&apikey=${apiKey}`;
   }
-};
+}
 
 export default AdapterWeb;

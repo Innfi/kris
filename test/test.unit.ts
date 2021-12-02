@@ -5,10 +5,10 @@ import fs from 'fs';
 import { Spot, SpotDetail } from '../src/stat/model';
 
 enum TimestampType {
-  INITIAL = 0, 
-  DAILY = 1, 
+  INITIAL = 0,
+  DAILY = 1,
   WEEKLY = 3,
-};
+}
 
 interface Snapshot {
   time: Date;
@@ -17,13 +17,13 @@ interface Snapshot {
   low: number;
   close: number;
   volume: number;
-};
+}
 
 interface StockData {
   symbol: string;
   timestampType: TimestampType;
   snapshots: Snapshot[];
-};
+}
 
 describe('test:unit', () => {
   it('parse json: simplest one', () => {
@@ -56,12 +56,12 @@ describe('test:unit', () => {
     const snapshots: Snapshot[] = dates.map((value: string) => {
       const detailData = seriesDaily[value];
       return {
-        time: new Date(value),  
-        open: detailData['1. open'], 
-        high: detailData['2. high'], 
-        low: detailData['3. low'], 
-        close: detailData['4. close'], 
-        volume: detailData['5. volume'], 
+        time: new Date(value),
+        open: detailData['1. open'],
+        high: detailData['2. high'],
+        low: detailData['3. low'],
+        close: detailData['4. close'],
+        volume: detailData['5. volume'],
       };
     });
   });

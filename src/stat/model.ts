@@ -1,7 +1,7 @@
 export enum TimestampTypeEnum {
   INTRADAY = 1,
   DAILY = 3,
-};
+}
 
 export interface SpotDetail {
   [milestone: string]: string;
@@ -18,10 +18,10 @@ export interface Snapshot {
   low: number;
   close: number;
   volume: number;
-};
+}
 
 export interface StockData {
   symbol: string;
   timestampType: TimestampTypeEnum;
   snapshots: Snapshot[];
-};
+}
