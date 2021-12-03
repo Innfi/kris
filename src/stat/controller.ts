@@ -5,7 +5,7 @@ import {
   useContainer, Get, Req, Res, Param, QueryParam, JsonController,
 } from 'routing-controllers';
 
-import StatRepository from './persistence/repository';
+import StatRepository from './repository';
 
 useContainer(Container);
 
@@ -28,16 +28,16 @@ class StatController {
     return res.status(200).send({ err: 'ok', data });
   }
 
-  @Get('/daily/:code')
-  async getDailyStats(
-  @Req() _req: Request,
-    @Res() res: Response,
-    @Param('code') code: string,
-  ) {
-    const data = await this.repo.loadDaily(code);
+  // @Get('/daily/:code')
+  // async getDailyStats(
+  // @Req() _req: Request,
+  //   @Res() res: Response,
+  //   @Param('code') code: string,
+  // ) {
+  //   const data = await this.repo.loadDaily(code);
 
-    return res.status(200).send({ err: 'ok', data });
-  }
+  //   return res.status(200).send({ err: 'ok', data });
+  // }
 }
 
 export default StatController;

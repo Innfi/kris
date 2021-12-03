@@ -15,13 +15,14 @@ class AdapterWeb {
 
   // getIntraday
   async getIntraday(symbol: string, interval: string): Promise<any> {
-    const response = await axios.get(
-      this.toIntradayUrl(this.timeSeriesIntraday, symbol, interval),
-    );
+    const url: string = AdapterWeb.toIntradayUrl(this.timeSeriesIntraday, symbol, interval);
+    console.log(`getIntraDay] url: ${url}`);
+    const response = await axios.get(url);
+
     return response.data;
   }
 
-  protected toIntradayUrl(
+  static toIntradayUrl(
     type: string,
     symbol: string,
     interval: string,
@@ -35,12 +36,12 @@ class AdapterWeb {
 
   // getDaily
   async getDaily(symbol: string): Promise<any> {
-    const url = this.toDailyUrl(this.timeSeriesDaily, symbol);
+    const url = AdapterWeb.toDailyUrl(this.timeSeriesDaily, symbol);
     const response = await axios.get(url);
     return response.data;
   }
 
-  protected toDailyUrl(
+  static toDailyUrl(
     type: string,
     symbol: string,
   ): string {

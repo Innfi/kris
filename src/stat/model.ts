@@ -3,14 +3,6 @@ export enum TimestampTypeEnum {
   DAILY = 3,
 }
 
-export interface SpotDetail {
-  [milestone: string]: string;
-}
-
-export interface Spot {
-  [timestamp: string]: SpotDetail;
-}
-
 export interface Snapshot {
   time: Date;
   open: number;
@@ -24,4 +16,13 @@ export interface StockData {
   symbol: string;
   timestampType: TimestampTypeEnum;
   snapshots: Snapshot[];
+}
+
+export interface ReadIntradayResult {
+  err: string;
+  stockData?: StockData;
+}
+
+export interface WriteIntradayResult {
+  err: string;
 }

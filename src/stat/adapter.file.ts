@@ -1,36 +1,29 @@
 import { Service } from 'typedi';
 
-import { StockData, TimestampTypeEnum } from 'stat/model';
 import fs from 'fs';
-
-export interface ReadIntradayResult {
-  err: string;
-  stockData?: StockData;
-}
-
-export interface WriteIntradayResult {
-  err: string;
-}
+import {
+  ReadIntradayResult, StockData, TimestampTypeEnum, WriteIntradayResult,
+} from './model';
 
 @Service()
-export class AdapterFile {
+class AdapterFile {
   readonly dataPath = './data/';
 
   // readIntraday
   async readIntraday(
-    symbol: string, 
-    interval: string
+    symbol: string,
+    interval: string,
   ): Promise<ReadIntradayResult> {
     const effectiveFilePath = this.toEffectiveFilepath(symbol, interval);
-    if(!fs.existsSync(effectiveFilePath)) {
+    if (!fs.existsSync(effectiveFilePath)) {
       return { err: 'getIntraday] file not found' };
     }
 
     const rawData: string = fs.readFileSync(effectiveFilePath, 'utf-8');
-    return this.toGetIntradayResult(rawData);
+    return AdapterFile.toGetIntradayResult(rawData);
   }
 
-  protected toGetIntradayResult(rawData: string): ReadIntradayResult {    
+  static toGetIntradayResult(rawData: string): ReadIntradayResult {
     try {
       return {
         err: 'ok',
@@ -44,41 +37,43 @@ export class AdapterFile {
     }
   }
 
-  //writeIntraday  
+  // writeIntraday
   async writeIntraday(
-    symbol: string, 
-    interval: string, 
+    symbol: string,
+    interval: string,
     data: StockData,
   ): Promise<WriteIntradayResult> {
     const effectiveFilePath = this.toEffectiveFilepath(symbol, interval);
-    if(fs.existsSync(effectiveFilePath)) {
+    if (fs.existsSync(effectiveFilePath)) {
       return { err: 'writeIntraday] file exists' };
     }
 
     try {
       fs.writeFileSync(effectiveFilePath, JSON.stringify(data), 'utf8');
-    } catch(error: any) {
-      //TODO: logging
-      return { err: 'file write failed'};
+    } catch (error: any) {
+      // TODO: logging
+      return { err: 'file write failed' };
     }
 
     return { err: 'ok' };
   }
 
   protected toEffectiveFilepath(symbol: string, interval: string): string {
-    const filename = this.toIntradayFilename(
+    const filename = AdapterFile.toIntradayFilename(
       TimestampTypeEnum.INTRADAY,
-      symbol, 
-      interval, 
+      symbol,
+      interval,
     );
     return `${this.dataPath}${filename}`;
   }
 
-  protected toIntradayFilename(
-    type: TimestampTypeEnum, 
-    symbol: string, 
+  static toIntradayFilename(
+    type: TimestampTypeEnum,
+    symbol: string,
     interval: string,
   ): string {
     return `${symbol}.${type.toString()}.${interval}.json`;
   }
 }
+
+export default AdapterFile;

@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha -r ts-node/register test/test.unit.ts --exit",
+    "test:int": "mocha -r ts-node/register test.integration/stat.ts --exit",
     "build": "tsc --build",
     "clean": "rm -rf ./dist",
     "start": "nodemon dist/src/index.js",
