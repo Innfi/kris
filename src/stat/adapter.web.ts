@@ -16,7 +16,6 @@ class AdapterWeb {
   // getIntraday
   async getIntraday(symbol: string, interval: string): Promise<any> {
     const url: string = AdapterWeb.toIntradayUrl(this.timeSeriesIntraday, symbol, interval);
-    console.log(`getIntraDay] url: ${url}`);
     const response = await axios.get(url);
 
     return response.data;

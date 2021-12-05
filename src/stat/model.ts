@@ -14,6 +14,7 @@ export interface Snapshot {
 
 export interface StockData {
   symbol: string;
+  interval: string;
   timestampType: TimestampTypeEnum;
   snapshots: Snapshot[];
 }

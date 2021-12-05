@@ -5,6 +5,21 @@ import { useExpressServer } from 'routing-controllers';
 
 import StatController from './stat/controller';
 
+/**
+TODO
+-------------------------------------------------------------------------------
+* caching by file
+- create a suitable topic name of data folders,
+(for names will be applied to memory caches too)
+- interface for portfolio lists
+
+DONE
+-------------------------------------------------------------------------------
+retrieve stock data from web
+parsing data to more machine-friendly style
+save / retrieve stock data from file
+*/
+
 @Service()
 class Trady {
   app: any;

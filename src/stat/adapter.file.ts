@@ -41,8 +41,10 @@ class AdapterFile {
   async writeIntraday(
     symbol: string,
     interval: string,
-    data: StockData,
+    data: StockData | undefined,
   ): Promise<WriteIntradayResult> {
+    if (!data) return { err: 'no stock data' };
+
     const effectiveFilePath = this.toEffectiveFilepath(symbol, interval);
     if (fs.existsSync(effectiveFilePath)) {
       return { err: 'writeIntraday] file exists' };
