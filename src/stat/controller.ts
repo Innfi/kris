@@ -1,13 +1,10 @@
-import 'reflect-metadata';
 import { Request, Response } from 'express';
-import { Container, Service } from 'typedi';
+import { Service } from 'typedi';
 import {
-  useContainer, Get, Req, Res, Param, QueryParam, JsonController,
+  Get, Req, Res, Param, QueryParam, JsonController,
 } from 'routing-controllers';
 
 import StatRepository from './repository';
-
-useContainer(Container);
 
 @Service()
 @JsonController('/stat')
@@ -18,11 +15,11 @@ class StatController {
 
   @Get('/intraday/:code')
   async getIntradayStats(
-  @Req() _req: Request,
-    @Res() res: Response,
-    @Param('code') code: string,
-    @QueryParam('interval') interval: string,
-  ) {
+    @Req() _req: Request,
+      @Res() res: Response,
+      @Param('code') code: string,
+      @QueryParam('interval') interval: string,
+  ): Promise<Response> {
     const data = await this.repo.loadIntraday(code, interval);
 
     return res.status(200).send({ err: 'ok', data });

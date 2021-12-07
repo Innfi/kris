@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha -r ts-node/register test/test.unit.ts --exit",
-    "test:int": "mocha -r ts-node/register test.integration/stat.ts --exit",
+    "test:int": "mocha -r ts-node/register test.integration/port.ts --exit",
     "build": "tsc --build",
     "clean": "rm -rf ./dist",
-    "start": "nodemon dist/src/index.js",
+    "start": "tsc --build && node dist/src/index.js",
     "startdev": "nodemon --exec npx ts-node src/index.ts",
     "lint": "eslint src/**/*.ts test/**/*.ts",
     "lint:fix": "eslint --fix src/**/*.ts test/**/*.ts"

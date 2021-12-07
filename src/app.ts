@@ -1,9 +1,12 @@
 import 'reflect-metadata';
 import express from 'express';
-import { Service } from 'typedi';
-import { useExpressServer } from 'routing-controllers';
+import { Container, Service } from 'typedi';
+import { useExpressServer, useContainer } from 'routing-controllers';
 
 import StatController from './stat/controller';
+import PortController from './portfolio/controller';
+
+useContainer(Container);
 
 /**
 TODO
@@ -30,6 +33,7 @@ class Trady {
     useExpressServer(this.app, {
       controllers: [
         StatController,
+        PortController,
       ],
     });
   }
