@@ -10,13 +10,13 @@ class AdapterFile {
   readonly dataPath = './data/';
 
   // readIntraday
-  async readIntraday(
+  readIntraday(
     symbol: string,
     interval: string,
-  ): Promise<ReadIntradayResult> {
+  ): ReadIntradayResult {
     const effectiveFilePath = this.toEffectiveFilepath(symbol, interval);
     if (!fs.existsSync(effectiveFilePath)) {
-      return { err: 'getIntraday] file not found' };
+      return { err: 'readIntraday] file not found' };
     }
 
     const rawData: string = fs.readFileSync(effectiveFilePath, 'utf-8');
@@ -38,11 +38,11 @@ class AdapterFile {
   }
 
   // writeIntraday
-  async writeIntraday(
+  writeIntraday(
     symbol: string,
     interval: string,
-    data: StockData | undefined,
-  ): Promise<WriteIntradayResult> {
+    data?: StockData,
+  ): WriteIntradayResult {
     if (!data) return { err: 'no stock data' };
 
     const effectiveFilePath = this.toEffectiveFilepath(symbol, interval);

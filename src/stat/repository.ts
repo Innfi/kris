@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { Service } from 'typedi';
 
 import { ReadIntradayResult } from './model';
@@ -18,7 +17,8 @@ class StatRepository {
     symbol: string,
     interval: string,
   ): Promise<ReadIntradayResult> {
-    const readResult: ReadIntradayResult = await this.adapterFile.readIntraday(symbol, interval);
+    const readResult: ReadIntradayResult =
+      this.adapterFile.readIntraday(symbol, interval);
     if (readResult.err === 'ok') {
       console.log('loadIntraday] read from file');
       return readResult;
@@ -32,12 +32,14 @@ class StatRepository {
       };
     }
 
-    const result: ReadIntradayResult = parseStockData(symbol, interval, parsed);
-    if (result.err !== 'ok') return result;
+    const parseResult: ReadIntradayResult = 
+      parseStockData(symbol, interval, parsed);
+    if (parseResult.err !== 'ok') return parseResult;
 
-    await this.adapterFile.writeIntraday(symbol, interval, result.stockData);
+    this.adapterFile.writeIntraday(
+      symbol, interval, parseResult.stockData);
 
-    return result;
+    return parseResult;
   }
 
   // loadDaily

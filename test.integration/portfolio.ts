@@ -1,7 +1,7 @@
 import assert from 'assert';
 import fs from 'fs';
 
-import PortDict from '../src/portfolio/model';
+import { PortDict } from '../src/portfolio/model';
 
 describe('port: repository', () => {
   it('portfolio dictionary by file', () => {

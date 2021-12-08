@@ -1,5 +1,9 @@
-type PortDict = {
+export type PortDict = {
   [email: string]: string[];
 };
 
-export default PortDict;
+export interface LoadPortfolioResult {
+  err: string;
+  symbols?: string[];
+};
+
