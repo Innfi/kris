@@ -17,8 +17,7 @@ class StatRepository {
     symbol: string,
     interval: string,
   ): Promise<ReadIntradayResult> {
-    const readResult: ReadIntradayResult =
-      this.adapterFile.readIntraday(symbol, interval);
+    const readResult: ReadIntradayResult = this.adapterFile.readIntraday(symbol, interval);
     if (readResult.err === 'ok') {
       console.log('loadIntraday] read from file');
       return readResult;
@@ -32,12 +31,10 @@ class StatRepository {
       };
     }
 
-    const parseResult: ReadIntradayResult = 
-      parseStockData(symbol, interval, parsed);
+    const parseResult: ReadIntradayResult = parseStockData(symbol, interval, parsed);
     if (parseResult.err !== 'ok') return parseResult;
 
-    this.adapterFile.writeIntraday(
-      symbol, interval, parseResult.stockData);
+    this.adapterFile.writeIntraday(symbol, interval, parseResult.stockData);
 
     return parseResult;
   }

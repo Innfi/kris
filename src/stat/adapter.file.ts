@@ -1,6 +1,6 @@
 import { Service } from 'typedi';
-
 import fs from 'fs';
+
 import {
   ReadIntradayResult, StockData, TimestampTypeEnum, WriteIntradayResult,
 } from './model';

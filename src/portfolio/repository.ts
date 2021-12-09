@@ -1,6 +1,6 @@
 import { Service } from 'typedi';
 
-import { PortDict, LoadPortfolioResult } from './model';
+import { LoadPortfolioResult, SavePortfolioResult } from './model';
 import AdapterFile from './adapter.file';
 
 @Service()
@@ -13,7 +13,9 @@ class PortRepository {
   }
 
   // savePortfolio
-  //savePortfolio()
-};
+  savePortfolio(email: string, symbols: string[]): SavePortfolioResult {
+    return this.fileAdapter.writeUserPort(email, symbols);
+  }
+}
 
 export default PortRepository;
