@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { Service } from 'typedi';
 import {
-  Req, Res, Post, JsonController, Body, Get, QueryParam,
+  Req, Res, Post, JsonController, Body, Get, Param,
 } from 'routing-controllers';
 
 import { LoadPortfolioResult, SavePortfolioResult } from './model';
@@ -23,18 +23,19 @@ class PortController {
       @Res() res: Response,
       @Body() body: AddPortfolioInput,
   ): Promise<Response> {
-    const result: SavePortfolioResult = await this.repo.savePortfolio(body.email, body.symbols);
+    const result: SavePortfolioResult = await this.repo
+      .savePortfolio(body.email, body.symbols);
 
     if (result.err !== 'ok') return res.status(400).send({ err: result.err });
 
     return res.status(200).send({ err: 'ok' });
   }
 
-  @Get('/list')
+  @Get('/list/:email')
   async listPortfolio(
-    @Req() _req: Request,
+    @Req() req: Request,
       @Res() res: Response,
-      @QueryParam('email') email: string,
+      @Param('email') email: string,
   ): Promise<Response> {
     const result: LoadPortfolioResult = await this.repo.loadPortfolio(email);
 

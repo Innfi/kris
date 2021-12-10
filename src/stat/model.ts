@@ -27,3 +27,8 @@ export interface ReadIntradayResult {
 export interface WriteIntradayResult {
   err: string;
 }
+
+export interface LoadPortfolioStatsResult {
+  err: string;
+  stockDataByPorts?: StockData[];
+}
