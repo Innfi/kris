@@ -3,7 +3,7 @@ import fs from 'fs';
 
 import {
   ReadIntradayResult, StockData, TimestampTypeEnum, WriteIntradayResult,
-} from './model';
+} from '../model';
 
 @Service()
 class AdapterFile {

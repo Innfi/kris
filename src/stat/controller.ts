@@ -4,7 +4,7 @@ import {
   Get, Req, Res, Param, QueryParam, JsonController,
 } from 'routing-controllers';
 
-import { LoadPortfolioStatsResult, ReadIntradayResult } from './model';
+import { ReadIntradayResult } from './model';
 import StatService from './service';
 
 @Service()
@@ -27,17 +27,17 @@ class StatController {
     return res.status(200).send(result);
   }
 
-  @Get('/byport/intraday/:email')
-  async getIntradayStatsByPort(
-    @Req() _req: Request,
-      @Res() res: Response,
-      @Param('email') email: string,
-  ): Promise<Response> {
-    const result: LoadPortfolioStatsResult = await this.service
-      .loadIntradayByPort(email);
+  // @Get('/byport/intraday/:email')
+  // async getIntradayStatsByPort(
+  //   @Req() _req: Request,
+  //     @Res() res: Response,
+  //     @Param('email') email: string,
+  // ): Promise<Response> {
+  //   const result: LoadPortfolioStatsResult = await this.service
+  //     .loadIntradayByPort(email);
 
-    return res.status(200).send(result);
-  }
+  //   return res.status(200).send(result);
+  // }
 
   // @Get('/daily/:code')
   // async getDailyStats(

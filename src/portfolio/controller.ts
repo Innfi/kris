@@ -5,7 +5,7 @@ import {
 } from 'routing-controllers';
 
 import { LoadPortfolioResult, SavePortfolioResult } from './model';
-import PortRepository from './repository';
+import PortService from './service';
 
 interface AddPortfolioInput {
   email: string;
@@ -15,7 +15,7 @@ interface AddPortfolioInput {
 @Service()
 @JsonController('/port')
 class PortController {
-  constructor(private repo: PortRepository) {}
+  constructor(private service: PortService) {}
 
   @Post('/add')
   async addPortfolio(
@@ -23,8 +23,8 @@ class PortController {
       @Res() res: Response,
       @Body() body: AddPortfolioInput,
   ): Promise<Response> {
-    const result: SavePortfolioResult = await this.repo
-      .savePortfolio(body.email, body.symbols);
+    const result: SavePortfolioResult = await this.service
+      .savePort(body.email, body.symbols);
 
     if (result.err !== 'ok') return res.status(400).send({ err: result.err });
 
@@ -37,7 +37,7 @@ class PortController {
       @Res() res: Response,
       @Param('email') email: string,
   ): Promise<Response> {
-    const result: LoadPortfolioResult = await this.repo.loadPortfolio(email);
+    const result: LoadPortfolioResult = await this.service.listPort(email);
 
     if (result.err !== 'ok') return res.status(400).send({ err: result.err });
 

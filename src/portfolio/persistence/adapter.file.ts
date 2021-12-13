@@ -1,7 +1,7 @@
 import { Service } from 'typedi';
 
 import fs from 'fs';
-import { LoadPortfolioResult, SavePortfolioResult } from './model';
+import { LoadPortfolioResult, SavePortfolioResult } from '../model';
 
 @Service()
 class AdapterFile {

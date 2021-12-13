@@ -1,9 +1,9 @@
 import { Service } from 'typedi';
 
-import { ReadIntradayResult } from './model';
+import { ReadIntradayResult } from '../model';
 import AdapterFile from './adapter.file';
 import AdapterWeb from './adapter.web';
-import parseStockData from './stock.parser';
+import parseStockData from '../domain/stock.parser';
 
 @Service()
 class StatRepository {

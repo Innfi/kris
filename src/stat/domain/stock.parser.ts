@@ -1,4 +1,4 @@
-import { ReadIntradayResult, Snapshot, TimestampTypeEnum } from './model';
+import { ReadIntradayResult, Snapshot, TimestampTypeEnum } from '../model';
 
 const parseStockData = (
   symbol: string,
