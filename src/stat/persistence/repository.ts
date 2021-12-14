@@ -1,15 +1,17 @@
 import { Service } from 'typedi';
 
 import { ReadIntradayResult } from '../model';
+import parseStockData from '../domain/stock.parser';
 import AdapterFile from './adapter.file';
 import AdapterWeb from './adapter.web';
-import parseStockData from '../domain/stock.parser';
+import AdapterRedis from './adapter.redis';
 
 @Service()
 class StatRepository {
   constructor(
     private adapterWeb: AdapterWeb,
     private adapterFile: AdapterFile,
+    private adapterRedis: AdapterRedis,
   ) {}
 
   // loadIntraday

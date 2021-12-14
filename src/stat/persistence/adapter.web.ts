@@ -14,11 +14,11 @@ class AdapterWeb {
   readonly timeSeriesDaily = 'TIME_SERIES_DAILY_ADJUSTED';
 
   // getIntraday
-  async getIntraday(symbol: string, interval: string): Promise<any> {
+  async getIntraday(symbol: string, interval: string): Promise<string> {
     const url: string = AdapterWeb.toIntradayUrl(this.timeSeriesIntraday, symbol, interval);
     const response = await axios.get(url);
 
-    return response.data;
+    return response.data as string;
   }
 
   static toIntradayUrl(
