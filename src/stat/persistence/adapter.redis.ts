@@ -27,7 +27,7 @@ class AdapterRedis {
   }
 
   protected async ensureConnected(): Promise<void> {
-    if(this.client) return;
+    if (this.client) return;
 
     this.client = createClient({ url: redisUrl });
 
@@ -35,11 +35,10 @@ class AdapterRedis {
       console.log(`error: ${err}`);
     });
 
-    this.client.on('connected', )
+    this.client.on('connected');
 
     await this.client.connect();
     console.log('ensureConnected');
-
   }
 
   protected toStockKey(

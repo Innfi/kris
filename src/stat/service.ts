@@ -5,9 +5,7 @@ import StatRepository from './persistence/repository';
 
 @Service()
 class StatService {
-  constructor(
-    protected statRepo: StatRepository,
-  ) {}
+  constructor(protected statRepo: StatRepository) {}
 
   // loadIntraday
   async loadIntraday(

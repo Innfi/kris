@@ -1,7 +1,12 @@
 import { Request, Response } from 'express';
 import { Service } from 'typedi';
 import {
-  Get, Req, Res, Param, QueryParam, JsonController,
+  Get,
+  Req,
+  Res,
+  Param,
+  QueryParam,
+  JsonController,
 } from 'routing-controllers';
 
 import { ReadIntradayResult } from './model';
@@ -10,19 +15,19 @@ import StatService from './service';
 @Service()
 @JsonController('/stat')
 class StatController {
-  constructor(
-    protected service: StatService,
-  ) {}
+  constructor(protected service: StatService) {}
 
   @Get('/intraday/:code')
   async getIntradayStats(
     @Req() _req: Request,
-      @Res() res: Response,
-      @Param('symbol') symbol: string,
-      @QueryParam('interval') interval: string,
+    @Res() res: Response,
+    @Param('symbol') symbol: string,
+    @QueryParam('interval') interval: string,
   ): Promise<Response> {
-    const result: ReadIntradayResult = await this.service
-      .loadIntraday(symbol, interval);
+    const result: ReadIntradayResult = await this.service.loadIntraday(
+      symbol,
+      interval,
+    );
 
     return res.status(200).send(result);
   }

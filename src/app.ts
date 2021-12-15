@@ -32,10 +32,7 @@ class Trady {
     this.app = express();
 
     useExpressServer(this.app, {
-      controllers: [
-        StatController,
-        PortController,
-      ],
+      controllers: [StatController, PortController],
     });
   }
 

@@ -1,7 +1,13 @@
 import { Request, Response } from 'express';
 import { Service } from 'typedi';
 import {
-  Req, Res, Post, JsonController, Body, Get, Param,
+  Req,
+  Res,
+  Post,
+  JsonController,
+  Body,
+  Get,
+  Param,
 } from 'routing-controllers';
 
 import { LoadPortfolioResult, SavePortfolioResult } from './model';
@@ -20,11 +26,13 @@ class PortController {
   @Post('/add')
   async addPortfolio(
     @Req() _req: Request,
-      @Res() res: Response,
-      @Body() body: AddPortfolioInput,
+    @Res() res: Response,
+    @Body() body: AddPortfolioInput,
   ): Promise<Response> {
-    const result: SavePortfolioResult = await this.service
-      .savePort(body.email, body.symbols);
+    const result: SavePortfolioResult = await this.service.savePort(
+      body.email,
+      body.symbols,
+    );
 
     if (result.err !== 'ok') return res.status(400).send({ err: result.err });
 
@@ -34,8 +42,8 @@ class PortController {
   @Get('/list/:email')
   async listPortfolio(
     @Req() req: Request,
-      @Res() res: Response,
-      @Param('email') email: string,
+    @Res() res: Response,
+    @Param('email') email: string,
   ): Promise<Response> {
     const result: LoadPortfolioResult = await this.service.listPort(email);
 
