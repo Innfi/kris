@@ -7,46 +7,54 @@ import { StockData, TimestampTypeEnum } from 'stat/model';
 dotenv.config();
 const redisUrl = process.env.REDIS_URL;
 
+const client = createClient({ url: redisUrl });
+type RedisClientType = typeof client;
+
+const toStockKey = (
+  type: TimestampTypeEnum,
+  symbol: string,
+  interval: string,
+): string => {
+  return `${type.toString()}:${symbol}:${interval}`;
+}
+
 @Service()
 class AdapterRedis {
-  protected client: any = undefined;
+  async init() {
+    this.initEvent(client);
 
-  constructor() {}
-
-  //setStockData
-  async setStockData(
-    type: TimestampTypeEnum,
-    symbol: string,
-    interval: string,
-    stockData: StockData,
-  ): Promise<void> {
-    this.ensureConnected();
-
-    const key = this.toStockKey(type, symbol, interval);
-    this.client.set(key, JSON.stringify(stockData));
+    await client.connect();
   }
 
-  protected async ensureConnected(): Promise<void> {
-    if (this.client) return;
-
-    this.client = createClient({ url: redisUrl });
-
-    this.client.on('error', (err: Error) => {
-      console.log(`error: ${err}`);
+  protected initEvent(client: RedisClientType) {
+    client.on('connect', () => {
+      console.log('redis connected');
     });
 
-    this.client.on('connected');
+    client.on('end', () => {
+      console.log('redis disconnected');
+    });
 
-    await this.client.connect();
-    console.log('ensureConnected');
+    client.on('reconnecting', () => {
+      console.log('redis reconnecting');
+    });
   }
 
-  protected toStockKey(
-    type: TimestampTypeEnum,
-    symbol: string,
-    interval: string,
-  ): string {
-    return `${type.toString()}:${symbol}:${interval}`;
+  //setStockData 
+  setStockData(type: TimestampTypeEnum, symbol: string, interval: string, 
+    stockData: StockData) {
+    const key = toStockKey(type, symbol, interval);
+    client.set(key, JSON.stringify(stockData));
+  }
+
+  //getStockData
+  getStockData(type: TimestampTypeEnum, symbol: string, interval: string): string {
+    const key = toStockKey(type, symbol, interval);
+
+    const rawData = client.get(key);
+    if(typeof rawData === 'string') return rawData;
+
+    return '';
   }
 }
 
