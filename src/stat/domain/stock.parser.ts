@@ -1,10 +1,10 @@
-import { ReadIntradayResult, Snapshot, TimestampTypeEnum } from '../model';
+import { ReadStockDataResult, Snapshot, TimestampTypeEnum } from '../model';
 
 const parseStockData = (
   symbol: string,
   interval: string,
   parsed: any,
-): ReadIntradayResult => {
+): ReadStockDataResult => {
   const nameSeriesDaily = `Time Series (${interval})`;
   const nameOpen = '1. open';
   const nameHigh = '2. high';

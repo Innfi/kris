@@ -7,11 +7,10 @@ import { ReadIntradayResult, StockData } from '../src/stat/model';
 import StatRepository from '../src/stat/repository';
 import parseStockData from '../src/stat/stock.parser';
 
-
 describe('stat: persistence test', () => {
   // it('file adapter: basic behavior', async () => {
   //   const testResult: ReadIntradayResult = {
-  //     err: 'ok', 
+  //     err: 'ok',
   //   };
 
   //   assert.strictEqual(testResult !== undefined, true);
@@ -28,8 +27,11 @@ describe('stat: persistence test', () => {
   it('repository: parse stock data', () => {
     const rawData: string = fs.readFileSync('./ex/gme.json', 'utf-8');
 
-    const readResult: ReadIntradayResult = 
-      parseStockData('GME', '60min', rawData);
+    const readResult: ReadIntradayResult = parseStockData(
+      'GME',
+      '60min',
+      rawData,
+    );
 
     assert.strictEqual(readResult.err, 'ok');
     assert.strictEqual(readResult.stockData !== undefined, true);

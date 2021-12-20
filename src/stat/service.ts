@@ -1,6 +1,6 @@
 import { Service } from 'typedi';
 
-import { ReadIntradayResult } from './model';
+import { ReadStockDataResult } from './model';
 import StatRepository from './persistence/repository';
 
 @Service()
@@ -11,7 +11,7 @@ class StatService {
   async loadIntraday(
     symbol: string,
     interval: string,
-  ): Promise<ReadIntradayResult> {
+  ): Promise<ReadStockDataResult> {
     try {
       return await this.statRepo.loadIntraday(symbol, interval);
     } catch (err: any) {

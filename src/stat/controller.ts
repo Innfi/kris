@@ -9,7 +9,7 @@ import {
   JsonController,
 } from 'routing-controllers';
 
-import { ReadIntradayResult } from './model';
+import { ReadStockDataResult } from './model';
 import StatService from './service';
 
 @Service()
@@ -24,7 +24,7 @@ class StatController {
     @Param('symbol') symbol: string,
     @QueryParam('interval') interval: string,
   ): Promise<Response> {
-    const result: ReadIntradayResult = await this.service.loadIntraday(
+    const result: ReadStockDataResult = await this.service.loadIntraday(
       symbol,
       interval,
     );

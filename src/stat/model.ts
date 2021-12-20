@@ -19,12 +19,12 @@ export interface StockData {
   snapshots: Snapshot[];
 }
 
-export interface ReadIntradayResult {
+export interface ReadStockDataResult {
   err: string;
   stockData?: StockData;
 }
 
-export interface WriteIntradayResult {
+export interface WriteStockDataResult {
   err: string;
 }
 

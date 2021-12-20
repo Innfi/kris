@@ -2,10 +2,10 @@ import { Service } from 'typedi';
 import fs from 'fs';
 
 import {
-  ReadIntradayResult,
+  ReadStockDataResult,
   StockData,
   TimestampTypeEnum,
-  WriteIntradayResult,
+  WriteStockDataResult,
 } from '../model';
 
 @Service()
@@ -13,7 +13,7 @@ class AdapterFile {
   readonly dataPath = './data/';
 
   // readIntraday
-  readIntraday(symbol: string, interval: string): ReadIntradayResult {
+  readIntraday(symbol: string, interval: string): ReadStockDataResult {
     const effectiveFilePath = this.toEffectiveFilepath(symbol, interval);
     if (!fs.existsSync(effectiveFilePath)) {
       return { err: 'readIntraday] file not found' };
@@ -23,7 +23,7 @@ class AdapterFile {
     return AdapterFile.toGetIntradayResult(rawData);
   }
 
-  static toGetIntradayResult(rawData: string): ReadIntradayResult {
+  static toGetIntradayResult(rawData: string): ReadStockDataResult {
     try {
       return {
         err: 'ok',
@@ -42,7 +42,7 @@ class AdapterFile {
     symbol: string,
     interval: string,
     data?: StockData,
-  ): WriteIntradayResult {
+  ): WriteStockDataResult {
     if (!data) return { err: 'no stock data' };
 
     const effectiveFilePath = this.toEffectiveFilepath(symbol, interval);
