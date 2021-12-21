@@ -45,10 +45,10 @@ export const getStockData = async (
   } catch (err: any) {
     console.log(`getStockData error: ${err}`);
     return {
-      err: 'parse json failed'
-    }
+      err: 'parse json failed',
+    };
   }
-}
+};
 
 export const setStockData = async (
   type: TimestampTypeEnum,
@@ -57,13 +57,22 @@ export const setStockData = async (
   stockData: StockData,
 ) => {
   const key = toStockKey(type, symbol, interval);
-  
+
   try {
-    await adapterRedis.set(key, JSON.stringify(stockData));
+    const expireTime = toSeconds(interval);
+    if (!expireTime) return { err: 'invalid interval' };
+
+    await adapterRedis.setEx(key, expireTime, JSON.stringify(stockData));
   } catch (err: any) {
     console.log(`setSeockData error: ${err}`);
     return { err: 'write failed' };
   }
 
   return { err: 'ok' };
-}
+};
+
+const toSeconds = (interval: string): number => {
+  const min = interval.replace('min', '');
+
+  return Number.parseInt(min) * 60;
+};

@@ -1,49 +1,72 @@
 import { Service } from 'typedi';
 
-import { ReadStockDataResult } from '../model';
+import { ReadStockDataResult, TimestampTypeEnum } from '../model';
 import parseStockData from '../domain/stock.parser';
-import AdapterFile from './adapter.file';
+//import AdapterFile from './adapter.file';
 import AdapterWeb from './adapter.web';
+import { adapterRedis, setStockData, getStockData } from './adapter.redis';
 
 @Service()
 class StatRepository {
   constructor(
     private adapterWeb: AdapterWeb,
-    private adapterFile: AdapterFile,
-  ) {}
+  ) //private adapterFile: AdapterFile,
+  { }
 
   // loadIntraday
   async loadIntraday(
     symbol: string,
     interval: string,
   ): Promise<ReadStockDataResult> {
-    const readResult: ReadStockDataResult = this.adapterFile.readIntraday(
+    //FIXME: interface
+
+    // const readResult: ReadStockDataResult = this.adapterFile.readIntraday(
+    //   symbol,
+    //   interval,
+    // );
+    // if (readResult.err === 'ok') {
+    //   console.log('loadIntraday] read from file');
+    //   return readResult;
+    // }
+    let readResult: ReadStockDataResult = await getStockData(
+      TimestampTypeEnum.INTRADAY,
       symbol,
       interval,
     );
     if (readResult.err === 'ok') {
-      console.log('loadIntraday] read from file');
+      console.log(`loadIntraday] read from cache`);
       return readResult;
     }
 
-    // read stockData from web and transform
-    const parsed: any = await this.adapterWeb.getIntraday(symbol, interval);
+    const parseResult: ReadStockDataResult = await this.loadIntradayFromWeb(
+      symbol,
+      interval,
+    );
+    if (parseResult.err !== 'ok') return parseResult;
+
+    //this.adapterFile.writeIntraday(symbol, interval, parseResult.stockData);
+    await setStockData(
+      TimestampTypeEnum.INTRADAY,
+      symbol,
+      interval,
+      parseResult.stockData!,
+    );
+
+    return parseResult;
+  }
+
+  protected async loadIntradayFromWeb(
+    symbol: string,
+    interval: string,
+  ): Promise<ReadStockDataResult> {
+    const parsed: string = await this.adapterWeb.getIntraday(symbol, interval);
     if (!parsed) {
       return {
         err: 'invalid input',
       };
     }
 
-    const parseResult: ReadStockDataResult = parseStockData(
-      symbol,
-      interval,
-      parsed,
-    );
-    if (parseResult.err !== 'ok') return parseResult;
-
-    this.adapterFile.writeIntraday(symbol, interval, parseResult.stockData);
-
-    return parseResult;
+    return parseStockData(symbol, interval, parsed);
   }
 
   // loadDaily
