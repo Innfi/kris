@@ -17,7 +17,7 @@ import StatService from './service';
 class StatController {
   constructor(protected service: StatService) {}
 
-  @Get('/intraday/:code')
+  @Get('/intraday/:symbol')
   async getIntradayStats(
     @Req() _req: Request,
     @Res() res: Response,
