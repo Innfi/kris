@@ -5,7 +5,6 @@ import parseStockData from '../domain/stock.parser';
 // import AdapterFile from './adapter.file';
 import AdapterWeb from './adapter.web';
 import AdapterRedis from './adapter.redis';
-// import { setStockData, getStockData } from './adapter.redis';
 
 @Service()
 class StatRepository {

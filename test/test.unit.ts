@@ -1,8 +1,8 @@
 import 'reflect-metadata';
 import assert from 'assert';
-//import fs from 'fs';
+// import fs from 'fs';
 
-//import { Snapshot } from '../src/stat/model';
+// import { Snapshot } from '../src/stat/model';
 
 const toSeconds = (interval: string): number => {
   const min = interval.replace('min', '');

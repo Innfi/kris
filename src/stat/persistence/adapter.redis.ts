@@ -27,6 +27,7 @@ const toSeconds = (interval: string): number => {
 @Service()
 class AdapterRedis {
   protected readonly client = createClient({ url: redisUrl });
+
   protected connected: boolean = false;
 
   constructor() {
