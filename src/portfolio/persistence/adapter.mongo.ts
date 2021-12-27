@@ -15,12 +15,17 @@ const PortfolioSchema = new Schema<IPortfolio>({
 
 @Service()
 class AdapterMongo {
-  protected dbUrl = 'mongodb://localhost/users'; // FIXME
+  protected dbUrl = 'mongodb://localhost/trady'; // FIXME
 
   protected options: ConnectOptions = {
     dbName: 'trady',
     autoCreate: true,
   };
+
+  protected portModel = mongoose.model<IPortfolio>(
+    'portfolio',
+    PortfolioSchema,
+  );
 
   // connect
   connect() {
@@ -31,27 +36,40 @@ class AdapterMongo {
 
   async readUserPort(email: string): Promise<LoadPortfolioResult> {
     try {
-      const portModel = mongoose.model<IPortfolio>(
-        'portfolio',
-        PortfolioSchema,
-      );
+      if(mongoose.connection.readyState !== mongoose.STATES.connected) {
+        this.connect();
+      }
 
-      const findResult: IPortfolio | null = await portModel.findOne({
+      const findResult: IPortfolio | null = await this.portModel.findOne({
         email,
       });
+
+      return {
+        err: 'ok',
+        symbols: findResult?.symbols,
+      };
     } catch (err: any) {
       // TODO: logging
       return {
         err: 'read mongo failed',
       };
     }
-
-    return { err: 'ok' };
   }
 
   // writeUserPort
-  writeUserPort(email: string, symbols: string[]): SavePortfolioResult {
+  async writeUserPort(
+    email: string,
+    symbols: string[],
+  ): Promise<SavePortfolioResult> {
     try {
+      if(mongoose.connection.readyState !== mongoose.STATES.connected) {
+        this.connect();
+      }
+
+      await this.portModel.create({
+        email: email,
+        symbols: symbols,
+      });
     } catch (err: any) {
       return {
         err: 'write mongo failed',
