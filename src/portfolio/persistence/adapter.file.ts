@@ -1,14 +1,15 @@
 import { Service } from 'typedi';
-
 import fs from 'fs';
+
 import { LoadPortfolioResult, SavePortfolioResult } from '../model';
+import AdapterBase from './adapter.base';
 
 @Service()
-class AdapterFile {
+class AdapterFile implements AdapterBase {
   readonly dataPath = './port';
 
   // readUserPort
-  readUserPort(email: string): LoadPortfolioResult {
+  async readUserPort(email: string): Promise<LoadPortfolioResult> {
     const effectiveFilePath = this.toEffectiveFilepath(email);
     if (!fs.existsSync(effectiveFilePath)) {
       return { err: 'readUserPort] file not found' };
@@ -31,7 +32,10 @@ class AdapterFile {
   }
 
   // writeUserPort
-  writeUserPort(email: string, symbols: string[]): SavePortfolioResult {
+  async writeUserPort(
+    email: string,
+    symbols: string[],
+  ): Promise<SavePortfolioResult> {
     const effectiveFilePath = this.toEffectiveFilepath(email);
 
     fs.writeFileSync(effectiveFilePath, JSON.stringify(symbols), 'utf-8');

@@ -7,7 +7,7 @@ import assert from 'assert';
 const toSeconds = (interval: string): number => {
   const min = interval.replace('min', '');
 
-  return Number.parseInt(min)*60;
+  return Number.parseInt(min, 10)*60;
 };
 
 describe('test:unit', () => {

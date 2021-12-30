@@ -1,20 +1,29 @@
-import { Service } from 'typedi';
+import { Container, Service } from 'typedi';
 
 import { LoadPortfolioResult, SavePortfolioResult } from '../model';
-import AdapterFile from './adapter.file';
+import AdapterBase from './adapter.base';
+import PortRepositoryFactory from './factory';
 
-@Service()
+const initializer =
+  process.env.ENV === 'local'
+    ? 'createRepositoryLocal'
+    : 'createRepositoryCompose';
+
+@Service({ factory: [PortRepositoryFactory, initializer] })
 class PortRepository {
-  constructor(private fileAdapter: AdapterFile) {}
+  constructor(private adapter: AdapterBase) {}
 
   // loadPortfolio
-  loadPortfolio(email: string): LoadPortfolioResult {
-    return this.fileAdapter.readUserPort(email);
+  async loadPortfolio(email: string): Promise<LoadPortfolioResult> {
+    return this.adapter.readUserPort(email);
   }
 
   // savePortfolio
-  savePortfolio(email: string, symbols: string[]): SavePortfolioResult {
-    return this.fileAdapter.writeUserPort(email, symbols);
+  async savePortfolio(
+    email: string,
+    symbols: string[],
+  ): Promise<SavePortfolioResult> {
+    return this.adapter.writeUserPort(email, symbols);
   }
 }
 

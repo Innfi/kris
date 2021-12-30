@@ -2,6 +2,7 @@ import { Service } from 'typedi';
 import mongoose, { ConnectOptions, Document, Schema } from 'mongoose';
 
 import { LoadPortfolioResult, SavePortfolioResult } from '../model';
+import AdapterBase from './adapter.base';
 
 interface IPortfolio extends Document {
   email: string;
@@ -14,7 +15,7 @@ const PortfolioSchema = new Schema<IPortfolio>({
 });
 
 @Service()
-class AdapterMongo {
+class AdapterMongo implements AdapterBase {
   protected dbUrl = 'mongodb://localhost/trady'; // FIXME
 
   protected options: ConnectOptions = {
@@ -36,7 +37,7 @@ class AdapterMongo {
 
   async readUserPort(email: string): Promise<LoadPortfolioResult> {
     try {
-      if(mongoose.connection.readyState !== mongoose.STATES.connected) {
+      if (mongoose.connection.readyState !== mongoose.STATES.connected) {
         this.connect();
       }
 
@@ -62,13 +63,13 @@ class AdapterMongo {
     symbols: string[],
   ): Promise<SavePortfolioResult> {
     try {
-      if(mongoose.connection.readyState !== mongoose.STATES.connected) {
+      if (mongoose.connection.readyState !== mongoose.STATES.connected) {
         this.connect();
       }
 
       await this.portModel.create({
-        email: email,
-        symbols: symbols,
+        email,
+        symbols,
       });
     } catch (err: any) {
       return {
