@@ -8,14 +8,14 @@ const referenceUrl = process.env.URL;
 const apiKey = process.env.API_KEY;
 
 @Service()
-class AdapterWeb {
+class DataReference {
   readonly timeSeriesIntraday = 'TIME_SERIES_INTRADAY';
 
   readonly timeSeriesDaily = 'TIME_SERIES_DAILY_ADJUSTED';
 
   // getIntraday
   async getIntraday(symbol: string, interval: string): Promise<string> {
-    const url: string = AdapterWeb.toIntradayUrl(
+    const url: string = DataReference.toIntradayUrl(
       this.timeSeriesIntraday,
       symbol,
       interval,
@@ -37,7 +37,7 @@ class AdapterWeb {
 
   // getDaily
   async getDaily(symbol: string): Promise<any> {
-    const url = AdapterWeb.toDailyUrl(this.timeSeriesDaily, symbol);
+    const url = DataReference.toDailyUrl(this.timeSeriesDaily, symbol);
     const response = await axios.get(url);
     return response.data;
   }
@@ -52,4 +52,4 @@ class AdapterWeb {
   }
 }
 
-export default AdapterWeb;
+export default DataReference;

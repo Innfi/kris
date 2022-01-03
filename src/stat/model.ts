@@ -19,9 +19,22 @@ export interface StockData {
   snapshots: Snapshot[];
 }
 
+export interface ReadStockDataInput {
+  type: TimestampTypeEnum;
+  symbol: string;
+  interval: string;
+}
+
 export interface ReadStockDataResult {
   err: string;
   stockData?: StockData;
+}
+
+export interface WriteStockDataInput {
+  type: TimestampTypeEnum;
+  symbol: string;
+  interval: string;
+  stockData: StockData;
 }
 
 export interface WriteStockDataResult {

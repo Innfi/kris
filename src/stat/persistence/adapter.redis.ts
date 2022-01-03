@@ -7,7 +7,10 @@ import {
   TimestampTypeEnum,
   ReadStockDataResult,
   WriteStockDataResult,
+  ReadStockDataInput,
+  WriteStockDataInput,
 } from 'stat/model';
+import AdapterBase from './adapter.base';
 
 dotenv.config();
 const redisUrl = process.env.REDIS_URL;
@@ -25,7 +28,7 @@ const toSeconds = (interval: string): number => {
 };
 
 @Service()
-class AdapterRedis {
+class AdapterRedis implements AdapterBase {
   protected readonly client = createClient({ url: redisUrl });
 
   protected connected: boolean = false;
@@ -50,11 +53,9 @@ class AdapterRedis {
   }
 
   // getStockData
-  async getStockData(
-    type: TimestampTypeEnum,
-    symbol: string,
-    interval: string,
-  ): Promise<ReadStockDataResult> {
+  async readStockData(input: ReadStockDataInput): Promise<ReadStockDataResult> {
+    const { type, symbol, interval } = input;
+
     if (!this.connected) {
       console.log('calling connect');
       await this.client.connect();
@@ -78,12 +79,11 @@ class AdapterRedis {
     }
   }
 
-  async setStockData(
-    type: TimestampTypeEnum,
-    symbol: string,
-    interval: string,
-    stockData: StockData,
+  async writeStockData(
+    input: WriteStockDataInput,
   ): Promise<WriteStockDataResult> {
+    const { type, symbol, interval, stockData } = input;
+
     if (!this.connected) {
       console.log('calling connect');
       await this.client.connect();

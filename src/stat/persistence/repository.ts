@@ -2,38 +2,29 @@ import { Service } from 'typedi';
 
 import { ReadStockDataResult, TimestampTypeEnum } from '../model';
 import parseStockData from '../domain/stock.parser';
-// import AdapterFile from './adapter.file';
-import AdapterWeb from './adapter.web';
-import AdapterRedis from './adapter.redis';
+import DataReference from './data.ref';
+import AdapterBase from './adapter.base';
+import StatRepositoryFactory from './factory';
 
-@Service()
+const initializer =
+  process.env.ENV === 'local'
+    ? 'createRepositoryLocal'
+    : 'createRepositoryCompose';
+
+@Service({ factory: [StatRepositoryFactory, initializer] })
 class StatRepository {
-  constructor(
-    private adapterWeb: AdapterWeb,
-    private adapterRedis: AdapterRedis, // private adapterFile: AdapterFile,
-  ) {}
+  constructor(private dataRef: DataReference, private adapter: AdapterBase) {}
 
   // loadIntraday
   async loadIntraday(
     symbol: string,
     interval: string,
   ): Promise<ReadStockDataResult> {
-    // FIXME: interface
-
-    // const readResult: ReadStockDataResult = this.adapterFile.readIntraday(
-    //   symbol,
-    //   interval,
-    // );
-    // if (readResult.err === 'ok') {
-    //   console.log('loadIntraday] read from file');
-    //   return readResult;
-    // }
-    const readResult: ReadStockDataResult =
-      await this.adapterRedis.getStockData(
-        TimestampTypeEnum.INTRADAY,
-        symbol,
-        interval,
-      );
+    const readResult: ReadStockDataResult = await this.adapter.readStockData({
+      type: TimestampTypeEnum.INTRADAY,
+      symbol: symbol,
+      interval: interval,
+    });
     if (readResult.err === 'ok') {
       console.log(`loadIntraday] read from cache`);
       return readResult;
@@ -45,13 +36,12 @@ class StatRepository {
     );
     if (parseResult.err !== 'ok') return parseResult;
 
-    // this.adapterFile.writeIntraday(symbol, interval, parseResult.stockData);
-    await this.adapterRedis.setStockData(
-      TimestampTypeEnum.INTRADAY,
-      symbol,
-      interval,
-      parseResult.stockData!,
-    );
+    await this.adapter.writeStockData({
+      type: TimestampTypeEnum.INTRADAY,
+      symbol: symbol,
+      interval: interval,
+      stockData: parseResult.stockData!,
+    });
 
     return parseResult;
   }
@@ -60,7 +50,7 @@ class StatRepository {
     symbol: string,
     interval: string,
   ): Promise<ReadStockDataResult> {
-    const parsed: string = await this.adapterWeb.getIntraday(symbol, interval);
+    const parsed: string = await this.dataRef.getIntraday(symbol, interval);
     if (!parsed) {
       return {
         err: 'invalid input',

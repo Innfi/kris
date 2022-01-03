@@ -2,18 +2,23 @@ import { Service } from 'typedi';
 import fs from 'fs';
 
 import {
+  ReadStockDataInput,
   ReadStockDataResult,
   StockData,
   TimestampTypeEnum,
+  WriteStockDataInput,
   WriteStockDataResult,
 } from '../model';
+import AdapterBase from './adapter.base';
 
 @Service()
-class AdapterFile {
+class AdapterFile implements AdapterBase {
   readonly dataPath = './data/';
 
   // readIntraday
-  readIntraday(symbol: string, interval: string): ReadStockDataResult {
+  async readStockData(input: ReadStockDataInput): Promise<ReadStockDataResult> {
+    const { symbol, interval } = input;
+
     const effectiveFilePath = this.toEffectiveFilepath(symbol, interval);
     if (!fs.existsSync(effectiveFilePath)) {
       return { err: 'readIntraday] file not found' };
@@ -38,12 +43,12 @@ class AdapterFile {
   }
 
   // writeIntraday
-  writeIntraday(
-    symbol: string,
-    interval: string,
-    data?: StockData,
-  ): WriteStockDataResult {
-    if (!data) return { err: 'no stock data' };
+  async writeStockData(
+    input: WriteStockDataInput,
+  ): Promise<WriteStockDataResult> {
+    const { symbol, interval, stockData } = input;
+
+    if (!stockData) return { err: 'no stock data' };
 
     const effectiveFilePath = this.toEffectiveFilepath(symbol, interval);
     if (fs.existsSync(effectiveFilePath)) {
@@ -51,7 +56,7 @@ class AdapterFile {
     }
 
     try {
-      fs.writeFileSync(effectiveFilePath, JSON.stringify(data), 'utf8');
+      fs.writeFileSync(effectiveFilePath, JSON.stringify(stockData), 'utf8');
     } catch (error: any) {
       // TODO: logging
       return { err: 'file write failed' };
