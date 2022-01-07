@@ -1,8 +1,9 @@
+import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import DummyDashboard from './DummyDashboard';
 
-function TradyApp() {
+const TradyApp = () => {
   return (
     <BrowserRouter>
       <Routes>
@@ -10,6 +11,6 @@ function TradyApp() {
       </Routes>
     </BrowserRouter>
   );
-}
+};
 
 export default TradyApp;
