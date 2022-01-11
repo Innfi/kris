@@ -45,7 +45,7 @@ export const rootReducer = combineReducers({ tradyReducer });
 
 //actions
 export const loadStatThunk =
-  (symbol: string, history: History) => async (dispatch: Function) => {
+  (symbol: string) => async (dispatch: Function) => {
     try {
       const response = await axios.get(backendUrl);
 
