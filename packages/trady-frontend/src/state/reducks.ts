@@ -1,7 +1,6 @@
 import thunk from 'redux-thunk';
 import axios from 'axios';
 import { applyMiddleware, combineReducers, createStore } from 'redux';
-// import { History } from 'history';
 
 const backendUrl = 'http://localhost:3000'; // FIXME
 
@@ -18,6 +17,7 @@ interface TradyActionRedux {
 
 const STAT_RESP = 'STAT_RESP';
 const ERROR = 'ERROR';
+const SIMPLE_RESP = 'SIMPLE_RESP';
 
 // state
 const initialState: TradyState = {
@@ -43,6 +43,8 @@ const tradyReducer = (
     };
   case ERROR:
     return state;
+  case SIMPLE_RESP:
+    return state;
   default:
     return state;
   }
@@ -59,6 +61,24 @@ export const loadStatThunk = (symbol: string) => {
       dispatch({
         type: STAT_RESP,
         payload: response.data, // FIXME: check data type
+      });
+    } catch (err: unknown) {
+      dispatch({
+        type: ERROR,
+        payload: err,
+      });
+    }
+  };
+};
+
+export const simpleCallThunk = () => {
+  return async (dispatch: Function) => {
+    try {
+      const response = await axios.get(`${backendUrl}/simple`);
+
+      dispatch({
+        type: SIMPLE_RESP,
+        payload: response.data,
       });
     } catch (err: unknown) {
       dispatch({
