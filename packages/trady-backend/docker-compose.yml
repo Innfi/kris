@@ -8,11 +8,8 @@ services:
     image: mongo
     ports: 
       - "27017:27017"
-  web:
+  trady-backend:
     build: .
     ports:
       - "3000:3000"
-    links:
-      - redis
-  
   
