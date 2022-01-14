@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import express from 'express';
 import { Container, Service } from 'typedi';
 import { useExpressServer, useContainer } from 'routing-controllers';
+import dotenv from 'dotenv';
 
 import StatController from './stat/controller';
 import PortController from './portfolio/controller';
@@ -24,6 +25,8 @@ DONE
 
 */
 
+dotenv.config();
+
 @Service()
 class Trady {
   app: any;
@@ -37,7 +40,7 @@ class Trady {
   }
 
   start() {
-    const port = process.env.npm_package_config_port;
+    const port = process.env.PORT;
     this.app.listen(port, () => {
       console.log(`Trady.stat] listening ${port}`);
     });
