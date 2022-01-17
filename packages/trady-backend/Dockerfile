@@ -11,4 +11,4 @@ LABEL name=trady
 WORKDIR /usr/src/app
 COPY --from=builder /usr/src/app ./
 ENTRYPOINT [ "node", "./dist/src/index.js" ]
-EXPOSE 3000
+EXPOSE 1330

@@ -35,6 +35,7 @@ class Trady {
     this.app = express();
 
     useExpressServer(this.app, {
+      cors: true,
       controllers: [StatController, PortController],
     });
   }

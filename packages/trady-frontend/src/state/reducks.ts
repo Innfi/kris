@@ -2,7 +2,7 @@ import thunk from 'redux-thunk';
 import axios from 'axios';
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 
-const backendUrl = 'http://localhost:3000'; // FIXME
+const backendUrl = 'http://localhost:1330'; // FIXME
 
 export interface TradyState {
   email: string;
@@ -58,6 +58,8 @@ export const loadStatThunk = (symbol: string) => {
     try {
       const response = await axios.get(`${backendUrl}/${symbol}`);
 
+      console.log(`data: ${response.data}`);
+
       dispatch({
         type: STAT_RESP,
         payload: response.data, // FIXME: check data type
@@ -74,7 +76,7 @@ export const loadStatThunk = (symbol: string) => {
 export const simpleCallThunk = () => {
   return async (dispatch: Function) => {
     try {
-      const response = await axios.get(`${backendUrl}/simple`);
+      const response = await axios.get(`${backendUrl}/stat`);
 
       dispatch({
         type: SIMPLE_RESP,

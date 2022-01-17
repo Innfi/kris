@@ -1,12 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 
-import reportWebVitals from './reportWebVitals';
+import { store } from './state/reducks';
 import TradyApp from './TradyApp';
+import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <TradyApp />
+    <Provider store={store}>
+      <TradyApp />
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root'),
 );
