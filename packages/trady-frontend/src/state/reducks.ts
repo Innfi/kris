@@ -8,6 +8,7 @@ export interface TradyState {
   email: string;
   ports: string[]; // FIXME
   stats: any; // FIXMEEEE
+  stockData: any,
 }
 
 interface TradyActionRedux {
@@ -24,6 +25,7 @@ const initialState: TradyState = {
   email: '',
   ports: [],
   stats: {},
+  stockData: {},
 };
 
 const initialAction: TradyActionRedux = {
@@ -52,6 +54,8 @@ const tradyReducer = (
 
 export const rootReducer = combineReducers({ tradyReducer });
 
+export type RootReducerType = typeof rootReducer;
+
 // actions
 export const loadStatThunk = (symbol: string) => {
   return async (dispatch: Function) => {
@@ -77,6 +81,8 @@ export const simpleCallThunk = () => {
   return async (dispatch: Function) => {
     try {
       const response = await axios.get(`${backendUrl}/stat`);
+
+      console.log(`simpleCallThunk: ${JSON.stringify(response.data)}`);
 
       dispatch({
         type: SIMPLE_RESP,

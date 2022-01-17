@@ -14,6 +14,7 @@ TODO
 -------------------------------------------------------------------------------
 - create a suitable topic name of data folders,
 (for names will be applied to memory caches too)
+- logging support
 
 DONE
 -------------------------------------------------------------------------------
