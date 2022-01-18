@@ -12,11 +12,17 @@ export interface Snapshot {
   volume: number;
 }
 
+export interface SnapshotMinimal {
+  x: Date;
+  y: number[];
+}
+
 export interface StockData {
   symbol: string;
   interval: string;
   timestampType: TimestampTypeEnum;
-  snapshots: Snapshot[];
+  snapshots?: Snapshot[];
+  snapshotMins?: SnapshotMinimal[];
 }
 
 export interface ReadStockDataInput {

@@ -4,7 +4,7 @@ import { ApexOptions } from 'apexcharts';
 import ApexCharts from 'react-apexcharts';
 import { Button } from '@mui/material';
 
-import { simpleCallThunk } from '../state/reducks';
+import { loadStatThunk } from '../state/reducks';
 
 const options: ApexOptions = {
   xaxis: {
@@ -18,7 +18,7 @@ const options: ApexOptions = {
 };
 
 const StockChart = () => {
-  const [trigger, setTrigger] = useState(true); //temporary
+  const [trigger, setTrigger] = useState(true); // temporary
   const dispatch = useDispatch();
 
   const stockData = useSelector((state: any) => {
@@ -30,10 +30,10 @@ const StockChart = () => {
 
     console.log('handleClick');
     setTrigger(false);
-    dispatch(simpleCallThunk());
+    dispatch(loadStatThunk('TWTR', '60min'));
   };
 
-  if (trigger) {
+  if (trigger && !stockData) {
     return (
       <div>
         <Button

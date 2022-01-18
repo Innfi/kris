@@ -2,13 +2,14 @@ import thunk from 'redux-thunk';
 import axios from 'axios';
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 
+import { StockData } from './model';
+
 const backendUrl = 'http://localhost:1330'; // FIXME
 
 export interface TradyState {
   email: string;
   ports: string[]; // FIXME
-  stats: any; // FIXMEEEE
-  stockData: any,
+  stockData?: StockData;
 }
 
 interface TradyActionRedux {
@@ -24,8 +25,7 @@ const SIMPLE_RESP = 'SIMPLE_RESP';
 const initialState: TradyState = {
   email: '',
   ports: [],
-  stats: {},
-  stockData: {},
+  stockData: undefined,
 };
 
 const initialAction: TradyActionRedux = {
@@ -41,7 +41,7 @@ const tradyReducer = (
   case STAT_RESP:
     return {
       ...state,
-      stats: action.payload.stats,
+      stockData: action.payload.stockData,
     };
   case ERROR:
     return state;
@@ -57,16 +57,20 @@ export const rootReducer = combineReducers({ tradyReducer });
 export type RootReducerType = typeof rootReducer;
 
 // actions
-export const loadStatThunk = (symbol: string) => {
+export const loadStatThunk = (symbol: string, interval: string) => {
   return async (dispatch: Function) => {
     try {
-      const response = await axios.get(`${backendUrl}/${symbol}`);
+      const url = `${backendUrl}/stat/intraday/${symbol}?interval=${interval}`;
+      const response = await axios.get(url);
 
-      console.log(`data: ${response.data}`);
+      console.log(`data: ${JSON.stringify(response.data)}`);
+      const stockData = JSON.parse(response.data) as StockData;
 
       dispatch({
         type: STAT_RESP,
-        payload: response.data, // FIXME: check data type
+        payload: {
+          stockData,
+        },
       });
     } catch (err: unknown) {
       dispatch({

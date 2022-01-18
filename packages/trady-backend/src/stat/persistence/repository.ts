@@ -1,7 +1,7 @@
 import { Service } from 'typedi';
 
 import { ReadStockDataResult, TimestampTypeEnum } from '../model';
-import parseStockData from '../domain/stock.parser';
+import { parseStockDataMin } from '../domain/stock.parser';
 import DataReference from './data.ref';
 import AdapterBase from './adapter.base';
 import StatRepositoryFactory from './factory';
@@ -22,8 +22,8 @@ class StatRepository {
   ): Promise<ReadStockDataResult> {
     const readResult: ReadStockDataResult = await this.adapter.readStockData({
       type: TimestampTypeEnum.INTRADAY,
-      symbol: symbol,
-      interval: interval,
+      symbol,
+      interval,
     });
     if (readResult.err === 'ok') {
       console.log(`loadIntraday] read from cache`);
@@ -38,8 +38,8 @@ class StatRepository {
 
     await this.adapter.writeStockData({
       type: TimestampTypeEnum.INTRADAY,
-      symbol: symbol,
-      interval: interval,
+      symbol,
+      interval,
       stockData: parseResult.stockData!,
     });
 
@@ -50,14 +50,14 @@ class StatRepository {
     symbol: string,
     interval: string,
   ): Promise<ReadStockDataResult> {
-    const parsed: string = await this.dataRef.getIntraday(symbol, interval);
-    if (!parsed) {
+    const rawData: string = await this.dataRef.getIntraday(symbol, interval);
+    if (!rawData) {
       return {
         err: 'invalid input',
       };
     }
-
-    return parseStockData(symbol, interval, parsed);
+    // return parseStockData(symbol, interval, rawData);
+    return parseStockDataMin(symbol, interval, rawData);
   }
 
   // loadDaily
