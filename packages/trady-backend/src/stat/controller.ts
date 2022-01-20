@@ -17,11 +17,6 @@ import StatService from './service';
 class StatController {
   constructor(protected service: StatService) {}
 
-  @Get('/') // test method
-  async getRoot(@Req() _req: Request, @Res() res: Response): Promise<Response> {
-    return res.status(200).send({ err: 'ok' });
-  }
-
   @Get('/intraday/:symbol')
   async getIntradayStats(
     @Req() _req: Request,

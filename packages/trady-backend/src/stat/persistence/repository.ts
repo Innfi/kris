@@ -1,17 +1,22 @@
-import { Service } from 'typedi';
+import { Container, Service } from 'typedi';
 
 import { ReadStockDataResult, TimestampTypeEnum } from '../model';
-import { parseStockDataMin } from '../domain/stock.parser';
+import parseStockData from '../domain/stock.parser';
 import DataReference from './data.ref';
 import AdapterBase from './adapter.base';
-import StatRepositoryFactory from './factory';
+import AdapterFile from './adapter.file';
+import AdapterRedis from './adapter.redis';
 
-const initializer =
-  process.env.ENV === 'local'
-    ? 'createRepositoryLocal'
-    : 'createRepositoryCompose';
+const createRepositoryLocal = (): StatRepository =>
+  new StatRepository(Container.get(DataReference), Container.get(AdapterFile));
 
-@Service({ factory: [StatRepositoryFactory, initializer] })
+const createRepositoryCompose = (): StatRepository =>
+  new StatRepository(Container.get(DataReference), Container.get(AdapterRedis));
+
+const initializer: CallableFunction =
+  process.env.ENV === 'local' ? createRepositoryLocal : createRepositoryCompose;
+
+@Service({ factory: initializer })
 class StatRepository {
   constructor(private dataRef: DataReference, private adapter: AdapterBase) {}
 
@@ -56,8 +61,8 @@ class StatRepository {
         err: 'invalid input',
       };
     }
-    // return parseStockData(symbol, interval, rawData);
-    return parseStockDataMin(symbol, interval, rawData);
+    
+    return parseStockData(symbol, interval, rawData);
   }
 
   // loadDaily

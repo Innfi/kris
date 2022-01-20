@@ -2,14 +2,19 @@ import { Container, Service } from 'typedi';
 
 import { LoadPortfolioResult, SavePortfolioResult } from '../model';
 import AdapterBase from './adapter.base';
-import PortRepositoryFactory from './factory';
+import AdapterFile from './adapter.file';
+import AdapterMongo from './adapter.mongo';
 
-const initializer =
-  process.env.ENV === 'local'
-    ? 'createRepositoryLocal'
-    : 'createRepositoryCompose';
+const createRepositoryLocal = (): PortRepository =>
+  new PortRepository(Container.get(AdapterFile));
 
-@Service({ factory: [PortRepositoryFactory, initializer] })
+const createRepositoryCompose = (): PortRepository =>
+  new PortRepository(Container.get(AdapterMongo));
+
+const initializer: CallableFunction =
+  process.env.ENV === 'local' ? createRepositoryLocal : createRepositoryCompose;
+
+@Service({ factory: initializer })
 class PortRepository {
   constructor(private adapter: AdapterBase) {}
 

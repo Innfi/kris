@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { Container, Service } from 'typedi';
 import { useExpressServer, useContainer } from 'routing-controllers';
 import dotenv from 'dotenv';
@@ -38,6 +38,14 @@ class Trady {
     useExpressServer(this.app, {
       cors: true,
       controllers: [StatController, PortController],
+    });
+
+    this.handleTest();
+  }
+
+  protected handleTest() {
+    this.app.get('/', (_req: Request, res: Response) => {
+      res.status(200).send({ err: 'ok' }).end();
     });
   }
 
