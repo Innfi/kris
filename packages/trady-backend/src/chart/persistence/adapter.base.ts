@@ -3,7 +3,7 @@ import {
   ReadStockDataResult,
   WriteStockDataInput,
   WriteStockDataResult,
-} from 'stat/model';
+} from 'chart/model';
 
 interface AdapterBase {
   readStockData(input: ReadStockDataInput): Promise<ReadStockDataResult>;

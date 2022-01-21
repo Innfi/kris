@@ -7,7 +7,7 @@ import {
 const parseStockData = (
   symbol: string,
   interval: string,
-  parsed: any,
+  rawData: string,
 ): ReadStockDataResult => {
   const nameSeriesDaily = `Time Series (${interval})`;
   const nameOpen = '1. open';
@@ -17,6 +17,7 @@ const parseStockData = (
   // const nameVolume = '6. volume';
 
   try {
+    const parsed = JSON.parse(rawData);
     const seriesDaily = parsed[nameSeriesDaily];
 
     const snapshotMins: SnapshotMinimal[] = Object.keys(seriesDaily).map(
@@ -41,7 +42,6 @@ const parseStockData = (
         symbol,
         interval,
         timestampType: TimestampTypeEnum.DAILY,
-        // snapshots,
         snapshotMins,
       },
     };

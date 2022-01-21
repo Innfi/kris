@@ -9,7 +9,7 @@ import {
   WriteStockDataResult,
   ReadStockDataInput,
   WriteStockDataInput,
-} from 'stat/model';
+} from 'chart/model';
 import AdapterBase from './adapter.base';
 
 dotenv.config();

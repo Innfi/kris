@@ -4,7 +4,7 @@ import { Container, Service } from 'typedi';
 import { useExpressServer, useContainer } from 'routing-controllers';
 import dotenv from 'dotenv';
 
-import StatController from './stat/controller';
+import StatController from './chart/controller';
 import PortController from './portfolio/controller';
 
 useContainer(Container);
