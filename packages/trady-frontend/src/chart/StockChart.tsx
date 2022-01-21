@@ -1,5 +1,6 @@
 import React, { useState, MouseEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { ApexOptions } from 'apexcharts';
 import ApexCharts from 'react-apexcharts';
 import { Button } from '@mui/material';
@@ -24,6 +25,7 @@ const StockChart = () => {
   const stockData = useSelector((state: any) => {
     return state.tradyReducer.stockData;
   });
+  const navigate: NavigateFunction = useNavigate();
 
   const handleClick = (e: MouseEvent): void => {
     e.preventDefault();
@@ -33,9 +35,18 @@ const StockChart = () => {
     dispatch(loadStatThunk('TWTR', '60min'));
   };
 
+  const handleClickToHome = (e: MouseEvent): void => {
+    e.preventDefault();
+
+    navigate('/');
+  };
+
   if (trigger && !stockData) {
     return (
       <div>
+        <Button variant="contained" onClick={(e: MouseEvent) => { handleClickToHome(e); }}>
+          Home
+        </Button>
         <Button
           variant="contained"
           onClick={(e: MouseEvent) => {
