@@ -1,5 +1,7 @@
+import 'reflect-metadata';
+import { Container } from 'typedi';
 import Trady from './app';
 
-const app = new Trady();
+const app = Container.get(Trady);
 
 app.start();

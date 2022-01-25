@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import express, { Request, Response } from 'express';
 import { Container, Service } from 'typedi';
 import { useExpressServer, useContainer } from 'routing-controllers';
@@ -6,6 +5,7 @@ import dotenv from 'dotenv';
 
 import StatController from './chart/controller';
 import PortController from './portfolio/controller';
+import TradyLogger from 'common/logger';
 
 useContainer(Container);
 
@@ -32,7 +32,9 @@ dotenv.config();
 class Trady {
   app: any;
 
-  constructor() {
+  constructor(
+    protected tradyLogger: TradyLogger,
+  ) {
     this.app = express();
 
     useExpressServer(this.app, {
@@ -52,7 +54,7 @@ class Trady {
   start() {
     const port = process.env.PORT;
     this.app.listen(port, () => {
-      console.log(`Trady.stat] listening ${port}`);
+      this.tradyLogger.logger.info(`Trady.stat] listening ${port}`);
     });
   }
 }

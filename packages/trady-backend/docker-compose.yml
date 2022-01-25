@@ -8,6 +8,10 @@ services:
     image: mongo
     ports: 
       - "27017:27017"
+  es-server:
+    image: elasticsearch:7.16.2
+    ports:
+      - "9200:9200"
   web:
     build: .
     ports:
