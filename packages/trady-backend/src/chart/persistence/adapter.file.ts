@@ -1,6 +1,7 @@
 import { Service } from 'typedi';
 import fs from 'fs';
 
+import TradyLogger from '../../common/logger';
 import {
   ReadStockDataInput,
   ReadStockDataResult,
@@ -11,9 +12,17 @@ import {
 } from '../model';
 import AdapterBase from './adapter.base';
 
+const toIntradayFilename = (
+  type: TimestampTypeEnum,
+  symbol: string,
+  interval: string,
+): string => `${symbol}.${type.toString()}.${interval}.json`;
+
 @Service()
 class AdapterFile implements AdapterBase {
   readonly dataPath = './data/';
+
+  constructor(protected logger: TradyLogger) {}
 
   // readIntraday
   async readStockData(input: ReadStockDataInput): Promise<ReadStockDataResult> {
@@ -34,8 +43,9 @@ class AdapterFile implements AdapterBase {
         err: 'ok',
         stockData: JSON.parse(rawData) as StockData,
       };
-    } catch (err: any) {
+    } catch (err: unknown) {
       // TODO: logging;
+
       return {
         err: 'parse json failed',
       };
@@ -57,7 +67,7 @@ class AdapterFile implements AdapterBase {
 
     try {
       fs.writeFileSync(effectiveFilePath, JSON.stringify(stockData), 'utf8');
-    } catch (error: any) {
+    } catch (error: unknown) {
       // TODO: logging
       return { err: 'file write failed' };
     }
@@ -66,20 +76,12 @@ class AdapterFile implements AdapterBase {
   }
 
   protected toEffectiveFilepath(symbol: string, interval: string): string {
-    const filename = AdapterFile.toIntradayFilename(
+    const filename = toIntradayFilename(
       TimestampTypeEnum.INTRADAY,
       symbol,
       interval,
     );
     return `${this.dataPath}${filename}`;
-  }
-
-  static toIntradayFilename(
-    type: TimestampTypeEnum,
-    symbol: string,
-    interval: string,
-  ): string {
-    return `${symbol}.${type.toString()}.${interval}.json`;
   }
 }
 

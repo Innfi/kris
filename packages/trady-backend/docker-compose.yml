@@ -10,6 +10,8 @@ services:
       - "27017:27017"
   es-server:
     image: elasticsearch:7.16.2
+    environment:
+      - discovery.type=single-node
     ports:
       - "9200:9200"
   web:

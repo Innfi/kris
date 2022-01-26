@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 
 import StatController from './chart/controller';
 import PortController from './portfolio/controller';
-import TradyLogger from 'common/logger';
+import TradyLogger from './common/logger';
 
 useContainer(Container);
 
@@ -32,9 +32,7 @@ dotenv.config();
 class Trady {
   app: any;
 
-  constructor(
-    protected tradyLogger: TradyLogger,
-  ) {
+  constructor(protected tradyLogger: TradyLogger) {
     this.app = express();
 
     useExpressServer(this.app, {
@@ -54,7 +52,7 @@ class Trady {
   start() {
     const port = process.env.PORT;
     this.app.listen(port, () => {
-      this.tradyLogger.logger.info(`Trady.stat] listening ${port}`);
+      this.tradyLogger.info(`Trady.stat] listening ${port}`);
     });
   }
 }

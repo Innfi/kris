@@ -1,5 +1,6 @@
 import { Container, Service } from 'typedi';
 
+import TradyLogger from '../../common/logger';
 import { ReadStockDataResult, TimestampTypeEnum } from '../model';
 import parseStockData from '../domain/stock.parser';
 import DataReference from './data.ref';
@@ -8,17 +9,29 @@ import AdapterFile from './adapter.file';
 import AdapterRedis from './adapter.redis';
 
 const createRepositoryLocal = (): StatRepository =>
-  new StatRepository(Container.get(DataReference), Container.get(AdapterFile));
+  new StatRepository(
+    Container.get(DataReference),
+    Container.get(AdapterFile),
+    Container.get(TradyLogger),
+  );
 
 const createRepositoryCompose = (): StatRepository =>
-  new StatRepository(Container.get(DataReference), Container.get(AdapterRedis));
+  new StatRepository(
+    Container.get(DataReference),
+    Container.get(AdapterRedis),
+    Container.get(TradyLogger),
+  );
 
 const initializer: CallableFunction =
   process.env.ENV === 'local' ? createRepositoryLocal : createRepositoryCompose;
 
 @Service({ factory: initializer })
 class StatRepository {
-  constructor(private dataRef: DataReference, private adapter: AdapterBase) {}
+  constructor(
+    private dataRef: DataReference,
+    private adapter: AdapterBase,
+    protected logger: TradyLogger,
+  ) {}
 
   // loadIntraday
   async loadIntraday(
@@ -31,7 +44,7 @@ class StatRepository {
       interval,
     });
     if (readResult.err === 'ok') {
-      console.log(`loadIntraday] read from cache`);
+      this.logger.info(`loadIntraday] read from cache: ${symbol}:${interval}`);
       return readResult;
     }
 
@@ -61,7 +74,7 @@ class StatRepository {
         err: 'invalid input',
       };
     }
-    
+
     return parseStockData(symbol, interval, rawData);
   }
 

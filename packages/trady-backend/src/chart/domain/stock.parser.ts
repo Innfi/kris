@@ -1,8 +1,13 @@
+import { Container } from 'typedi';
+
+import TradyLogger from '../../common/logger';
 import {
   ReadStockDataResult,
   SnapshotMinimal,
   TimestampTypeEnum,
 } from '../model';
+
+const logger = Container.get(TradyLogger);
 
 const parseStockData = (
   symbol: string,
@@ -45,8 +50,8 @@ const parseStockData = (
         snapshotMins,
       },
     };
-  } catch (err: any) {
-    console.log(`parseStockData] err: ${err}`);
+  } catch (err: unknown) {
+    logger.error(`parseStockData] ${(err as Error).stack}`);
     return {
       err: 'intraday: parse failed',
     };

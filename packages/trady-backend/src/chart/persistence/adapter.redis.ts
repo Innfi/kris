@@ -10,6 +10,7 @@ import {
   ReadStockDataInput,
   WriteStockDataInput,
 } from 'chart/model';
+import TradyLogger from '../../common/logger';
 import AdapterBase from './adapter.base';
 
 dotenv.config();
@@ -33,71 +34,72 @@ class AdapterRedis implements AdapterBase {
 
   protected connected: boolean = false;
 
-  constructor() {
+  constructor(protected logger: TradyLogger) {
     this.initEvents();
   }
 
   protected initEvents() {
     this.client.on('connect', () => {
-      console.log('connected');
+      this.logger.info('connected');
       this.connected = true;
     });
     this.client.on('reconnecting', () => {
-      console.log('reconnecting');
+      this.logger.info('reconnecting');
       this.connected = false;
     });
     this.client.on('end', () => {
-      console.log('connection closed');
+      this.logger.info('connection closed');
       this.connected = false;
     });
   }
 
-  // getStockData
+  // readStockData
   async readStockData(input: ReadStockDataInput): Promise<ReadStockDataResult> {
-    const { type, symbol, interval } = input;
-
-    if (!this.connected) {
-      console.log('calling connect');
-      await this.client.connect();
-    }
-
-    const key = toStockKey(type, symbol, interval);
-
-    const rawData = await this.client.get(key);
-    if (typeof rawData !== 'string') return { err: 'invalid data' };
-
     try {
+      const { type, symbol, interval } = input;
+
+      if (!this.connected) {
+        this.logger.info(`AdapterRedis.readStockData] calling connect`);
+        await this.client.connect();
+      }
+
+      const key = toStockKey(type, symbol, interval);
+
+      const rawData = await this.client.get(key);
+      if (typeof rawData !== 'string') return { err: 'invalid data' };
+
       return {
         err: 'ok',
         stockData: JSON.parse(rawData) as StockData,
       };
-    } catch (err: any) {
-      console.log(`getStockData error: ${err}`);
+    } catch (err: unknown) {
+      this.logger.info(`AdapterRedis.readStockData] ${(err as Error).stack}`);
       return {
         err: 'parse json failed',
       };
     }
   }
 
+  // writeStockData
   async writeStockData(
     input: WriteStockDataInput,
   ): Promise<WriteStockDataResult> {
-    const { type, symbol, interval, stockData } = input;
-
-    if (!this.connected) {
-      console.log('calling connect');
-      await this.client.connect();
-    }
-
-    const key = toStockKey(type, symbol, interval);
-
     try {
+      const { type, symbol, interval, stockData } = input;
+
+      if (!this.connected) {
+        this.logger.info(`AdapterRedis.writeStockData] calling connect`);
+        await this.client.connect();
+      }
+
+      const key = toStockKey(type, symbol, interval);
+
       const expireTime = toSeconds(interval);
       if (!expireTime) return { err: 'invalid interval' };
 
       await this.client.setEx(key, expireTime, JSON.stringify(stockData));
-    } catch (err: any) {
-      console.log(`setSeockData error: ${err}`);
+    } catch (err: unknown) {
+      this.logger.info(`AdapterRedis.writeStockData] ${(err as Error).stack}`);
       return { err: 'write failed' };
     }
 

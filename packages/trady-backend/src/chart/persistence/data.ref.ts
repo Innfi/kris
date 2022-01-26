@@ -2,6 +2,8 @@ import { Service } from 'typedi';
 import axios from 'axios';
 import dotenv from 'dotenv';
 
+import TradyLogger from '../../common/logger';
+
 dotenv.config();
 
 const referenceUrl = process.env.URL;
@@ -12,6 +14,8 @@ class DataReference {
   readonly timeSeriesIntraday = 'TIME_SERIES_INTRADAY';
 
   readonly timeSeriesDaily = 'TIME_SERIES_DAILY_ADJUSTED';
+
+  constructor(protected logger: TradyLogger) {}
 
   // getIntraday
   async getIntraday(symbol: string, interval: string): Promise<string> {
