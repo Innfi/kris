@@ -9,6 +9,24 @@ dotenv.config();
 const referenceUrl = process.env.URL;
 const apiKey = process.env.API_KEY;
 
+const toIntradayUrl = (
+  type: string,
+  symbol: string,
+  interval: string,
+): string =>
+  `${referenceUrl}` +
+  `?function=${type}` +
+  `&symbol=${symbol}` +
+  `&interval=${interval}` +
+  `&apikey=${apiKey}`;
+
+const toDailyUrl = (type: string, symbol: string): string => (
+  `${referenceUrl}` +
+    `?function=${type}` +
+    `&symbol=${symbol}` +
+    `&apikey=${apiKey}`
+);
+
 @Service()
 class DataReference {
   readonly timeSeriesIntraday = 'TIME_SERIES_INTRADAY';
@@ -19,7 +37,7 @@ class DataReference {
 
   // getIntraday
   async getIntraday(symbol: string, interval: string): Promise<string> {
-    const url: string = DataReference.toIntradayUrl(
+    const url: string = toIntradayUrl(
       this.timeSeriesIntraday,
       symbol,
       interval,
@@ -29,30 +47,11 @@ class DataReference {
     return response.data as string;
   }
 
-  static toIntradayUrl(type: string, symbol: string, interval: string): string {
-    return (
-      `${referenceUrl}` +
-      `?function=${type}` +
-      `&symbol=${symbol}` +
-      `&interval=${interval}` +
-      `&apikey=${apiKey}`
-    );
-  }
-
   // getDaily
   async getDaily(symbol: string): Promise<any> {
-    const url = DataReference.toDailyUrl(this.timeSeriesDaily, symbol);
+    const url = toDailyUrl(this.timeSeriesDaily, symbol);
     const response = await axios.get(url);
     return response.data;
-  }
-
-  static toDailyUrl(type: string, symbol: string): string {
-    return (
-      `${referenceUrl}` +
-      `?function=${type}` +
-      `&symbol=${symbol}` +
-      `&apikey=${apiKey}`
-    );
   }
 }
 

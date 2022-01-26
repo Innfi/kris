@@ -40,15 +40,15 @@ class AdapterRedis implements AdapterBase {
 
   protected initEvents() {
     this.client.on('connect', () => {
-      this.logger.info('connected');
+      this.logger.info('AdapterRedis] connected');
       this.connected = true;
     });
     this.client.on('reconnecting', () => {
-      this.logger.info('reconnecting');
+      this.logger.info('AdapterRedis] reconnecting');
       this.connected = false;
     });
     this.client.on('end', () => {
-      this.logger.info('connection closed');
+      this.logger.info('AdapterRedis] connection closed');
       this.connected = false;
     });
   }
@@ -74,6 +74,7 @@ class AdapterRedis implements AdapterBase {
       };
     } catch (err: unknown) {
       this.logger.info(`AdapterRedis.readStockData] ${(err as Error).stack}`);
+
       return {
         err: 'parse json failed',
       };
@@ -100,6 +101,7 @@ class AdapterRedis implements AdapterBase {
       await this.client.setEx(key, expireTime, JSON.stringify(stockData));
     } catch (err: unknown) {
       this.logger.info(`AdapterRedis.writeStockData] ${(err as Error).stack}`);
+
       return { err: 'write failed' };
     }
 

@@ -1,6 +1,7 @@
 import { Service } from 'typedi';
 import fs from 'fs';
 
+import TradyLogger from '../../common/logger';
 import { LoadPortfolioResult, SavePortfolioResult } from '../model';
 import AdapterBase from './adapter.base';
 
@@ -8,14 +9,16 @@ import AdapterBase from './adapter.base';
 class AdapterFile implements AdapterBase {
   readonly dataPath = './port';
 
+  constructor(protected logger: TradyLogger) {}
+
   // readUserPort
   async readUserPort(email: string): Promise<LoadPortfolioResult> {
-    const effectiveFilePath = this.toEffectiveFilepath(email);
-    if (!fs.existsSync(effectiveFilePath)) {
-      return { err: 'readUserPort] file not found' };
-    }
-
     try {
+      const effectiveFilePath = this.toEffectiveFilepath(email);
+      if (!fs.existsSync(effectiveFilePath)) {
+        return { err: 'readUserPort] file not found' };
+      }
+
       const rawData = fs.readFileSync(effectiveFilePath, 'utf-8');
       const symbols: string[] = JSON.parse(rawData);
 
@@ -23,8 +26,9 @@ class AdapterFile implements AdapterBase {
         err: 'ok',
         symbols,
       };
-    } catch (err: any) {
-      // TODO: logging
+    } catch (err: unknown) {
+      this.logger.error(`AdapterFile.readUserPort] ${(err as Error).stack}`);
+
       return {
         err: 'parse json failed',
       };
@@ -36,11 +40,19 @@ class AdapterFile implements AdapterBase {
     email: string,
     symbols: string[],
   ): Promise<SavePortfolioResult> {
-    const effectiveFilePath = this.toEffectiveFilepath(email);
+    try {
+      const effectiveFilePath = this.toEffectiveFilepath(email);
 
-    fs.writeFileSync(effectiveFilePath, JSON.stringify(symbols), 'utf-8');
+      fs.writeFileSync(effectiveFilePath, JSON.stringify(symbols), 'utf-8');
 
-    return { err: 'ok' };
+      return { err: 'ok' };
+    } catch (err: unknown) {
+      this.logger.error(`AdapterFile.writeUserPort] ${(err as Error).stack}`);
+
+      return {
+        err: 'write failed',
+      };
+    }
   }
 
   protected toEffectiveFilepath(email: string): string {

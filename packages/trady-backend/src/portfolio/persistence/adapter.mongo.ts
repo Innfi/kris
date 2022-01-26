@@ -1,6 +1,7 @@
 import { Service } from 'typedi';
 import mongoose, { ConnectOptions, Document, Schema } from 'mongoose';
 
+import TradyLogger from '../../common/logger';
 import { LoadPortfolioResult, SavePortfolioResult } from '../model';
 import AdapterBase from './adapter.base';
 
@@ -28,10 +29,12 @@ class AdapterMongo implements AdapterBase {
     PortfolioSchema,
   );
 
+  constructor(protected logger: TradyLogger) {}
+
   // connect
   connect() {
     mongoose.connect(this.dbUrl, this.options, () => {
-      console.log('AdapterMongo] connected');
+      this.logger.info('AdapterMongo] connected');
     });
   }
 
@@ -49,8 +52,9 @@ class AdapterMongo implements AdapterBase {
         err: 'ok',
         symbols: findResult?.symbols,
       };
-    } catch (err: any) {
-      // TODO: logging
+    } catch (err: unknown) {
+      this.logger.error(`AdapterMongo.readUserPort] ${(err as Error).stack}`);
+
       return {
         err: 'read mongo failed',
       };
@@ -71,7 +75,9 @@ class AdapterMongo implements AdapterBase {
         email,
         symbols,
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
+      this.logger.error(`AdapterMongo.writeUserPort] ${(err as Error).stack}`);
+
       return {
         err: 'write mongo failed',
       };

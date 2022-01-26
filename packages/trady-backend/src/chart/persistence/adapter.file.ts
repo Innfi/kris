@@ -26,25 +26,22 @@ class AdapterFile implements AdapterBase {
 
   // readIntraday
   async readStockData(input: ReadStockDataInput): Promise<ReadStockDataResult> {
-    const { symbol, interval } = input;
-
-    const effectiveFilePath = this.toEffectiveFilepath(symbol, interval);
-    if (!fs.existsSync(effectiveFilePath)) {
-      return { err: 'readIntraday] file not found' };
-    }
-
-    const rawData: string = fs.readFileSync(effectiveFilePath, 'utf-8');
-    return AdapterFile.toGetIntradayResult(rawData);
-  }
-
-  static toGetIntradayResult(rawData: string): ReadStockDataResult {
     try {
+      const { symbol, interval } = input;
+
+      const effectiveFilePath = this.toEffectiveFilepath(symbol, interval);
+      if (!fs.existsSync(effectiveFilePath)) {
+        return { err: 'readIntraday] file not found' };
+      }
+
+      const rawData: string = fs.readFileSync(effectiveFilePath, 'utf-8');
+
       return {
         err: 'ok',
         stockData: JSON.parse(rawData) as StockData,
       };
     } catch (err: unknown) {
-      // TODO: logging;
+      this.logger.error(`AdapterFile.readStockData] ${(err as Error).stack}`);
 
       return {
         err: 'parse json failed',
@@ -56,19 +53,20 @@ class AdapterFile implements AdapterBase {
   async writeStockData(
     input: WriteStockDataInput,
   ): Promise<WriteStockDataResult> {
-    const { symbol, interval, stockData } = input;
-
-    if (!stockData) return { err: 'no stock data' };
-
-    const effectiveFilePath = this.toEffectiveFilepath(symbol, interval);
-    if (fs.existsSync(effectiveFilePath)) {
-      return { err: 'writeIntraday] file exists' };
-    }
-
     try {
+      const { symbol, interval, stockData } = input;
+
+      if (!stockData) return { err: 'no stock data' };
+
+      const effectiveFilePath = this.toEffectiveFilepath(symbol, interval);
+      if (fs.existsSync(effectiveFilePath)) {
+        return { err: 'writeIntraday] file exists' };
+      }
+
       fs.writeFileSync(effectiveFilePath, JSON.stringify(stockData), 'utf8');
-    } catch (error: unknown) {
-      // TODO: logging
+    } catch (err: unknown) {
+      this.logger.error(`AdapterFile.writeStockData] ${(err as Error).stack}`);
+
       return { err: 'file write failed' };
     }
 
