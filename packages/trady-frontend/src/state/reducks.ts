@@ -3,6 +3,7 @@ import axios from 'axios';
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 
 import { StockData } from './model';
+import { NavigateFunction } from 'react-router-dom';
 
 const backendUrl = 'http://localhost:1330'; // FIXME
 
@@ -81,7 +82,7 @@ export const loadStatThunk = (symbol: string, interval: string) => {
   };
 };
 
-export const simpleCallThunk = () => {
+export const simpleCallThunk = (navigate: NavigateFunction) => {
   return async (dispatch: Function) => {
     try {
       const response = await axios.get(`${backendUrl}/stat`);
@@ -92,6 +93,8 @@ export const simpleCallThunk = () => {
         type: SIMPLE_RESP,
         payload: response.data,
       });
+
+      navigate('/');
     } catch (err: unknown) {
       dispatch({
         type: ERROR,

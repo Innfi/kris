@@ -5,7 +5,7 @@ import { ApexOptions } from 'apexcharts';
 import ApexCharts from 'react-apexcharts';
 import { Button } from '@mui/material';
 
-import { loadStatThunk } from '../state/reducks';
+import { loadStatThunk, simpleCallThunk } from '../state/reducks';
 
 const options: ApexOptions = {
   xaxis: {
@@ -38,7 +38,7 @@ const StockChart = () => {
   const handleClickToHome = (e: MouseEvent): void => {
     e.preventDefault();
 
-    navigate('/');
+    dispatch(simpleCallThunk(navigate));
   };
 
   if (trigger && !stockData) {
