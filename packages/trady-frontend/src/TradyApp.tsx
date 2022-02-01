@@ -1,15 +1,15 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import DummyDashboard from './DummyDashboard';
-import StockChart from './chart/StockChart';
+import Intro from './intro';
+import StockEntry from './chart/entry';
 
 const TradyApp = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<DummyDashboard />} />
-        <Route path="/stock" element={<StockChart />} />
+        <Route path="/" element={<Intro />} />
+        <Route path="/stock" element={<StockEntry />} />
       </Routes>
     </BrowserRouter>
   );

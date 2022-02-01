@@ -1,9 +1,9 @@
 import thunk from 'redux-thunk';
 import axios from 'axios';
 import { applyMiddleware, combineReducers, createStore } from 'redux';
+import { NavigateFunction } from 'react-router-dom';
 
 import { StockData } from './model';
-import { NavigateFunction } from 'react-router-dom';
 
 const backendUrl = 'http://localhost:1330'; // FIXME
 
@@ -64,7 +64,7 @@ export const loadStatThunk = (symbol: string, interval: string) => {
       const url = `${backendUrl}/stat/intraday/${symbol}?interval=${interval}`;
       const response = await axios.get(url);
 
-      console.log(`data: ${JSON.stringify(response.data)}`);
+      // console.log(`data: ${JSON.stringify(response.data)}`);
       const stockData = JSON.parse(response.data) as StockData;
 
       dispatch({
@@ -87,7 +87,7 @@ export const simpleCallThunk = (navigate: NavigateFunction) => {
     try {
       const response = await axios.get(`${backendUrl}/stat`);
 
-      console.log(`simpleCallThunk: ${JSON.stringify(response.data)}`);
+      // console.log(`simpleCallThunk: ${JSON.stringify(response.data)}`);
 
       dispatch({
         type: SIMPLE_RESP,

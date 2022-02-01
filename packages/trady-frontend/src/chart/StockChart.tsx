@@ -30,7 +30,6 @@ const StockChart = () => {
   const handleClick = (e: MouseEvent): void => {
     e.preventDefault();
 
-    console.log('handleClick');
     setTrigger(false);
     dispatch(loadStatThunk('TWTR', '60min'));
   };
@@ -44,7 +43,12 @@ const StockChart = () => {
   if (trigger && !stockData) {
     return (
       <div>
-        <Button variant="contained" onClick={(e: MouseEvent) => { handleClickToHome(e); }}>
+        <Button
+          variant="contained"
+          onClick={(e: MouseEvent) => {
+            handleClickToHome(e);
+          }}
+        >
           Home
         </Button>
         <Button
