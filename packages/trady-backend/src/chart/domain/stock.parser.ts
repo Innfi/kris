@@ -12,7 +12,7 @@ const logger = Container.get(TradyLogger);
 const parseStockData = (
   symbol: string,
   interval: string,
-  rawData: string,
+  rawData: unknown,
 ): ReadStockDataResult => {
   const nameSeriesDaily = `Time Series (${interval})`;
   const nameOpen = '1. open';
@@ -22,7 +22,8 @@ const parseStockData = (
   // const nameVolume = '6. volume';
 
   try {
-    const parsed = JSON.parse(rawData);
+    //const parsed = JSON.parse(rawData);
+    const parsed: any = rawData;
     const seriesDaily = parsed[nameSeriesDaily];
 
     const snapshotMins: SnapshotMinimal[] = Object.keys(seriesDaily).map(

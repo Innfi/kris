@@ -1,9 +1,13 @@
 import { Service } from 'typedi';
 import mongoose, { ConnectOptions, Document, Schema } from 'mongoose';
+import dotenv from 'dotenv';
 
 import TradyLogger from '../../common/logger';
 import { LoadPortfolioResult, SavePortfolioResult } from '../model';
 import AdapterBase from './adapter.base';
+
+dotenv.config();
+const mongoUrl = process.env.MONGO_URL;
 
 interface IPortfolio extends Document {
   email: string;
@@ -17,7 +21,7 @@ const PortfolioSchema = new Schema<IPortfolio>({
 
 @Service()
 class AdapterMongo implements AdapterBase {
-  protected dbUrl = 'mongodb://localhost/trady'; // FIXME
+  protected dbUrl = `${mongoUrl}/trady`
 
   protected options: ConnectOptions = {
     dbName: 'trady',

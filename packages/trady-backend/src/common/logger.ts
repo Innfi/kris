@@ -7,12 +7,13 @@ import {
 import dotenv from 'dotenv';
 
 dotenv.config();
+const esUrl = process.env.ES_URL;
 
 @Service()
 class TradyLogger {
   protected esTransportOptions: ElasticsearchTransportOptions = {
     level: 'info',
-    clientOpts: { node: process.env.ES_URL },
+    clientOpts: { node: esUrl },
   };
 
   protected esTransport = new ElasticsearchTransport(this.esTransportOptions);
@@ -22,8 +23,13 @@ class TradyLogger {
   });
 
   constructor() {
-    console.log('---TradyLogger---');
     this.logger.info('TradyLogger] ');
+
+    if(process.env.NODE_ENV !== 'local') return;
+
+    this.logger.add(new winston.transports.Console({
+      format: winston.format.simple(),
+    }));
   }
 
   info(msg: unknown) {

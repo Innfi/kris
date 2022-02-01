@@ -8,7 +8,7 @@ dotenv.config();
 
 const referenceUrl = process.env.URL;
 const apiKey = process.env.API_KEY;
-
+//https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=5min&apikey=demo
 const toIntradayUrl = (
   type: string,
   symbol: string,
@@ -36,7 +36,7 @@ class DataReference {
   constructor(protected logger: TradyLogger) {}
 
   // getIntraday
-  async getIntraday(symbol: string, interval: string): Promise<string> {
+  async getIntraday(symbol: string, interval: string): Promise<unknown> {
     const url: string = toIntradayUrl(
       this.timeSeriesIntraday,
       symbol,
@@ -44,7 +44,7 @@ class DataReference {
     );
     const response = await axios.get(url);
 
-    return response.data as string;
+    return response.data;
   }
 
   // getDaily

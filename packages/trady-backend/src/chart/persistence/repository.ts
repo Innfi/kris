@@ -68,7 +68,7 @@ class StatRepository {
     symbol: string,
     interval: string,
   ): Promise<ReadStockDataResult> {
-    const rawData: string = await this.dataRef.getIntraday(symbol, interval);
+    const rawData: unknown = await this.dataRef.getIntraday(symbol, interval);
     if (!rawData) {
       return {
         err: 'invalid input',
