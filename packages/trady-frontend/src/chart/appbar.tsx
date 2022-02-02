@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import {
-  styled, alpha, AppBar, InputBase, Box, Toolbar, Typography,
+  styled,
+  alpha,
+  AppBar,
+  InputBase,
+  Box,
+  Toolbar,
+  Typography,
   IconButton,
 } from '@mui/material';
-import {
-  Menu as MenuIcon, Search as SearchIcon,
-} from '@mui/icons-material';
+import { Menu as MenuIcon, Search as SearchIcon } from '@mui/icons-material';
+
+import { loadStatThunk } from 'src/state/reducks';
 
 const Search = styled('div')(({ theme }) => {
   return {
@@ -53,7 +60,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => {
   };
 });
 
-type ChangeEventType = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>;
+type ChangeEventType = React.ChangeEvent<
+  HTMLInputElement | HTMLTextAreaElement
+>;
 
 const TradyAppBar = () => {
   const [topic, setTopic] = useState({
@@ -61,24 +70,20 @@ const TradyAppBar = () => {
     interval: '60min',
   });
 
+  const dispatch = useDispatch();
+
   const handleChangeSearch = (e: ChangeEventType) => {
     e.preventDefault();
 
     setTopic({ ...topic, symbol: e.target.value });
-    console.log(`symbol: ${topic.symbol}`);
   };
 
   const handleSubmitSearch = (e: React.FormEvent) => {
     console.log('handleSubmitSearch');
     e.preventDefault();
 
-    console.log(`topic: ${topic.symbol}`);
-  };
-
-  const handleClickIcon = (e: React.MouseEvent) => {
-    e.preventDefault();
-
-    console.log('handleClickIcon');
+    dispatch(loadStatThunk(topic.symbol, topic.interval));
+    setTopic({ ...topic, symbol: '' });
   };
 
   return (
@@ -102,18 +107,24 @@ const TradyAppBar = () => {
           >
             Trady
           </Typography>
-          <Search
-            onSubmit={(e) => { return handleSubmitSearch(e); }}
+          <form
+            onSubmit={(e) => {
+              return handleSubmitSearch(e);
+            }}
           >
-            <SearchIconWrapper onClick={(e) => { return handleClickIcon(e); }}>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search..."
-              inputProps={{ 'aria-label': 'search' }}
-              onChange={(e) => { return handleChangeSearch(e); }}
-            />
-          </Search>
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search..."
+                inputProps={{ 'aria-label': 'search' }}
+                onChange={(e) => {
+                  return handleChangeSearch(e);
+                }}
+              />
+            </Search>
+          </form>
         </Toolbar>
       </AppBar>
     </Box>

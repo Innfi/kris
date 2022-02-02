@@ -1,7 +1,7 @@
-export enum TimestampTypeEnum {
-  INTRADAY = 1,
-  DAILY = 3,
-}
+// export enum TimestampTypeEnum {
+//   INTRADAY = 1,
+//   DAILY = 3,
+// }
 
 export interface SnapshotMinimal {
   x: Date;
@@ -11,6 +11,6 @@ export interface SnapshotMinimal {
 export interface StockData {
   symbol: string;
   interval: string;
-  timestampType: TimestampTypeEnum;
+  //timestampType: TimestampTypeEnum;
   snapshotMins?: SnapshotMinimal[];
 }

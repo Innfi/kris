@@ -1,11 +1,9 @@
-import React, { useState, MouseEvent } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { NavigateFunction, useNavigate } from 'react-router-dom';
+import React from 'react';
 import { ApexOptions } from 'apexcharts';
 import ApexCharts from 'react-apexcharts';
-import { Button } from '@mui/material';
+import { Typography } from '@mui/material';
 
-import { loadStatThunk, simpleCallThunk } from '../state/reducks';
+import { StockData } from '../state/model';
 
 const options: ApexOptions = {
   xaxis: {
@@ -18,56 +16,20 @@ const options: ApexOptions = {
   },
 };
 
-const StockChart = () => {
-  const [trigger, setTrigger] = useState(true); // temporary
-  const dispatch = useDispatch();
-
-  const stockData = useSelector((state: any) => {
-    return state.tradyReducer.stockData;
-  });
-  const navigate: NavigateFunction = useNavigate();
-
-  const handleClick = (e: MouseEvent): void => {
-    e.preventDefault();
-
-    setTrigger(false);
-    dispatch(loadStatThunk('TWTR', '60min'));
-  };
-
-  const handleClickToHome = (e: MouseEvent): void => {
-    e.preventDefault();
-
-    dispatch(simpleCallThunk(navigate));
-  };
-
-  if (trigger && !stockData) {
-    return (
-      <div>
-        <Button
-          variant="contained"
-          onClick={(e: MouseEvent) => {
-            handleClickToHome(e);
-          }}
-        >
-          Home
-        </Button>
-        <Button
-          variant="contained"
-          onClick={(e: MouseEvent) => {
-            handleClick(e);
-          }}
-        >
-          Load
-        </Button>
-      </div>
-    );
-  }
+const StockChart = (props: Readonly<StockData>) => {
+  const { symbol, interval, snapshotMins } = props;
 
   return (
     <div className="stockChart">
+      <Typography variant="h3" gutterBottom component="div">
+        {symbol}
+        {' '}
+        /
+        {interval}
+      </Typography>
       <ApexCharts
         options={options}
-        series={stockData}
+        series={snapshotMins}
         type="candlestick"
         height={550}
         width={700}
