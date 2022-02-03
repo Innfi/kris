@@ -12,5 +12,5 @@ export interface StockData {
   symbol: string;
   interval: string;
   //timestampType: TimestampTypeEnum;
-  snapshotMins?: SnapshotMinimal[];
+  snapshotMins: SnapshotMinimal[];
 }

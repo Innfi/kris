@@ -5,12 +5,12 @@ import { NavigateFunction } from 'react-router-dom';
 
 import { StockData } from './model';
 
-const backendUrl = 'http://localhost:1330'; // FIXME
+const backendUrl = 'http://localhost:1330';
 
 export interface TradyState {
   email: string;
   ports: string[]; // FIXME
-  stockData?: StockData;
+  stockStats: StockData[];
 }
 
 interface TradyActionRedux {
@@ -26,7 +26,7 @@ const SIMPLE_RESP = 'SIMPLE_RESP';
 const initialState: TradyState = {
   email: '',
   ports: [],
-  stockData: undefined,
+  stockStats: [],
 };
 
 const initialAction: TradyActionRedux = {
@@ -42,7 +42,7 @@ const tradyReducer = (
   case STAT_RESP:
     return {
       ...state,
-      stockData: action.payload.stockData,
+      stockStats: [...state.stockStats, action.payload.stockData],
     };
   case ERROR:
     return state;
@@ -62,6 +62,9 @@ export const loadStatThunk = (symbol: string, interval: string) => {
   return async (dispatch: Function) => {
     try {
       const url = `${backendUrl}/stat/intraday/${symbol}?interval=${interval}`;
+
+      console.log(`loadStatThunk] url: ${url}`);
+
       const response = await axios.get(url);
 
       // console.log(`data: ${JSON.stringify(response.data)}`);
