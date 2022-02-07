@@ -18,6 +18,9 @@ const options: ApexOptions = {
 
 const StockChart = (props: Readonly<StockData>) => {
   const { symbol, interval, snapshotMins } = props;
+  // console.log(`StockChart] symbol: ${symbol}`);
+  // console.log(`StockChart] interval: ${interval}`);
+  // console.log(`StockChart] snapshotMins: ${JSON.stringify(snapshotMins)}`);
 
   return (
     <div className="stockChart">

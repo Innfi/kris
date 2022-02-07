@@ -80,9 +80,10 @@ const TradyAppBar = () => {
 
   const handleSubmitSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(`handleSubmitSearch] topic: ${topic.symbol}`);
-    dispatch(loadStatThunk(topic.symbol, topic.interval));
+    const { symbol } = topic;
     setTopic({ ...topic, symbol: '' });
+    console.log(`handleSubmitSearch] topic: ${symbol}`);
+    dispatch(loadStatThunk(topic.symbol, topic.interval));
   };
 
   return (

@@ -33,10 +33,10 @@ const parseStockData = (
         return {
           x: new Date(value),
           y: [
-            detailData[nameOpen],
-            detailData[nameHigh],
-            detailData[nameLow],
-            detailData[nameClose],
+            Number.parseFloat(detailData[nameOpen]),
+            Number.parseFloat(detailData[nameHigh]),
+            Number.parseFloat(detailData[nameLow]),
+            Number.parseFloat(detailData[nameClose]),
           ],
         };
       },

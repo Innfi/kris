@@ -45,6 +45,7 @@ const tradyReducer = (
       stockStats: [...state.stockStats, action.payload.stockData],
     };
   case ERROR:
+    console.log('ERROR');
     return state;
   case SIMPLE_RESP:
     return state;
@@ -66,17 +67,17 @@ export const loadStatThunk = (symbol: string, interval: string) => {
       console.log(`loadStatThunk] url: ${url}`);
 
       const response = await axios.get(url);
-
-      // console.log(`data: ${JSON.stringify(response.data)}`);
-      const stockData = JSON.parse(response.data) as StockData;
+      // const stockData: StockData = JSON.parse(response.data.stockData);
+      // console.log(`loadStatThunk] data: ${JSON.stringify(stockData)}`);
 
       dispatch({
         type: STAT_RESP,
         payload: {
-          stockData,
+          stockData: response.data.stockData,
         },
       });
     } catch (err: unknown) {
+      console.log(`err: ${(err as Error).message}`);
       dispatch({
         type: ERROR,
         payload: err,
