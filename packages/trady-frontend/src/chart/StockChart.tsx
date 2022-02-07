@@ -3,7 +3,7 @@ import { ApexOptions } from 'apexcharts';
 import ApexCharts from 'react-apexcharts';
 import { Typography } from '@mui/material';
 
-import { StockData } from '../state/model';
+import { SnapshotMinimal, StockData } from '../state/model';
 
 const options: ApexOptions = {
   xaxis: {
@@ -16,11 +16,15 @@ const options: ApexOptions = {
   },
 };
 
+interface ApexSeriesUnit {
+  data: SnapshotMinimal[];
+}
+
 const StockChart = (props: Readonly<StockData>) => {
   const { symbol, interval, snapshotMins } = props;
-  // console.log(`StockChart] symbol: ${symbol}`);
-  // console.log(`StockChart] interval: ${interval}`);
-  // console.log(`StockChart] snapshotMins: ${JSON.stringify(snapshotMins)}`);
+  const series: ApexSeriesUnit[] = [];
+  series.push({ data: snapshotMins });
+  // console.log(`StockChart] series: ${JSON.stringify(series)}`);
 
   return (
     <div className="stockChart">
@@ -32,10 +36,10 @@ const StockChart = (props: Readonly<StockData>) => {
       </Typography>
       <ApexCharts
         options={options}
-        series={snapshotMins}
+        series={series}
         type="candlestick"
-        height={550}
-        width={700}
+        height={250}
+        width={600}
       />
     </div>
   );

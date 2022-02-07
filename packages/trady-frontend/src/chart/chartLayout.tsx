@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Grid, Paper, styled } from '@mui/material';
+import { Grid, styled, Paper } from '@mui/material';
 
 import { StockData } from 'src/state/model';
 import StockChart from './stockChart';
@@ -20,7 +20,6 @@ const ChartLayout = () => {
   });
 
   useEffect(() => {
-    console.log('useEffect');
     console.log(`ChartLayout] len: ${stockStats.length}`);
   }, [stockStats]);
 
@@ -29,15 +28,8 @@ const ChartLayout = () => {
   return (
     <div>
       <Grid container spacing={{ xs: 1, md: 1 }}>
-        <Grid item xs={2} sm={4} md={4} key={0} />
-        <StockChart
-          symbol={stockStats[0].symbol}
-          interval={stockStats[0].interval}
-          snapshotMins={stockStats[0].snapshotMins}
-          key={stockStats[0].symbol}
-        />
-
-        {/* {stockStats.forEach((value: Readonly<StockData>) => {
+        <Grid item xs={2} sm={4} md={4} key={0}>
+        {stockStats.forEach((value: Readonly<StockData>) => {
           return (
             <StockChart
               symbol={value.symbol}
@@ -46,7 +38,9 @@ const ChartLayout = () => {
               key={value.symbol}
             />
           );
-        })} */}
+        })}
+        </Grid>
+        
         <Grid item xs={2} sm={4} md={4} key={1}>
           <Item>xs=2</Item>
         </Grid>
