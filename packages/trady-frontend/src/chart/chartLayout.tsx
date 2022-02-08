@@ -1,18 +1,18 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Grid, styled, Paper } from '@mui/material';
+import { Grid } from '@mui/material';
 
 import { StockData } from 'src/state/model';
 import StockChart from './stockChart';
 
-const Item = styled(Paper)(({ theme }) => {
-  return {
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  };
-});
+// const Item = styled(Paper)(({ theme }) => {
+//   return {
+//     ...theme.typography.body2,
+//     padding: theme.spacing(1),
+//     textAlign: 'center',
+//     color: theme.palette.text.secondary,
+//   };
+// });
 
 const ChartLayout = () => {
   const stockStats: Readonly<StockData>[] = useSelector((state: any) => {
@@ -28,8 +28,7 @@ const ChartLayout = () => {
   return (
     <div>
       <Grid container spacing={{ xs: 1, md: 1 }}>
-        <Grid item xs={2} sm={4} md={4} key={0}>
-        {stockStats.forEach((value: Readonly<StockData>) => {
+        {stockStats.map((value: Readonly<StockData>) => {
           return (
             <StockChart
               symbol={value.symbol}
@@ -39,14 +38,6 @@ const ChartLayout = () => {
             />
           );
         })}
-        </Grid>
-        
-        <Grid item xs={2} sm={4} md={4} key={1}>
-          <Item>xs=2</Item>
-        </Grid>
-        <Grid item xs={2} sm={4} md={4} key={2}>
-          <Item>xs=2</Item>
-        </Grid>
       </Grid>
     </div>
   );

@@ -22,7 +22,6 @@ const parseStockData = (
   // const nameVolume = '6. volume';
 
   try {
-    //const parsed = JSON.parse(rawData);
     const parsed: any = rawData;
     const seriesDaily = parsed[nameSeriesDaily];
 
@@ -33,10 +32,10 @@ const parseStockData = (
         return {
           x: new Date(value),
           y: [
-            Number.parseFloat(detailData[nameOpen]),
-            Number.parseFloat(detailData[nameHigh]),
-            Number.parseFloat(detailData[nameLow]),
-            Number.parseFloat(detailData[nameClose]),
+            +detailData[nameOpen],
+            +detailData[nameHigh],
+            +detailData[nameLow],
+            +detailData[nameClose],
           ],
         };
       },
