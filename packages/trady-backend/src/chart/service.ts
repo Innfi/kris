@@ -23,6 +23,16 @@ class StatService {
       return { err: 'server error' };
     }
   }
+
+  // loadDaily
+  async loadDaily(symbol: string): Promise<ReadStockDataResult> {
+    try {
+      return await this.statRepo.loadDaily(symbol);
+    } catch (err: unknown) {
+      this.logger.error(`StatService.loadDaily] ${(err as Error).stack}`);
+      return { err: 'server error' };
+    }
+  }
 }
 
 export default StatService;

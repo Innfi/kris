@@ -79,9 +79,12 @@ class StatRepository {
   }
 
   // loadDaily
-  // async loadDaily(code: string): Promise<any> {
-
-  // }
+  async loadDaily(symbol: string): Promise<ReadStockDataResult> {
+    // FIXME
+    return {
+      err: 'ok',
+    };
+  }
 }
 
 export default StatRepository;

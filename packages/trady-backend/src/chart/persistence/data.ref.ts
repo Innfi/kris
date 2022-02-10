@@ -8,7 +8,7 @@ dotenv.config();
 
 const referenceUrl = process.env.URL;
 const apiKey = process.env.API_KEY;
-//https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=5min&apikey=demo
+// https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=5min&apikey=demo
 const toIntradayUrl = (
   type: string,
   symbol: string,
@@ -20,12 +20,11 @@ const toIntradayUrl = (
   `&interval=${interval}` +
   `&apikey=${apiKey}`;
 
-const toDailyUrl = (type: string, symbol: string): string => (
+const toDailyUrl = (type: string, symbol: string): string =>
   `${referenceUrl}` +
-    `?function=${type}` +
-    `&symbol=${symbol}` +
-    `&apikey=${apiKey}`
-);
+  `?function=${type}` +
+  `&symbol=${symbol}` +
+  `&apikey=${apiKey}`;
 
 @Service()
 class DataReference {

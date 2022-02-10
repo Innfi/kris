@@ -21,7 +21,7 @@ const PortfolioSchema = new Schema<IPortfolio>({
 
 @Service()
 class AdapterMongo implements AdapterBase {
-  protected dbUrl = `${mongoUrl}/trady`
+  protected dbUrl = `${mongoUrl}/trady`;
 
   protected options: ConnectOptions = {
     dbName: 'trady',

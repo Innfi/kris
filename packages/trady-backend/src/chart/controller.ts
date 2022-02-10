@@ -32,6 +32,17 @@ class StatController {
     return res.status(200).send(result);
   }
 
+  @Get('/daily/:symbol')
+  async getDailyStats(
+    @Req() _req: Request,
+    @Res() res: Response,
+    @Param('symbol') symbol: string,
+  ) {
+    const result: ReadStockDataResult = await this.service.loadDaily(symbol);
+
+    return res.status(200).send(result);
+  }
+
   // @Get('/byport/intraday/:email')
   // async getIntradayStatsByPort(
   //   @Req() _req: Request,
@@ -42,17 +53,6 @@ class StatController {
   //     .loadIntradayByPort(email);
 
   //   return res.status(200).send(result);
-  // }
-
-  // @Get('/daily/:code')
-  // async getDailyStats(
-  // @Req() _req: Request,
-  //   @Res() res: Response,
-  //   @Param('code') code: string,
-  // ) {
-  //   const data = await this.repo.loadDaily(code);
-
-  //   return res.status(200).send({ err: 'ok', data });
   // }
 }
 

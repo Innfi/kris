@@ -25,11 +25,13 @@ class TradyLogger {
   constructor() {
     this.logger.info('TradyLogger] ');
 
-    if(process.env.NODE_ENV !== 'local') return;
+    if (process.env.NODE_ENV !== 'local') return;
 
-    this.logger.add(new winston.transports.Console({
-      format: winston.format.simple(),
-    }));
+    this.logger.add(
+      new winston.transports.Console({
+        format: winston.format.simple(),
+      }),
+    );
   }
 
   info(msg: unknown) {
