@@ -3,16 +3,7 @@ export enum TimestampTypeEnum {
   DAILY = 3,
 }
 
-export interface Snapshot {
-  time: Date;
-  open: number;
-  high: number;
-  low: number;
-  close: number;
-  volume: number;
-}
-
-export interface SnapshotMinimal {
+export interface SnapshotUnit {
   x: Date;
   y: number[];
 }
@@ -21,8 +12,7 @@ export interface StockData {
   symbol: string;
   interval: string;
   timestampType: TimestampTypeEnum;
-  snapshots?: Snapshot[];
-  snapshotMins?: SnapshotMinimal[];
+  snapshots?: SnapshotUnit[];
 }
 
 export interface ReadStockDataInput {

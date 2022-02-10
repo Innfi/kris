@@ -1,11 +1,7 @@
 import { Container } from 'typedi';
 
 import TradyLogger from '../../common/logger';
-import {
-  ReadStockDataResult,
-  SnapshotMinimal,
-  TimestampTypeEnum,
-} from '../model';
+import { ReadStockDataResult, SnapshotUnit, TimestampTypeEnum } from '../model';
 
 const logger = Container.get(TradyLogger);
 
@@ -14,18 +10,18 @@ const parseStockData = (
   interval: string,
   rawData: unknown,
 ): ReadStockDataResult => {
-  const nameSeriesDaily = `Time Series (${interval})`;
+  const nameTimeSeries = `Time Series (${interval})`;
   const nameOpen = '1. open';
   const nameHigh = '2. high';
   const nameLow = '3. low';
   const nameClose = '4. close';
-  // const nameVolume = '6. volume';
+  // const nameVolume = '5. volume';
 
   try {
     const parsed: any = rawData;
-    const seriesDaily = parsed[nameSeriesDaily];
+    const seriesDaily = parsed[nameTimeSeries];
 
-    const snapshotMins: SnapshotMinimal[] = Object.keys(seriesDaily).map(
+    const snapshots: SnapshotUnit[] = Object.keys(seriesDaily).map(
       (value: string) => {
         const detailData = seriesDaily[value];
 
@@ -47,7 +43,7 @@ const parseStockData = (
         symbol,
         interval,
         timestampType: TimestampTypeEnum.DAILY,
-        snapshotMins,
+        snapshots,
       },
     };
   } catch (err: unknown) {
