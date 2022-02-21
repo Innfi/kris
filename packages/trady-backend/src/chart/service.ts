@@ -13,9 +13,9 @@ class StatService {
 
   // loadIntraday
   async loadIntraday(
-    symbol: string,
-    interval: string,
-  ): Promise<ReadStockDataResult> {
+    symbol: Readonly<string>,
+    interval: Readonly<string>,
+  ): Promise<Readonly<ReadStockDataResult>> {
     try {
       return await this.statRepo.loadIntraday(symbol, interval);
     } catch (err: unknown) {

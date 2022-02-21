@@ -54,7 +54,9 @@ class AdapterRedis implements AdapterBase {
   }
 
   // readStockData
-  async readStockData(input: ReadStockDataInput): Promise<ReadStockDataResult> {
+  async readStockData(
+    input: Readonly<ReadStockDataInput>,
+  ): Promise<Readonly<ReadStockDataResult>> {
     try {
       const { type, symbol, interval } = input;
 
@@ -83,8 +85,8 @@ class AdapterRedis implements AdapterBase {
 
   // writeStockData
   async writeStockData(
-    input: WriteStockDataInput,
-  ): Promise<WriteStockDataResult> {
+    input: Readonly<WriteStockDataInput>,
+  ): Promise<Readonly<WriteStockDataResult>> {
     try {
       const { type, symbol, interval, stockData } = input;
 
@@ -94,7 +96,6 @@ class AdapterRedis implements AdapterBase {
       }
 
       const key = toStockKey(type, symbol, interval);
-
       const expireTime = toSeconds(interval);
       if (!expireTime) return { err: 'invalid interval' };
 

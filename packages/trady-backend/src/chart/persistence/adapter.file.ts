@@ -25,7 +25,9 @@ class AdapterFile implements AdapterBase {
   constructor(protected logger: TradyLogger) {}
 
   // readIntraday
-  async readStockData(input: ReadStockDataInput): Promise<ReadStockDataResult> {
+  async readStockData(
+    input: Readonly<ReadStockDataInput>,
+  ): Promise<Readonly<ReadStockDataResult>> {
     try {
       const { symbol, interval } = input;
 
@@ -51,8 +53,8 @@ class AdapterFile implements AdapterBase {
 
   // writeIntraday
   async writeStockData(
-    input: WriteStockDataInput,
-  ): Promise<WriteStockDataResult> {
+    input: Readonly<WriteStockDataInput>,
+  ): Promise<Readonly<WriteStockDataResult>> {
     try {
       const { symbol, interval, stockData } = input;
 

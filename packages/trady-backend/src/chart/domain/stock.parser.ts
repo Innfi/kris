@@ -6,10 +6,10 @@ import { ReadStockDataResult, SnapshotUnit, TimestampTypeEnum } from '../model';
 const logger = Container.get(TradyLogger);
 
 const parseStockData = (
-  symbol: string,
-  interval: string,
+  symbol: Readonly<string>,
+  interval: Readonly<string>,
   rawData: unknown,
-): ReadStockDataResult => {
+): Readonly<ReadStockDataResult> => {
   const nameTimeSeries = `Time Series (${interval})`;
   const nameOpen = '1. open';
   const nameHigh = '2. high';

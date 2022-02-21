@@ -35,9 +35,9 @@ class StatRepository {
 
   // loadIntraday
   async loadIntraday(
-    symbol: string,
-    interval: string,
-  ): Promise<ReadStockDataResult> {
+    symbol: Readonly<string>,
+    interval: Readonly<string>,
+  ): Promise<Readonly<ReadStockDataResult>> {
     const readResult: ReadStockDataResult = await this.adapter.readStockData({
       type: TimestampTypeEnum.INTRADAY,
       symbol,
@@ -65,9 +65,9 @@ class StatRepository {
   }
 
   protected async loadIntradayFromWeb(
-    symbol: string,
-    interval: string,
-  ): Promise<ReadStockDataResult> {
+    symbol: Readonly<string>,
+    interval: Readonly<string>,
+  ): Promise<Readonly<ReadStockDataResult>> {
     const rawData: unknown = await this.dataRef.getIntraday(symbol, interval);
     if (!rawData) {
       return {

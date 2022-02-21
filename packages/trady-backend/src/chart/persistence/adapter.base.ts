@@ -6,8 +6,12 @@ import {
 } from 'chart/model';
 
 interface AdapterBase {
-  readStockData(input: ReadStockDataInput): Promise<ReadStockDataResult>;
-  writeStockData(input: WriteStockDataInput): Promise<WriteStockDataResult>;
+  readStockData(
+    input: Readonly<ReadStockDataInput>,
+  ): Promise<Readonly<ReadStockDataResult>>;
+  writeStockData(
+    input: Readonly<WriteStockDataInput>,
+  ): Promise<Readonly<WriteStockDataResult>>;
 }
 
 export default AdapterBase;
