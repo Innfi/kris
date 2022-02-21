@@ -2,7 +2,7 @@ import { Container, Service } from 'typedi';
 
 import TradyLogger from '../../common/logger';
 import { ReadStockDataResult, TimestampTypeEnum } from '../model';
-import parseStockData from '../domain/stock.parser';
+import { parseStockIntraday } from '../domain/stock.parser';
 import DataReference from './data.ref';
 import AdapterBase from './adapter.base';
 import AdapterFile from './adapter.file';
@@ -75,7 +75,7 @@ class StatRepository {
       };
     }
 
-    return parseStockData(symbol, interval, rawData);
+    return parseStockIntraday(symbol, interval, rawData);
   }
 
   // loadDaily

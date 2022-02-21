@@ -50,6 +50,7 @@ class DataReference {
   async getDaily(symbol: string): Promise<any> {
     const url = toDailyUrl(this.timeSeriesDaily, symbol);
     const response = await axios.get(url);
+    
     return response.data;
   }
 }

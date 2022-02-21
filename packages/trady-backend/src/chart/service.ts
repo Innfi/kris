@@ -25,7 +25,9 @@ class StatService {
   }
 
   // loadDaily
-  async loadDaily(symbol: string): Promise<ReadStockDataResult> {
+  async loadDaily(
+    symbol: Readonly<string>,
+  ): Promise<Readonly<ReadStockDataResult>> {
     try {
       return await this.statRepo.loadDaily(symbol);
     } catch (err: unknown) {
