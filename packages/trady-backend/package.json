@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha -r ts-node/register test/test.unit.ts --exit",
-    "test:int": "mocha -r ts-node/register test.integration/test.mongo.ts --exit",
+    "test:int": "mocha --timeout 10000 -r ts-node/register test.integration/chart.ts --exit",
     "build": "tsc --build",
     "clean": "rm -rf ./dist",
     "start": "tsc --build && node dist/src/index.js",

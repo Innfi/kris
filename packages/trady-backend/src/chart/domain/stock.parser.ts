@@ -6,11 +6,12 @@ import { ReadStockDataResult, SnapshotUnit, TimestampTypeEnum } from '../model';
 const logger = Container.get(TradyLogger);
 
 export const parseStockData = (
-  symbol: Readonly<string>,
-  interval: Readonly<string>,
+  // symbol: Readonly<string>,
+  // interval: Readonly<string>,
+  timeSeriesKey: Readonly<string>,
   rawData: unknown,
 ): Readonly<ReadStockDataResult> => {
-  const nameTimeSeries = `Time Series (${interval})`;
+  // const nameTimeSeries = `Time Series (${interval})`;
   const nameOpen = '1. open';
   const nameHigh = '2. high';
   const nameLow = '3. low';
@@ -19,7 +20,7 @@ export const parseStockData = (
 
   try {
     const parsed: any = rawData;
-    const seriesDaily = parsed[nameTimeSeries];
+    const seriesDaily = parsed[timeSeriesKey];
 
     const snapshots: SnapshotUnit[] = Object.keys(seriesDaily).map(
       (value: string) => {
@@ -48,4 +49,3 @@ export const parseStockData = (
     };
   }
 };
-

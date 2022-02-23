@@ -8,15 +8,15 @@ import AdapterBase from './adapter.base';
 import AdapterFile from './adapter.file';
 import AdapterRedis from './adapter.redis';
 
-const createRepositoryLocal = (): StatRepository =>
-  new StatRepository(
+const createRepositoryLocal = (): ChartRepository =>
+  new ChartRepository(
     Container.get(DataReference),
     Container.get(AdapterFile),
     Container.get(TradyLogger),
   );
 
-const createRepositoryCompose = (): StatRepository =>
-  new StatRepository(
+const createRepositoryCompose = (): ChartRepository =>
+  new ChartRepository(
     Container.get(DataReference),
     Container.get(AdapterRedis),
     Container.get(TradyLogger),
@@ -26,7 +26,7 @@ const initializer: CallableFunction =
   process.env.ENV === 'local' ? createRepositoryLocal : createRepositoryCompose;
 
 @Service({ factory: initializer })
-class StatRepository {
+class ChartRepository {
   constructor(
     private dataRef: DataReference,
     private adapter: AdapterBase,
@@ -48,10 +48,7 @@ class StatRepository {
       return readResult;
     }
 
-    readResult = await this.loadIntradayFromWeb(
-      symbol,
-      interval,
-    );
+    readResult = await this.loadIntradayFromWeb(symbol, interval);
     if (readResult.err !== 'ok') return readResult;
 
     await this.adapter.writeStockData({
@@ -80,7 +77,9 @@ class StatRepository {
       };
     }
 
-    return parseStockData(symbol, interval, rawData);
+    const timeSeriesKey = `Time Series (${interval})`;
+
+    return parseStockData(timeSeriesKey, rawData);
   }
 
   // loadDaily
@@ -92,4 +91,4 @@ class StatRepository {
   }
 }
 
-export default StatRepository;
+export default ChartRepository;

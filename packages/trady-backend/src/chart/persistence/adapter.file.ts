@@ -38,9 +38,11 @@ class AdapterFile implements AdapterBase {
 
       const rawData: string = fs.readFileSync(effectiveFilePath, 'utf-8');
 
+      const stockData = JSON.parse(rawData) as StockData;
+
       return {
         err: 'ok',
-        stockData: JSON.parse(rawData) as StockData,
+        snapshots: stockData.snapshots,
       };
     } catch (err: unknown) {
       this.logger.error(`AdapterFile.readStockData] ${(err as Error).stack}`);

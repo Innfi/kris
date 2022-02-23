@@ -70,9 +70,11 @@ class AdapterRedis implements AdapterBase {
       const rawData = await this.client.get(key);
       if (typeof rawData !== 'string') return { err: 'invalid data' };
 
+      const stockData = JSON.parse(rawData) as StockData;
+
       return {
         err: 'ok',
-        stockData: JSON.parse(rawData) as StockData,
+        snapshots: stockData.snapshots,
       };
     } catch (err: unknown) {
       this.logger.info(`AdapterRedis.readStockData] ${(err as Error).stack}`);

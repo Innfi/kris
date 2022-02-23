@@ -2,12 +2,12 @@ import { Service } from 'typedi';
 
 import TradyLogger from '../common/logger';
 import { ReadStockDataResult } from './model';
-import StatRepository from './persistence/repository';
+import ChartRepository from './persistence/repository';
 
 @Service()
 class StatService {
   constructor(
-    protected statRepo: StatRepository,
+    protected chartRepo: ChartRepository,
     protected logger: TradyLogger,
   ) {}
 
@@ -17,7 +17,7 @@ class StatService {
     interval: Readonly<string>,
   ): Promise<Readonly<ReadStockDataResult>> {
     try {
-      return await this.statRepo.loadIntraday(symbol, interval);
+      return await this.chartRepo.loadIntraday(symbol, interval);
     } catch (err: unknown) {
       this.logger.error(`StatService.loadIntraday] ${(err as Error).stack}`);
       return { err: 'server error' };
@@ -29,7 +29,7 @@ class StatService {
     symbol: Readonly<string>,
   ): Promise<Readonly<ReadStockDataResult>> {
     try {
-      return await this.statRepo.loadDaily(symbol);
+      return await this.chartRepo.loadDaily(symbol);
     } catch (err: unknown) {
       this.logger.error(`StatService.loadDaily] ${(err as Error).stack}`);
       return { err: 'server error' };
