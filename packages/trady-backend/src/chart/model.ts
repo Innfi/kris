@@ -1,7 +1,11 @@
 export enum TimestampTypeEnum {
   INTRADAY = 1,
   DAILY = 3,
+  WEEKLY = 7,
+  MONTHLY = 11,
 }
+
+export type TimestampType = 'Intraday' | 'Daily' | 'Weekly' | 'Monthly';
 
 export interface SnapshotUnit {
   x: Date;
@@ -10,7 +14,7 @@ export interface SnapshotUnit {
 
 export interface StockData {
   symbol: string;
-  interval: string;
+  interval?: string;
   timestampType: TimestampTypeEnum;
   snapshots?: SnapshotUnit[];
 }
@@ -23,7 +27,7 @@ export interface ReadStockDataInput {
 
 export interface ReadStockDataResult {
   err: string;
-  stockData?: StockData;
+  snapshots?: SnapshotUnit[];
 }
 
 export interface WriteStockDataInput {

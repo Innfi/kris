@@ -2,7 +2,7 @@ import { Container, Service } from 'typedi';
 
 import TradyLogger from '../../common/logger';
 import { ReadStockDataResult, TimestampTypeEnum } from '../model';
-import { parseStockIntraday } from '../domain/stock.parser';
+import { parseStockData } from '../domain/stock.parser';
 import DataReference from './data.ref';
 import AdapterBase from './adapter.base';
 import AdapterFile from './adapter.file';
@@ -38,7 +38,7 @@ class StatRepository {
     symbol: Readonly<string>,
     interval: Readonly<string>,
   ): Promise<Readonly<ReadStockDataResult>> {
-    const readResult: ReadStockDataResult = await this.adapter.readStockData({
+    let readResult: ReadStockDataResult = await this.adapter.readStockData({
       type: TimestampTypeEnum.INTRADAY,
       symbol,
       interval,
@@ -48,20 +48,25 @@ class StatRepository {
       return readResult;
     }
 
-    const parseResult: ReadStockDataResult = await this.loadIntradayFromWeb(
+    readResult = await this.loadIntradayFromWeb(
       symbol,
       interval,
     );
-    if (parseResult.err !== 'ok') return parseResult;
+    if (readResult.err !== 'ok') return readResult;
 
     await this.adapter.writeStockData({
       type: TimestampTypeEnum.INTRADAY,
       symbol,
       interval,
-      stockData: parseResult.stockData!,
+      stockData: {
+        symbol,
+        interval,
+        timestampType: TimestampTypeEnum.INTRADAY,
+        snapshots: readResult.snapshots,
+      },
     });
 
-    return parseResult;
+    return readResult;
   }
 
   protected async loadIntradayFromWeb(
@@ -75,7 +80,7 @@ class StatRepository {
       };
     }
 
-    return parseStockIntraday(symbol, interval, rawData);
+    return parseStockData(symbol, interval, rawData);
   }
 
   // loadDaily
