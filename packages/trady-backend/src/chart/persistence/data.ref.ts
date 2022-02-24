@@ -1,30 +1,8 @@
 import { Service } from 'typedi';
 import axios from 'axios';
-import dotenv from 'dotenv';
 
 import TradyLogger from '../../common/logger';
-
-dotenv.config();
-
-const referenceUrl = process.env.URL;
-const apiKey = process.env.API_KEY;
-
-const toIntradayUrl = (
-  type: string,
-  symbol: string,
-  interval: string,
-): string =>
-  `${referenceUrl}` +
-  `?function=${type}` +
-  `&symbol=${symbol}` +
-  `&interval=${interval}` +
-  `&apikey=${apiKey}`;
-
-const toDailyUrl = (type: string, symbol: string): string =>
-  `${referenceUrl}` +
-  `?function=${type}` +
-  `&symbol=${symbol}` +
-  `&apikey=${apiKey}`;
+import { toDailyUrl, toIntradayUrl } from 'chart/domain/searchkey.descriptor';
 
 @Service()
 class DataReference {

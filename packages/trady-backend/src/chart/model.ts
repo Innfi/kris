@@ -6,6 +6,7 @@ export enum TimestampTypeEnum {
 }
 
 export type TimestampType = 'Intraday' | 'Daily' | 'Weekly' | 'Monthly';
+export type TimeSeriesType = 'TIME_SERIES_INTRADAY' | 'TIME_SERIES_DAILY';
 
 export interface SnapshotUnit {
   x: Date;
