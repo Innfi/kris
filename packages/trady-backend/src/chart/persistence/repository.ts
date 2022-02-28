@@ -33,6 +33,11 @@ class ChartRepository {
     protected logger: TradyLogger,
   ) {}
 
+  // // loadStockData
+  // async loadStockData(
+  //   input: 
+  // )
+
   // loadIntraday
   async loadIntraday(
     symbol: Readonly<string>,
