@@ -9,13 +9,12 @@ import {
   JsonController,
 } from 'routing-controllers';
 
-import { ReadStockDataResult } from './model';
-import StatService from './service';
+import ChartService from './service';
 
 @Service()
-@JsonController('/stat')
-class StatController {
-  constructor(protected service: StatService) {}
+@JsonController('/chart')
+class ChartController {
+  constructor(protected service: ChartService) {}
 
   @Get('/intraday/:symbol')
   async getIntradayStats(
@@ -24,36 +23,8 @@ class StatController {
     @Param('symbol') symbol: string,
     @QueryParam('interval') interval: string,
   ): Promise<Response> {
-    const result: ReadStockDataResult = await this.service.loadIntraday(
-      symbol,
-      interval,
-    );
-
-    return res.status(200).send(result);
+    return res.status(200).send({ err: 'ok' });
   }
-
-  @Get('/daily/:symbol')
-  async getDailyStats(
-    @Req() _req: Request,
-    @Res() res: Response,
-    @Param('symbol') symbol: string,
-  ) {
-    const result: ReadStockDataResult = await this.service.loadDaily(symbol);
-
-    return res.status(200).send(result);
-  }
-
-  // @Get('/byport/intraday/:email')
-  // async getIntradayStatsByPort(
-  //   @Req() _req: Request,
-  //     @Res() res: Response,
-  //     @Param('email') email: string,
-  // ): Promise<Response> {
-  //   const result: LoadPortfolioStatsResult = await this.service
-  //     .loadIntradayByPort(email);
-
-  //   return res.status(200).send(result);
-  // }
 }
 
-export default StatController;
+export default ChartController;

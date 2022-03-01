@@ -3,28 +3,11 @@ import { Container, Service } from 'typedi';
 import { useExpressServer, useContainer } from 'routing-controllers';
 import dotenv from 'dotenv';
 
-import StatController from './chart/controller';
+import ChartController from './chart/controller';
 import PortController from './portfolio/controller';
 import TradyLogger from './common/logger';
 
 useContainer(Container);
-
-/**
-TODO
--------------------------------------------------------------------------------
-- create a suitable topic name of data folders,
-(for names will be applied to memory caches too)
-- logging support
-
-DONE
--------------------------------------------------------------------------------
-* retrieve stock data from web
-* parsing data to more machine-friendly style
-* save / retrieve stock data from file
-* caching by file
-* interface for portfolio lists
-
-*/
 
 dotenv.config();
 
@@ -37,7 +20,7 @@ class Trady {
 
     useExpressServer(this.app, {
       cors: true,
-      controllers: [StatController, PortController],
+      controllers: [ChartController, PortController],
     });
 
     this.handleTest();

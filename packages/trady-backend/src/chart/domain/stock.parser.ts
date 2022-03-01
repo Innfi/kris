@@ -1,17 +1,14 @@
 import { Container } from 'typedi';
 
 import TradyLogger from '../../common/logger';
-import { ReadStockDataResult, SnapshotUnit, TimestampTypeEnum } from '../model';
+import { ParseStockDataResult, TimeSeriesUnit } from 'chart/model';
 
 const logger = Container.get(TradyLogger);
 
 export const parseStockData = (
-  // symbol: Readonly<string>,
-  // interval: Readonly<string>,
   timeSeriesKey: Readonly<string>,
   rawData: unknown,
-): Readonly<ReadStockDataResult> => {
-  // const nameTimeSeries = `Time Series (${interval})`;
+): Readonly<ParseStockDataResult> => {
   const nameOpen = '1. open';
   const nameHigh = '2. high';
   const nameLow = '3. low';
@@ -22,7 +19,7 @@ export const parseStockData = (
     const parsed: any = rawData;
     const seriesDaily = parsed[timeSeriesKey];
 
-    const snapshots: SnapshotUnit[] = Object.keys(seriesDaily).map(
+    const timeSeries: Readonly<TimeSeriesUnit>[] = Object.keys(seriesDaily).map(
       (value: string) => {
         const detailData = seriesDaily[value];
 
@@ -40,12 +37,12 @@ export const parseStockData = (
 
     return {
       err: 'ok',
-      snapshots,
+      timeSeries,
     };
   } catch (err: unknown) {
     logger.error(`parseStockData] ${(err as Error).stack}`);
     return {
-      err: 'intraday: parse failed',
+      err: 'parse failed',
     };
   }
 };

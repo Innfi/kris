@@ -20,16 +20,16 @@ describe('test:unit', () => {
       'Intraday': {
         timestampType: 'Intraday',
         keyName: 'TIME_SERIES_INTRADAY',
-        toUrl: (param: string) => { return `hello:${param}`; },
+        toUrl: (param: string) => `hello:${param}`,
       },
       'Daily': {
         timestampType: 'Daily',
         keyName: 'TIME_SERIES_DAILY',
-        toUrl: () => { return 'not this' },
+        toUrl: () => 'not this',
       },
     };
     
-    const descriptor = searchKeyDict['Intraday'];
+    const descriptor = searchKeyDict.Intraday;
     const result = descriptor.toUrl(param);
     assert.strictEqual(result, expectedResult);
   });

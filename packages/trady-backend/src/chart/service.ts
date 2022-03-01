@@ -1,40 +1,46 @@
 import { Service } from 'typedi';
 
 import TradyLogger from '../common/logger';
-import { ReadStockDataResult } from './model';
-import ChartRepository from './persistence/repository';
+import { LoadChartDataResult } from './model';
+import LoadChartInputBase from './domain/input.base';
+import LoadChartInputIntraday from './domain/input.intraday';
+import ChartRepository from './repository';
 
 @Service()
-class StatService {
-  constructor(
-    protected chartRepo: ChartRepository,
-    protected logger: TradyLogger,
-  ) {}
+class ChartService {
+  constructor(protected repo: ChartRepository, protected logger: TradyLogger) {}
 
   // loadIntraday
   async loadIntraday(
     symbol: Readonly<string>,
     interval: Readonly<string>,
-  ): Promise<Readonly<ReadStockDataResult>> {
+  ): Promise<Readonly<LoadChartDataResult>> {
     try {
-      return await this.chartRepo.loadIntraday(symbol, interval);
+      const input: LoadChartInputBase = new LoadChartInputIntraday(
+        symbol,
+        interval,
+      );
+      const loadResult = await this.repo.loadChartData(input);
+      if (loadResult.err === 'ok') return loadResult;
+
+      return {
+        err: 'ok',
+      };
     } catch (err: unknown) {
       this.logger.error(`StatService.loadIntraday] ${(err as Error).stack}`);
       return { err: 'server error' };
     }
   }
 
-  // loadDaily
-  async loadDaily(
-    symbol: Readonly<string>,
-  ): Promise<Readonly<ReadStockDataResult>> {
-    try {
-      return await this.chartRepo.loadDaily(symbol);
-    } catch (err: unknown) {
-      this.logger.error(`StatService.loadDaily] ${(err as Error).stack}`);
-      return { err: 'server error' };
-    }
-  }
+  // // loadDaily
+  // async loadDaily() {
+  //   try {
+
+  //   } catch (err: unknown) {
+  //     this.logger.error(`StatService.loadDaily] ${(err as Error).stack}`);
+  //     return { err: 'server error' };
+  //   }
+  // }
 }
 
-export default StatService;
+export default ChartService;

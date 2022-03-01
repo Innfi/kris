@@ -1,48 +1,27 @@
-export enum TimestampTypeEnum {
-  INTRADAY = 1,
-  DAILY = 3,
-  WEEKLY = 7,
-  MONTHLY = 11,
-}
-
-export type TimestampType = 'Intraday' | 'Daily'; // | 'Weekly' | 'Monthly';
 export type TimeSeriesType = 'TIME_SERIES_INTRADAY' | 'TIME_SERIES_DAILY';
+export type ChartError =
+  | 'ok'
+  | 'server error'
+  | 'parse failed'
+  | 'data unavailable';
 
-export interface SnapshotUnit {
+export interface TimeSeriesUnit {
   x: Date;
   y: number[];
 }
 
-export interface StockData {
-  symbol: string;
-  interval?: string;
-  timestampType: TimestampTypeEnum;
-  snapshots?: SnapshotUnit[];
+export interface ChartData {
+  err: ChartError;
+  descriptor?: string;
+  timeseries?: Readonly<TimeSeriesUnit>[];
 }
 
-export interface ReadStockDataInput {
-  type: TimestampTypeEnum;
-  symbol: string;
-  interval: string;
+export interface LoadChartDataResult {
+  err: ChartError;
+  chartData?: ChartData;
 }
 
-export interface ReadStockDataResult {
-  err: string;
-  snapshots?: SnapshotUnit[];
-}
-
-export interface WriteStockDataInput {
-  type: TimestampTypeEnum;
-  symbol: string;
-  interval: string;
-  stockData: StockData;
-}
-
-export interface WriteStockDataResult {
-  err: string;
-}
-
-export interface LoadPortfolioStatsResult {
-  err: string;
-  stockDataByPorts?: StockData[];
+export interface ParseStockDataResult {
+  err: ChartError;
+  timeSeries?: Readonly<TimeSeriesUnit>[];
 }
