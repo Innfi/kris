@@ -3,7 +3,7 @@ import assert from 'assert';
 // import fs from 'fs';
 
 // import { Snapshot } from '../src/stat/model';
-import { SearchKeyDict } from '../src/chart/domain/searchkey.descriptor';
+// import { SearchKeyDict } from '../src/chart/domain/searchkey.descriptor';
 
 const toSeconds = (interval: string): number => {
   const min = interval.replace('min', '');
@@ -12,27 +12,27 @@ const toSeconds = (interval: string): number => {
 };
 
 describe('test:unit', () => {
-  it('searchKeyDict: test element', () => {
-    const param = 'world';
-    const expectedResult = 'hello:world';
+  // it('searchKeyDict: test element', () => {
+  //   const param = 'world';
+  //   const expectedResult = 'hello:world';
 
-    const searchKeyDict: SearchKeyDict = {
-      'Intraday': {
-        timestampType: 'Intraday',
-        keyName: 'TIME_SERIES_INTRADAY',
-        toUrl: (param: string) => `hello:${param}`,
-      },
-      'Daily': {
-        timestampType: 'Daily',
-        keyName: 'TIME_SERIES_DAILY',
-        toUrl: () => 'not this',
-      },
-    };
+  //   const searchKeyDict: SearchKeyDict = {
+  //     'Intraday': {
+  //       timestampType: 'Intraday',
+  //       keyName: 'TIME_SERIES_INTRADAY',
+  //       toUrl: (param: string) => `hello:${param}`,
+  //     },
+  //     'Daily': {
+  //       timestampType: 'Daily',
+  //       keyName: 'TIME_SERIES_DAILY',
+  //       toUrl: () => 'not this',
+  //     },
+  //   };
     
-    const descriptor = searchKeyDict.Intraday;
-    const result = descriptor.toUrl(param);
-    assert.strictEqual(result, expectedResult);
-  });
+  //   const descriptor = searchKeyDict.Intraday;
+  //   const result = descriptor.toUrl(param);
+  //   assert.strictEqual(result, expectedResult);
+  // });
 
 
   // it('parse json: to machine-friendly values', () => {

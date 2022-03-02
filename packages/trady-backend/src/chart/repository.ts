@@ -1,4 +1,4 @@
-import { Container, Service } from 'typedi';
+import { Service } from 'typedi';
 
 import TradyLogger from '../common/logger';
 import { LoadChartDataResult } from './model';

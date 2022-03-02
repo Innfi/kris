@@ -21,6 +21,10 @@ export interface LoadChartDataResult {
   chartData?: ChartData;
 }
 
+export interface SaveChartDataResult {
+  err: ChartError;
+}
+
 export interface ParseStockDataResult {
   err: ChartError;
   timeSeries?: Readonly<TimeSeriesUnit>[];
