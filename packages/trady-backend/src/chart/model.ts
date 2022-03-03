@@ -11,7 +11,6 @@ export interface TimeSeriesUnit {
 }
 
 export interface ChartData {
-  err: ChartError;
   descriptor?: string;
   timeseries?: Readonly<TimeSeriesUnit>[];
 }

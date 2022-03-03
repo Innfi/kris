@@ -5,10 +5,15 @@ import { LoadChartDataResult } from './model';
 import LoadChartInputBase from './domain/input.base';
 import LoadChartInputIntraday from './domain/input.intraday';
 import ChartRepository from './repository';
+import getDataFromReference from './persistence/data.ref';
+import parseStockData from './domain/stock.parser';
 
 @Service()
 class ChartService {
-  constructor(protected repo: ChartRepository, protected logger: TradyLogger) {}
+  constructor(
+    protected repo: ChartRepository,
+    protected logger: TradyLogger,
+  ) {}
 
   // loadIntraday
   async loadIntraday(
@@ -23,8 +28,16 @@ class ChartService {
       const loadResult = await this.repo.loadChartData(input);
       if (loadResult.err === 'ok') return loadResult;
 
+      const rawData = await getDataFromReference(input);
+      const parseResult = parseStockData(input.toTimeSeriesKey(), rawData);
+      if (parseResult.err !== 'ok') return { err: 'server error' };
+
       return {
         err: 'ok',
+        chartData: {
+          descriptor: input.toDescriptor(),
+          timeseries: parseResult.timeSeries,
+        },
       };
     } catch (err: unknown) {
       this.logger.error(`StatService.loadIntraday] ${(err as Error).stack}`);

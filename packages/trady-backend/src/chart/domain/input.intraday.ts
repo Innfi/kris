@@ -5,6 +5,7 @@ class LoadChartInputIntraday implements LoadChartInputBase {
   timeSeriesType: Readonly<TimeSeriesType> = 'TIME_SERIES_INTRADAY';
 
   symbol: Readonly<string>;
+
   interval: Readonly<string>;
 
   constructor(symbol: string, interval: string) {
@@ -27,6 +28,10 @@ class LoadChartInputIntraday implements LoadChartInputBase {
       `&interval=${this.interval}` +
       `&apikey=${apiKey}`
     );
+  }
+
+  toTimeSeriesKey(): Readonly<string> {
+    return `Time Series (${this.interval})`;
   }
 }
 

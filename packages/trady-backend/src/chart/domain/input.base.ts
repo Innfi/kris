@@ -1,9 +1,10 @@
 interface LoadChartInputBase {
   toDescriptor(): Readonly<string>;
   toReferenceUrl(
-    prefix: Readonly<String>,
+    prefix: Readonly<string>,
     apiKey: Readonly<string>,
   ): Readonly<string>;
+  toTimeSeriesKey(): Readonly<string>;
 }
 
 export default LoadChartInputBase;

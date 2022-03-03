@@ -23,7 +23,9 @@ class ChartController {
     @Param('symbol') symbol: string,
     @QueryParam('interval') interval: string,
   ): Promise<Response> {
-    return res.status(200).send({ err: 'ok' });
+    const result = await this.service.loadIntraday(symbol, interval);
+
+    return res.status(200).send(result);
   }
 }
 

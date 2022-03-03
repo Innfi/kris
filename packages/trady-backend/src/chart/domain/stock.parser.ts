@@ -1,11 +1,11 @@
 import { Container } from 'typedi';
 
-import TradyLogger from '../../common/logger';
 import { ParseStockDataResult, TimeSeriesUnit } from 'chart/model';
+import TradyLogger from '../../common/logger';
 
 const logger = Container.get(TradyLogger);
 
-export const parseStockData = (
+const parseStockData = (
   timeSeriesKey: Readonly<string>,
   rawData: unknown,
 ): Readonly<ParseStockDataResult> => {
@@ -46,3 +46,5 @@ export const parseStockData = (
     };
   }
 };
+
+export default parseStockData;
