@@ -8,7 +8,7 @@
     "test:int": "mocha --timeout 10000 -r ts-node/register test.integration/chart.ts --exit",
     "build": "tsc --build",
     "clean": "rm -rf ./dist",
-    "start": "tsc --build && node dist/src/index.js",
+    "start": "node dist/src/index.js",
     "startdev": "nodemon --exec npx ts-node src/index.ts",
     "pre": "npx prettier --write src",
     "lint": "eslint --fix src/**/*.ts test/**/*.ts"

@@ -1,8 +1,8 @@
 import LoadChartInputBase from 'chart/domain/input.base';
 import {
+  ChartData,
   LoadChartDataResult,
   SaveChartDataResult,
-  TimeSeriesUnit,
 } from 'chart/model';
 
 interface AdapterBase {
@@ -10,10 +10,7 @@ interface AdapterBase {
     key: Readonly<LoadChartInputBase>,
   ): Promise<Readonly<LoadChartDataResult>>;
 
-  writeChartData(
-    key: Readonly<LoadChartInputBase>,
-    timeSeries: Readonly<TimeSeriesUnit>[],
-  ): Promise<SaveChartDataResult>;
+  writeChartData(chartData: Readonly<ChartData>): Promise<SaveChartDataResult>;
 }
 
 export default AdapterBase;

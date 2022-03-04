@@ -9,9 +9,8 @@ const referenceUrl = process.env.URL as string;
 const apiKey = process.env.API_KEY as string;
 
 const getDataFromReference = async (
-  input: LoadChartInputBase,
+  input: Readonly<LoadChartInputBase>,
 ): Promise<unknown> => {
-
   const url = input.toReferenceUrl(referenceUrl, apiKey);
 
   const response = await axios.get(url);

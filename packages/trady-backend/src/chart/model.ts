@@ -1,9 +1,15 @@
-export type TimeSeriesType = 'TIME_SERIES_INTRADAY' | 'TIME_SERIES_DAILY';
+export type TimeSeriesType =
+  | 'TIME_SERIES_INTRADAY'
+  | 'TIME_SERIES_DAILY'
+  | 'TIME_SERIES_WEEKLY'
+  | 'TIME_SERIES_MONTHLY';
 export type ChartError =
   | 'ok'
   | 'server error'
   | 'parse failed'
-  | 'data unavailable';
+  | 'data unavailable'
+  | 'write failed'
+  | 'read failed';
 
 export interface TimeSeriesUnit {
   x: Date;
@@ -12,7 +18,7 @@ export interface TimeSeriesUnit {
 
 export interface ChartData {
   descriptor?: string;
-  timeseries?: Readonly<TimeSeriesUnit>[];
+  timeSeries?: Readonly<TimeSeriesUnit>[];
 }
 
 export interface LoadChartDataResult {

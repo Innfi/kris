@@ -1,7 +1,7 @@
 import { Container, Service } from 'typedi';
 
 import TradyLogger from '../common/logger';
-import { LoadChartDataResult } from './model';
+import { ChartData, LoadChartDataResult, SaveChartDataResult } from './model';
 import LoadChartInputBase from './domain/input.base';
 import AdapterBase from './persistence/adapter.base';
 import AdapterFile from './persistence/adapter.file';
@@ -25,6 +25,13 @@ class ChartRepository {
     input: Readonly<LoadChartInputBase>,
   ): Promise<Readonly<LoadChartDataResult>> {
     return this.adapter.readChartData(input);
+  }
+
+  // saveChartData
+  async saveChartData(
+    chartData: Readonly<ChartData>,
+  ): Promise<Readonly<SaveChartDataResult>> {
+    return this.adapter.writeChartData(chartData);
   }
 }
 
