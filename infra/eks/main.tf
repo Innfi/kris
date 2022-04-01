@@ -106,11 +106,11 @@ module "vpc" {
   version = "~> 3.0"
 
   name = local.name
-  cidr = "10.0.0.0/16"
+  cidr = var.vpc_cidr
 
   azs             = ["${local.region}a", "${local.region}b"]
-  private_subnets = ["10.0.1.0/24", "10.0.2.0/24"]
-  public_subnets  = ["10.0.4.0/24", "10.0.5.0/24"]
+  private_subnets = var.private_subnets
+  public_subnets  = var.public_subnets
 
   enable_nat_gateway   = true
   single_nat_gateway   = true
@@ -139,4 +139,16 @@ resource "aws_kms_key" "eks" {
   enable_key_rotation     = true
 
   tags = local.tags
+}
+
+module "bastion" {
+  source = "./modules/bastion"
+
+  vpc_id = module.vpc.vpc_id
+  subnet_id = module.vpc.public_subnets[0]
+  internal_cidrs = var.admin_cidr_blocks
+  security_group_id = module.vpc.default_security_group_id
+  key_pair = var.key_pair
+  ami = "ami-033a6a056910d1137"
+  instance_type = "t2.micro"
 }
