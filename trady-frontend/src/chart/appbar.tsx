@@ -82,8 +82,8 @@ const TradyAppBar = () => {
     e.preventDefault();
     const { symbol } = topic;
     setTopic({ ...topic, symbol: '' });
-    console.log(`handleSubmitSearch] topic: ${symbol}`);
-    dispatch(loadStatThunk(topic.symbol, topic.interval));
+
+    dispatch(loadStatThunk(symbol, topic.interval));
   };
 
   return (

@@ -1,0 +1,42 @@
+name: action.frontend
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "trady-frontend/**"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: module caching
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{runner.OS}}-build-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: | 
+            ${{ runner.OS }}-build-
+            ${{ runner.OS }}-
+
+      - name: dependencies
+        run: npm install
+
+      - name: lint
+        run: npm run lint
+  
+  build:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: build
+        run: npm run build
+
+# TODO: upload build output to s3
+

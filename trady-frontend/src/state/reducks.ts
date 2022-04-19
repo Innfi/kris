@@ -45,7 +45,6 @@ const tradyReducer = (
       stockStats: [...state.stockStats, action.payload.stockData],
     };
   case ERROR:
-    console.log('ERROR');
     return state;
   case SIMPLE_RESP:
     return state;
@@ -64,7 +63,7 @@ export const loadStatThunk = (symbol: string, interval: string) => {
     try {
       const url = `${backendUrl}/stat/intraday/${symbol}?interval=${interval}`;
 
-      console.log(`loadStatThunk] url: ${url}`);
+      // console.log(`loadStatThunk] url: ${url}`);
 
       const response = await axios.get(url);
       // const stockData: StockData = JSON.parse(response.data.stockData);
@@ -77,7 +76,7 @@ export const loadStatThunk = (symbol: string, interval: string) => {
         },
       });
     } catch (err: unknown) {
-      console.log(`err: ${(err as Error).message}`);
+      // console.log(`err: ${(err as Error).message}`);
       dispatch({
         type: ERROR,
         payload: err,

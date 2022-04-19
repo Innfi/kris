@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { Grid } from '@mui/material';
 
@@ -19,9 +19,9 @@ const ChartLayout = () => {
     return state.tradyReducer.stockStats;
   });
 
-  useEffect(() => {
-    console.log(`ChartLayout] len: ${stockStats.length}`);
-  }, [stockStats]);
+  // useEffect(() => {
+  //   console.log(`ChartLayout] len: ${stockStats.length}`);
+  // }, [stockStats]);
 
   if (stockStats.length <= 0) return <div>ready</div>;
 
