@@ -5,6 +5,7 @@ on:
       - main
     paths:
       - "trady-backend/**"
+      - .github/workflows/action.backend.yaml
 
 jobs:
   test:

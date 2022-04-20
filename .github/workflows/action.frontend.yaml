@@ -5,6 +5,7 @@ on:
       - main
     paths:
       - "trady-frontend/**"
+      - .github/workflows/action.frontend.yaml
 
 jobs:
   lint:
