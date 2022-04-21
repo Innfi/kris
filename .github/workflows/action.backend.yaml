@@ -10,8 +10,9 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    env:
-      working-directory: ./trady-backend
+    defaults:
+      run:
+        working-directory: ./trady-backend
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -36,26 +37,29 @@ jobs:
 
 # build: not yet
 
-  # build:
-  #   needs: test
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
+#   build:
+#     needs: test
+#     runs-on: ubuntu-latest
+#     defaults:
+#       run:
+#         working-directory: ./trady-backend
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v2
 
-  #     - name: Setup Docker Buildx
-  #       uses: docker/setup-buildx-action@v1
+#       - name: Setup Docker Buildx
+#         uses: docker/setup-buildx-action@v1
 
-  #     - name: Login
-  #       uses: docker/login-action@v1
-  #       with:
-  #         username: ${{ secrets.DOCKERHUB_USERNAME }}
-  #         password: ${{ secrets.DOCKERHUB_TOKEN }}
+#       - name: Login
+#         uses: docker/login-action@v1
+#         with:
+#           username: ${{ secrets.DOCKERHUB_USERNAME }}
+#           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-  #     - name: Build and push
-  #       uses: docker/build-push-action@v2
-  #       with:
-  #         context: .
-  #         file: ./Dockerfile
-  #         push: true
-  #         tags: docker.io/innfi/trady:latest
+#       - name: Build and push
+#         uses: docker/build-push-action@v2
+#         with:
+#           context: .
+#           file: ./Dockerfile
+#           push: true
+#           tags: docker.io/innfi/trady:latest

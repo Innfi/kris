@@ -10,8 +10,6 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
-    env:
-      working-directory: ./trady-frontend
     defaults:
       run:
         working-directory: ./trady-frontend
@@ -37,14 +35,15 @@ jobs:
   build:
     needs: lint
     runs-on: ubuntu-latest
-    env:
-      working-directory: ./trady-frontend
+    defaults:
+      run:
+        working-directory: ./trady-frontend
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      # - name: dependencies
-      #   run: npm install
+      - name: dependencies
+        run: npm install
 
       - name: build
         run: npm run build
