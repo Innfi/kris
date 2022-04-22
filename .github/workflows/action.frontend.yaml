@@ -5,10 +5,14 @@ on:
       - main
     paths:
       - "trady-frontend/**"
+      - .github/workflows/action.frontend.yaml
 
 jobs:
   lint:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./trady-frontend
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -31,9 +35,15 @@ jobs:
   build:
     needs: lint
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./trady-frontend
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: dependencies
+        run: npm install
 
       - name: build
         run: npm run build
