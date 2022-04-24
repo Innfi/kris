@@ -28,15 +28,16 @@ A trade advisor to help stock trading decisions
 ## Backend
 
 - [Node.js](https://nodejs.org/ko/)
+- [Express.js](https://expressjs.com/)
 - [Typescript](https://www.typescriptlang.org/)
 - [TypeDI](https://github.com/typestack/typedi)
 - [Routing-controllers](https://github.com/typestack/routing-controllers)
-- [Redis](https://redis.io/)
 
 ## Intrastructure
-
+- [Docker](https://www.docker.com/)
 - [Kubernetes](https://kubernetes.io/ko/) on [EKS](https://aws.amazon.com/ko/eks/)
 - [Helm Chart](https://helm.sh/)
+- [Redis](https://redis.io/)
 
 ## CI/CD
 
