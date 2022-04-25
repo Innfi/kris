@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: trady
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    name: trady
+  type: LoadBalancer
+  ports:
+  - port: {{ .Values.trady.port }}
+    targetPort: {{ .Values.trady.port }}
+    protocol: TCP

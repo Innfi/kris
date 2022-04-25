@@ -1,12 +1,17 @@
 namespace: default
-backendReplicaCount: 2
-redisReplicaCount: 2
-port: 8080
 
-image:
-  backend: innfi/trady-backend:latest
+trady:
+  image: innfi/trady-backend:latest
   pullPolicy: Always
-  redis: redis:latest
+  replicaCount: 2
+  port: 8080
 
 redis:
+  image: redis:latest
+  replicaCount: 2
   url: redis://redis.default.svc.cluster.local:6379
+
+mongo:
+  image: mongo:latest
+  replicaCount: 2
+  url: mongodb://mongo.default.svc.cluster.local:27017

@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trady
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.trady.replicaCount }}
+  selector:
+    matchLabels:
+      name: trady
+  template:
+    metadata:
+      labels:
+        name: trady
+    spec:
+      containers:
+      - name: trady-instance
+        image: {{ .Values.trady.image }}
+        imagePullPolicy: {{ .Values.trady.pullPolicy }}
+        env:
+        - name: REDIS_URL
+          value: {{ .Values.redis.url }}
+        - name: MONGO_URL
+          value: {{ .Values.mongo.url }}
+        ports:
+        - containerPort: {{ .Values.port }}
