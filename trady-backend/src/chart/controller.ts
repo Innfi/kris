@@ -9,11 +9,11 @@ import {
   JsonController,
 } from 'routing-controllers';
 
-import ChartService from './service';
+import { ChartService } from './service';
 
 @Service()
 @JsonController('/chart')
-class ChartController {
+export class ChartController {
   constructor(protected service: ChartService) {}
 
   @Get('/intraday/:symbol')
@@ -61,5 +61,3 @@ class ChartController {
     return res.status(200).send(result);
   }
 }
-
-export default ChartController;

@@ -1,7 +1,7 @@
 import { TimeSeriesType } from 'chart/model';
-import LoadChartInputBase from './input.base';
+import { LoadChartInputBase } from './input.base';
 
-class LoadChartInputIntraday implements LoadChartInputBase {
+export class LoadChartInputIntraday implements LoadChartInputBase {
   timeSeriesType: Readonly<TimeSeriesType> = 'TIME_SERIES_INTRADAY';
 
   symbol: Readonly<string>;
@@ -34,5 +34,3 @@ class LoadChartInputIntraday implements LoadChartInputBase {
     return `Time Series (${this.interval})`;
   }
 }
-
-export default LoadChartInputIntraday;

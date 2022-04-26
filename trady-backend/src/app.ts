@@ -3,7 +3,7 @@ import { Container, Service } from 'typedi';
 import { useExpressServer, useContainer } from 'routing-controllers';
 import dotenv from 'dotenv';
 
-import ChartController from './chart/controller';
+import { ChartController } from './chart';
 import PortController from './portfolio/controller';
 import TradyLogger from './common/logger';
 

@@ -16,5 +16,6 @@ rules: {
   "linebreak-style": 0,
   "indent": ["error", 2], 
   "no-console": ["error", { allow: ["warn", "error", "log"] }],
-  "@typescript-eslint/no-use-before-define": ["off"]
+  "@typescript-eslint/no-use-before-define": ["off"],
+  "import/prefer-default-export": "off"
 }

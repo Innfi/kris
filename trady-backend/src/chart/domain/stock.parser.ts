@@ -5,7 +5,7 @@ import TradyLogger from '../../common/logger';
 
 const logger = Container.get(TradyLogger);
 
-const parseStockData = (
+export const parseStockData = (
   timeSeriesKey: Readonly<string>,
   rawData: unknown,
 ): Readonly<ParseStockDataResult> => {
@@ -46,5 +46,3 @@ const parseStockData = (
     };
   }
 };
-
-export default parseStockData;

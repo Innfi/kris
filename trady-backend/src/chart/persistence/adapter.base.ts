@@ -1,4 +1,4 @@
-import LoadChartInputBase from 'chart/domain/input.base';
+import { LoadChartInputBase } from 'chart/domain/input.base';
 import {
   ChartData,
   LoadChartDataResult,

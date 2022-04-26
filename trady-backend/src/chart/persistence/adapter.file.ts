@@ -1,7 +1,7 @@
 import { Service } from 'typedi';
 import fs from 'fs';
 
-import LoadChartInputBase from 'chart/domain/input.base';
+import { LoadChartInputBase } from 'chart/domain/input.base';
 import {
   ChartData,
   LoadChartDataResult,

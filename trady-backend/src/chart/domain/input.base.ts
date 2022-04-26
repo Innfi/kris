@@ -1,4 +1,4 @@
-interface LoadChartInputBase {
+export interface LoadChartInputBase {
   toDescriptor(): Readonly<string>;
   toReferenceUrl(
     prefix: Readonly<string>,
@@ -6,5 +6,3 @@ interface LoadChartInputBase {
   ): Readonly<string>;
   toTimeSeriesKey(): Readonly<string>;
 }
-
-export default LoadChartInputBase;
