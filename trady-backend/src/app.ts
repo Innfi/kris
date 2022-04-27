@@ -3,16 +3,16 @@ import { Container, Service } from 'typedi';
 import { useExpressServer, useContainer } from 'routing-controllers';
 import dotenv from 'dotenv';
 
+import { TradyLogger } from './common/logger';
 import { ChartController } from './chart';
-import PortController from './portfolio/controller';
-import TradyLogger from './common/logger';
+import { PortController } from './portfolio/controller';
 
 useContainer(Container);
 
 dotenv.config();
 
 @Service()
-class Trady {
+export class Trady {
   app: any;
 
   constructor(protected tradyLogger: TradyLogger) {
@@ -39,5 +39,3 @@ class Trady {
     });
   }
 }
-
-export default Trady;

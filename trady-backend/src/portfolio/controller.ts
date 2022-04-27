@@ -11,7 +11,7 @@ import {
 } from 'routing-controllers';
 
 import { LoadPortfolioResult, SavePortfolioResult } from './model';
-import PortService from './service';
+import { PortService } from './service';
 
 interface AddPortfolioInput {
   email: string;
@@ -20,7 +20,7 @@ interface AddPortfolioInput {
 
 @Service()
 @JsonController('/port')
-class PortController {
+export class PortController {
   constructor(private service: PortService) {}
 
   @Post('/add')
@@ -41,7 +41,7 @@ class PortController {
 
   @Get('/list/:email')
   async listPortfolio(
-    @Req() req: Request,
+    @Req() _req: Request,
     @Res() res: Response,
     @Param('email') email: string,
   ): Promise<Response> {
@@ -55,5 +55,3 @@ class PortController {
     });
   }
 }
-
-export default PortController;

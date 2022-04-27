@@ -1,11 +1,11 @@
 import { Container, Service } from 'typedi';
 
-import TradyLogger from '../common/logger';
+import { TradyLogger } from '../common/logger';
 import { ChartData, LoadChartDataResult, SaveChartDataResult } from './model';
 import { LoadChartInputBase } from './domain/input.base';
-import AdapterBase from './persistence/adapter.base';
-import AdapterFile from './persistence/adapter.file';
-import AdapterRedis from './persistence/adapter.redis';
+import { AdapterBase } from './persistence/adapter.base';
+import { AdapterFile } from './persistence/adapter.file';
+import { AdapterRedis } from './persistence/adapter.redis';
 
 const createRepositoryLocal = (): ChartRepository =>
   new ChartRepository(Container.get(AdapterFile), Container.get(TradyLogger));
@@ -17,7 +17,7 @@ const initializer: CallableFunction =
   process.env.ENV === 'local' ? createRepositoryLocal : createRepositoryCompose;
 
 @Service({ factory: initializer })
-class ChartRepository {
+export class ChartRepository {
   constructor(protected adapter: AdapterBase, protected logger: TradyLogger) {}
 
   // loadChartData
@@ -34,5 +34,3 @@ class ChartRepository {
     return this.adapter.writeChartData(chartData);
   }
 }
-
-export default ChartRepository;

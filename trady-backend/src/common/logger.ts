@@ -10,7 +10,7 @@ dotenv.config();
 const esUrl = process.env.ES_URL;
 
 @Service()
-class TradyLogger {
+export class TradyLogger {
   protected esTransportOptions: ElasticsearchTransportOptions = {
     level: 'info',
     clientOpts: { node: esUrl },
@@ -46,5 +46,3 @@ class TradyLogger {
     this.logger.error(msg);
   }
 }
-
-export default TradyLogger;

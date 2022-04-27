@@ -1,18 +1,18 @@
 import { Service } from 'typedi';
 import fs from 'fs';
 
-import { LoadChartInputBase } from 'chart/domain/input.base';
+import { TradyLogger } from '../../common/logger';
+import { LoadChartInputBase } from '../domain/input.base';
 import {
   ChartData,
   LoadChartDataResult,
   SaveChartDataResult,
   TimeSeriesUnit,
-} from 'chart/model';
-import TradyLogger from '../../common/logger';
-import AdapterBase from './adapter.base';
+} from '../model';
+import { AdapterBase } from './adapter.base';
 
 @Service()
-class AdapterFile implements AdapterBase {
+export class AdapterFile implements AdapterBase {
   readonly dataPath = './data/';
 
   constructor(protected logger: TradyLogger) {}
@@ -59,5 +59,3 @@ class AdapterFile implements AdapterBase {
     return { err: 'ok' };
   }
 }
-
-export default AdapterFile;

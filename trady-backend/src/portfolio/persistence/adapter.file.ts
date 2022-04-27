@@ -1,12 +1,12 @@
 import { Service } from 'typedi';
 import fs from 'fs';
 
-import TradyLogger from '../../common/logger';
+import { TradyLogger } from '../../common/logger';
 import { LoadPortfolioResult, SavePortfolioResult } from '../model';
-import AdapterBase from './adapter.base';
+import { AdapterBase } from './adapter.base';
 
 @Service()
-class AdapterFile implements AdapterBase {
+export class AdapterFile implements AdapterBase {
   readonly dataPath = './port';
 
   constructor(protected logger: TradyLogger) {}
@@ -59,5 +59,3 @@ class AdapterFile implements AdapterBase {
     return `${this.dataPath}/${email}.json`;
   }
 }
-
-export default AdapterFile;

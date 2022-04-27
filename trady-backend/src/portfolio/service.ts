@@ -1,11 +1,11 @@
 import { Service } from 'typedi';
 
-import TradyLogger from '../common/logger';
+import { TradyLogger } from '../common/logger';
 import { LoadPortfolioResult, SavePortfolioResult } from './model';
-import PortRepository from './persistence/repository';
+import { PortRepository } from './repository';
 
 @Service()
-class PortService {
+export class PortService {
   constructor(protected repo: PortRepository, protected logger: TradyLogger) {}
 
   // savePort
@@ -31,5 +31,3 @@ class PortService {
     }
   }
 }
-
-export default PortService;

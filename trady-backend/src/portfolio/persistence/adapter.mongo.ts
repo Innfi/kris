@@ -2,9 +2,9 @@ import { Service } from 'typedi';
 import mongoose, { ConnectOptions, Document, Schema } from 'mongoose';
 // import dotenv from 'dotenv';
 
-import TradyLogger from '../../common/logger';
+import { TradyLogger } from '../../common/logger';
 import { LoadPortfolioResult, SavePortfolioResult } from '../model';
-import AdapterBase from './adapter.base';
+import { AdapterBase } from './adapter.base';
 
 // dotenv.config();
 const mongoUrl = process.env.MONGO_URL;
@@ -20,7 +20,7 @@ const PortfolioSchema = new Schema<IPortfolio>({
 });
 
 @Service()
-class AdapterMongo implements AdapterBase {
+export class AdapterMongo implements AdapterBase {
   protected dbUrl = `${mongoUrl}/trady`;
 
   protected options: ConnectOptions = {
@@ -91,5 +91,3 @@ class AdapterMongo implements AdapterBase {
     return { err: 'ok' };
   }
 }
-
-export default AdapterMongo;

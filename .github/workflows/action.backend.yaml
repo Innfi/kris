@@ -58,6 +58,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./trady-backend
-          file: ./Dockerfile
+          file: ./trady-backend/Dockerfile
           push: true
           tags: docker.io/innfi/trady:latest
