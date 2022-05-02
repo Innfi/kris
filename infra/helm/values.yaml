@@ -15,3 +15,8 @@ mongo:
   image: mongo:latest
   replicaCount: 2
   url: mongodb://mongo.default.svc.cluster.local:27017
+
+elasticsearch:
+  image: elasticsearch:latest
+  replicaCount: 2
+  url: es://elasticsearch.default.svc.cluster.local:9200

@@ -22,5 +22,7 @@ spec:
           value: {{ .Values.redis.url }}
         - name: MONGO_URL
           value: {{ .Values.mongo.url }}
+        - name: ES_URL
+          value: {{ .Values.elasticsearch.url }}
         ports:
         - containerPort: {{ .Values.port }}

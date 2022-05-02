@@ -4,9 +4,3 @@ description: helm chart for trady-chart
 type: application
 version: 0.1.0
 appVersion: "0.1.0"
-
-#TODO
-#-----------------------
-# k8s objects for 
-#- backend service
-#- persistence (redis, mongodb)
