@@ -1,7 +1,7 @@
 import { Container } from 'typedi';
 
 import { ParseStockDataResult, TimeSeriesUnit } from 'chart/model';
-import TradyLogger from '../../common/logger';
+import { TradyLogger } from '../../common/logger';
 
 const logger = Container.get(TradyLogger);
 

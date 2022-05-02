@@ -8,7 +8,7 @@ dotenv.config();
 const referenceUrl = process.env.URL as string;
 const apiKey = process.env.API_KEY as string;
 
-const getDataFromReference = async (
+export const getDataFromReference = async (
   input: Readonly<LoadChartInputBase>,
 ): Promise<unknown> => {
   const url = input.toReferenceUrl(referenceUrl, apiKey);
@@ -17,5 +17,3 @@ const getDataFromReference = async (
 
   return response.data;
 };
-
-export default getDataFromReference;

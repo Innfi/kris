@@ -1,6 +1,6 @@
 import { Service } from 'typedi';
 
-import TradyLogger from '../common/logger';
+import { TradyLogger } from '../common/logger';
 import { ChartData, LoadChartDataResult } from './model';
 import { LoadChartInputBase } from './domain/input.base';
 import { LoadChartInputIntraday } from './domain/input.intraday';
@@ -8,8 +8,8 @@ import { LoadChartInputDaily } from './domain/input.daily';
 import { LoadChartInputWeekly } from './domain/input.weekly';
 import { LoadChartInputMonthly } from './domain/input.monthly';
 import { parseStockData } from './domain/stock.parser';
-import ChartRepository from './repository';
-import getDataFromReference from './persistence/data.ref';
+import { ChartRepository } from './repository';
+import { getDataFromReference } from './persistence/data.ref';
 
 @Service()
 export class ChartService {

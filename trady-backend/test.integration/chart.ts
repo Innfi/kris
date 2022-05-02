@@ -2,8 +2,7 @@ import 'reflect-metadata';
 import assert from 'assert';
 import { Container } from 'typedi';
 
-import ChartRepository from '../src/chart/repository';
-import { LoadChartInputIntraday } from '../src/chart';
+import { ChartRepository, LoadChartInputIntraday } from '../src/chart';
 
 describe('chart.repository', () => {
   it('loadIntraday] check basic function', async () => {
