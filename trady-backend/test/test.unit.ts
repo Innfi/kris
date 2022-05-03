@@ -1,63 +1,58 @@
 import 'reflect-metadata';
 import assert from 'assert';
-// import fs from 'fs';
 
-// import { Snapshot } from '../src/stat/model';
-// import { SearchKeyDict } from '../src/chart/domain/searchkey.descriptor';
+import { parseStockData } from '../src/chart/domain/stock.parser';
+import { LoadChartInputDaily } from '../src/chart/domain/input.daily';
 
-const toSeconds = (interval: string): number => {
-  const min = interval.replace('min', '');
+const sampleData = {
+  "Meta Data": {
+      "1. Information": "Daily Prices (open, high, low, close) and Volumes",
+      "2. Symbol": "IBM",
+      "3. Last Refreshed": "2022-05-02",
+      "4. Output Size": "Compact",
+      "5. Time Zone": "US/Eastern"
+  },
+  "Time Series (Daily)": {
+      "2022-05-02": {
+          "1. open": "133.0000",
+          "2. high": "133.7700",
+          "3. low": "130.8900",
+          "4. close": "133.0400",
+          "5. volume": "4213477"
+      },
+      "2022-04-29": {
+          "1. open": "135.1300",
+          "2. high": "135.5545",
+          "3. low": "132.0000",
+          "4. close": "132.2100",
+          "5. volume": "5078660"
+      },
+      "2022-04-28": {
+          "1. open": "136.8500",
+          "2. high": "136.9900",
+          "3. low": "134.8100",
+          "4. close": "135.7400",
+          "5. volume": "4477068"
+      }
+  }
+}
 
-  return Number.parseInt(min, 10)*60;
-};
+describe('parseStockData', () => {
+  it('returns error without source data', () => {
+    const timeSeriesKey = new LoadChartInputDaily('IBM').toTimeSeriesKey();
+    const rawData = undefined;
 
-describe('test:unit', () => {
-  // it('searchKeyDict: test element', () => {
-  //   const param = 'world';
-  //   const expectedResult = 'hello:world';
+    const result = parseStockData(timeSeriesKey, rawData);
 
-  //   const searchKeyDict: SearchKeyDict = {
-  //     'Intraday': {
-  //       timestampType: 'Intraday',
-  //       keyName: 'TIME_SERIES_INTRADAY',
-  //       toUrl: (param: string) => `hello:${param}`,
-  //     },
-  //     'Daily': {
-  //       timestampType: 'Daily',
-  //       keyName: 'TIME_SERIES_DAILY',
-  //       toUrl: () => 'not this',
-  //     },
-  //   };
-    
-  //   const descriptor = searchKeyDict.Intraday;
-  //   const result = descriptor.toUrl(param);
-  //   assert.strictEqual(result, expectedResult);
-  // });
+    assert.strictEqual(result.err, 'parse failed');
+  });
 
+  it('returns ok for valid source', () => {
+    const timeSeriesKey = new LoadChartInputDaily('IBM').toTimeSeriesKey();
+    const rawData = sampleData;
 
-  // it('parse json: to machine-friendly values', () => {
-  //   const input: string = fs.readFileSync('./test/sample.json', 'utf-8');
-  //   const rawData = JSON.parse(input);
-  //   const seriesDailyKey = 'Time Series (Daily)';
-  //   const seriesDaily = rawData[seriesDailyKey];
+    const result = parseStockData(timeSeriesKey, rawData);
 
-  //   const dates: string[] = Object.keys(seriesDaily);
-  //   const snapshots: Snapshot[] = dates.map((value: string) => {
-  //     const detailData = seriesDaily[value];
-  //     return {
-  //       time: new Date(value),
-  //       open: detailData['1. open'],
-  //       high: detailData['2. high'],
-  //       low: detailData['3. low'],
-  //       close: detailData['4. close'],
-  //       volume: detailData['5. volume'],
-  //     };
-  //   });
-
-  //   assert.strictEqual(snapshots.length > 0, true);
-  // });
-
-  it('toSeconds', () => {
-    assert.strictEqual(toSeconds('60min'), 3600);
+    assert.strictEqual(result.err, 'ok');
   });
 });

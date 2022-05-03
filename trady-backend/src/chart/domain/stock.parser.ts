@@ -17,11 +17,11 @@ export const parseStockData = (
 
   try {
     const parsed: any = rawData;
-    const seriesDaily = parsed[timeSeriesKey];
+    const timeSeriesValue = parsed[timeSeriesKey];
 
-    const timeSeries: Readonly<TimeSeriesUnit>[] = Object.keys(seriesDaily).map(
+    const timeSeries: TimeSeriesUnit[] = Object.keys(timeSeriesValue).map(
       (value: string) => {
-        const detailData = seriesDaily[value];
+        const detailData = timeSeriesValue[value];
 
         return {
           x: new Date(value),
