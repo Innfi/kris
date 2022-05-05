@@ -7,7 +7,7 @@ import {
 import dotenv from 'dotenv';
 
 dotenv.config();
-const esUrl = process.env.ES_URL;
+const esUrl = process.env.ES_URL ? process.env.ES_URL : 'http://localhost:9200';
 
 @Service()
 export class TradyLogger {
