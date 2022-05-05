@@ -23,14 +23,20 @@ export const parseStockData = (
       (value: string) => {
         const detailData = timeSeriesValue[value];
 
+        const chartValue: number[] = [
+          +detailData[nameOpen],
+          +detailData[nameHigh],
+          +detailData[nameLow],
+          +detailData[nameClose],
+        ];
+
+        if (!chartValue.every(value => value)) {
+          throw new Error('invalid chartValue');
+        }
+
         return {
           x: new Date(value),
-          y: [
-            +detailData[nameOpen],
-            +detailData[nameHigh],
-            +detailData[nameLow],
-            +detailData[nameClose],
-          ],
+          y: chartValue,
         };
       },
     );
