@@ -30,7 +30,7 @@ export const parseStockData = (
           +detailData[nameClose],
         ];
 
-        if (!chartValue.every(value => value)) {
+        if (!chartValue.every((data) => data)) {
           throw new Error('invalid chartValue');
         }
 

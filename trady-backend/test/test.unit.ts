@@ -39,39 +39,39 @@ const sampleData = {
 
 const invalidKeyData = {
   "Meta Data": {
-      "1. Information": "Daily Prices (open, high, low, close) and Volumes",
-      "2. Symbol": "IBM",
-      "3. Last Refreshed": "2022-05-02",
-      "4. Output Size": "Compact",
-      "5. Time Zone": "US/Eastern"
+    "1. Information": "Daily Prices (open, high, low, close) and Volumes",
+    "2. Symbol": "IBM",
+    "3. Last Refreshed": "2022-05-02",
+    "4. Output Size": "Compact",
+    "5. Time Zone": "US/Eastern"
   },
   "Time Series (Daily)": {
-      "2022-04-28": {
-          "open": "136.8500",
-          "2. high": "136.9900",
-          "3. low": "134.8100",
-          "4. close": "135.7400",
-          "5. volume": "4477068"
-      }
+    "2022-04-28": {
+      "open": "136.8500",
+      "2. high": "136.9900",
+      "3. low": "134.8100",
+      "4. close": "135.7400",
+      "5. volume": "4477068"
+    }
   }
 }
 
 const invalidValueData = {
   "Meta Data": {
-      "1. Information": "Daily Prices (open, high, low, close) and Volumes",
-      "2. Symbol": "IBM",
-      "3. Last Refreshed": "2022-05-02",
-      "4. Output Size": "Compact",
-      "5. Time Zone": "US/Eastern"
+    "1. Information": "Daily Prices (open, high, low, close) and Volumes",
+    "2. Symbol": "IBM",
+    "3. Last Refreshed": "2022-05-02",
+    "4. Output Size": "Compact",
+    "5. Time Zone": "US/Eastern"
   },
   "Time Series (Daily)": {
-      "2022-04-28": {
-          "1. open": "136.8500",
-          "2. high": "136.9900",
-          "3. low": "134.8100",
-          "4. close": "abcd",
-          "5. volume": "4477068"
-      }
+    "2022-04-28": {
+      "1. open": "136.8500",
+      "2. high": "136.9900",
+      "3. low": "134.8100",
+      "4. close": "abcd",
+      "5. volume": "4477068"
+    }
   }
 }
 
