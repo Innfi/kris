@@ -43,7 +43,7 @@ export class PortController {
   async listPortfolio(
     @Req() _req: Request,
     @Res() res: Response,
-    @Param('email') email: string,
+    @Param('email') email: string, //TODO: need auth
   ): Promise<Response> {
     const result: LoadPortfolioResult = await this.service.listPort(email);
 
