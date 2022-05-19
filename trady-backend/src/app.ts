@@ -4,7 +4,6 @@ import { useExpressServer, useContainer } from 'routing-controllers';
 import dotenv from 'dotenv';
 
 import { TradyLogger } from './common/logger';
-import { ChartController } from './chart';
 import { PortController } from './portfolio/controller';
 
 useContainer(Container);
@@ -20,7 +19,7 @@ export class Trady {
 
     useExpressServer(this.app, {
       cors: true,
-      controllers: [ChartController, PortController],
+      controllers: [ PortController ],
     });
 
     this.handleTest();

@@ -6,6 +6,7 @@ A trade advisor to help stock trading decisions
 
 [![action.frontend](https://github.com/Innfi/trady/actions/workflows/action.frontend.yaml/badge.svg)](https://github.com/Innfi/trady/actions/workflows/action.frontend.yaml)
 [![action.backend](https://github.com/Innfi/trady/actions/workflows/action.backend.yaml/badge.svg)](https://github.com/Innfi/trady/actions/workflows/action.backend.yaml)
+[![action.chart](https://github.com/Innfi/trady/actions/workflows/action.chart.yaml/badge.svg)](https://github.com/Innfi/trady/actions/workflows/action.chart.yaml)
 
 # Features
 

@@ -26,11 +26,11 @@ jobs:
             ${{ runner.OS }}-build-
             ${{ runner.OS }}-
       
-      # - name: dependencies
-      #   run: npm install
+      - name: dependencies
+        run: npm install
 
-      # - name: lint
-      #   run: npm run lint
+      - name: lint
+        run: npm run lint
 
       - name: test
         run: npm test
