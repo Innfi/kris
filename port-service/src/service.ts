@@ -1,6 +1,6 @@
 import { Service } from 'typedi';
 
-import { TradyLogger } from '../common/logger';
+import { TradyLogger } from './common/logger';
 import { LoadPortfolioResult, SavePortfolioResult } from './model';
 import { PortRepository } from './repository';
 

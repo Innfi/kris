@@ -1,13 +1,13 @@
 import { Service } from 'typedi';
 import mongoose, { ConnectOptions, Document, Schema } from 'mongoose';
-// import dotenv from 'dotenv';
 
-import { TradyLogger } from '../../common/logger';
+import { TradyLogger } from '../common/logger';
 import { LoadPortfolioResult, SavePortfolioResult } from '../model';
 import { AdapterBase } from './adapter.base';
 
-// dotenv.config();
-const mongoUrl = process.env.MONGO_URL;
+const mongoUrl = process.env.MONGO_URL
+  ? process.env.MONGO_URL
+  : 'mongodb://localhost:27017/trady';
 
 interface IPortfolio extends Document {
   email: string;

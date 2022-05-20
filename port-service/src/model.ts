@@ -3,6 +3,11 @@ export interface LoadPortfolioResult {
   symbols?: string[];
 }
 
+export interface AddPortfolioInput {
+  email: string;
+  symbols: string[];
+}
+
 export interface SavePortfolioResult {
   err: string;
 }

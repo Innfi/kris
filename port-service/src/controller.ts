@@ -10,13 +10,12 @@ import {
   Param,
 } from 'routing-controllers';
 
-import { LoadPortfolioResult, SavePortfolioResult } from './model';
+import {
+  AddPortfolioInput,
+  LoadPortfolioResult,
+  SavePortfolioResult,
+} from './model';
 import { PortService } from './service';
-
-interface AddPortfolioInput {
-  email: string;
-  symbols: string[];
-}
 
 @Service()
 @JsonController('/port')

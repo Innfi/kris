@@ -4,14 +4,14 @@ import { useExpressServer, useContainer } from 'routing-controllers';
 import dotenv from 'dotenv';
 
 import { TradyLogger } from './common/logger';
-import { PortController } from './portfolio/controller';
+import { PortController } from './controller';
 
 useContainer(Container);
 
 dotenv.config();
 
 @Service()
-export class Trady {
+export class App {
   app: any;
 
   constructor(protected tradyLogger: TradyLogger) {
@@ -19,7 +19,7 @@ export class Trady {
 
     useExpressServer(this.app, {
       cors: true,
-      controllers: [ PortController ],
+      controllers: [PortController],
     });
 
     this.handleTest();
@@ -27,7 +27,7 @@ export class Trady {
 
   protected handleTest() {
     this.app.get('/', (_req: Request, res: Response) => {
-      res.status(200).send({ err: 'ok' }).end();
+      res.status(200).send({ err: 'ok', worker: 'port-service' }).end();
     });
   }
 

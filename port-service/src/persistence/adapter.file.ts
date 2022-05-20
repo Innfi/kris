@@ -1,7 +1,7 @@
 import { Service } from 'typedi';
 import fs from 'fs';
 
-import { TradyLogger } from '../../common/logger';
+import { TradyLogger } from '../common/logger';
 import { LoadPortfolioResult, SavePortfolioResult } from '../model';
 import { AdapterBase } from './adapter.base';
 

@@ -1,4 +1,4 @@
-import { LoadPortfolioResult, SavePortfolioResult } from 'portfolio/model';
+import { LoadPortfolioResult, SavePortfolioResult } from '../model';
 
 export interface AdapterBase {
   readUserPort(email: string): Promise<LoadPortfolioResult>;
