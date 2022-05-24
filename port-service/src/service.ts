@@ -1,11 +1,12 @@
 import { Service } from 'typedi';
 
 import { TradyLogger } from './common/logger';
+import { EventListener, EventPayload } from './common/event/types';
 import { LoadPortfolioResult, SavePortfolioResult } from './model';
 import { PortRepository } from './repository';
 
 @Service()
-export class PortService {
+export class PortService implements EventListener {
   constructor(protected repo: PortRepository, protected logger: TradyLogger) {}
 
   // savePort
@@ -29,5 +30,10 @@ export class PortService {
       this.logger.error(`PortService.listPort] ${(err as Error).stack}`);
       return { err: 'server error' };
     }
+  }
+
+  // handleEvent implements EventListener method
+  handleEvent(payload: Readonly<EventPayload>) {
+    this.logger.info(`payload: ${JSON.stringify(payload)}`);
   }
 }
