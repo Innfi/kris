@@ -1,7 +1,7 @@
 import { Service } from 'typedi';
 
 import { TradyLogger } from './common/logger';
-import { EventListener, EventPayload } from './common/event/types';
+import { EventListener, EventPayload } from './event/types';
 import { LoadPortfolioResult, SavePortfolioResult } from './model';
 import { PortRepository } from './repository';
 
