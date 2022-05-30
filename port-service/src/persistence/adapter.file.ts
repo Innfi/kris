@@ -41,6 +41,10 @@ export class AdapterFile implements AdapterBase {
     symbols: string[],
   ): Promise<SavePortfolioResult> {
     try {
+      if (!fs.existsSync(this.dataPath)) {
+        fs.mkdirSync(this.dataPath);
+      }
+
       const effectiveFilePath = this.toEffectiveFilepath(email);
 
       fs.writeFileSync(effectiveFilePath, JSON.stringify(symbols), 'utf-8');

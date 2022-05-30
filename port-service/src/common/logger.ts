@@ -7,7 +7,10 @@ import {
 import dotenv from 'dotenv';
 
 dotenv.config();
-const esUrl = process.env.ES_URL ? process.env.ES_URL : 'http://localhost:9200';
+
+const esUrl = process.env.ES_URL
+  ? process.env.ES_URL
+  : 'http://localhost://9200';
 
 @Service()
 export class TradyLogger {
@@ -25,7 +28,9 @@ export class TradyLogger {
   constructor() {
     this.logger.info('TradyLogger] ');
 
-    if (process.env.NODE_ENV !== 'local') return;
+    // if (!esUrl) throw new Error(`elasticsearch url invalid`);
+
+    if (process.env.ENV !== 'local') return;
 
     this.logger.add(
       new winston.transports.Console({

@@ -1,10 +1,15 @@
-import { Service } from 'typedi';
+import { Container, Service } from 'typedi';
 import amqp from 'amqplib/callback_api';
 
 import { TradyLogger } from '../common/logger';
 import { EventListener, EventPayload, EventQueue } from './types';
 
-@Service()
+const mqUrl = process.env.MQ_URL ? process.env.MQ_URL : 'amqp://localhost';
+
+const createEventQueue = () =>
+  new EventQueueRabbit(mqUrl, Container.get(TradyLogger));
+
+@Service({ factory: createEventQueue })
 export class EventQueueRabbit implements EventQueue {
   listeners: EventListener[] = [];
 
@@ -45,15 +50,19 @@ export class EventQueueRabbit implements EventQueue {
         channel.assertQueue(this.queueName);
 
         channel.consume(this.queueName, (msg: amqp.Message | null) => {
-          const rawMessage = msg?.content.toString();
-          if (!rawMessage) return;
+          try {
+            const rawMessage = msg?.content.toString();
+            if (!rawMessage) return;
 
-          const payload = JSON.parse(rawMessage) as EventPayload;
-          // TODO: handling parse error
+            const payload = JSON.parse(rawMessage) as EventPayload;
+            // TODO: handling parse error
 
-          this.listeners.forEach((listener: EventListener) => {
-            listener.handleEvent(payload);
-          });
+            this.listeners.forEach((listener: EventListener) => {
+              listener.handleEvent(payload);
+            });
+          } catch (err) {
+            this.logger.error(`consume] ${(err as Error).stack}`);
+          }
         });
       });
     });

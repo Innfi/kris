@@ -1,23 +1,25 @@
+import 'reflect-metadata';
 import express, { Request, Response } from 'express';
 import { Container, Service } from 'typedi';
 import { useExpressServer, useContainer } from 'routing-controllers';
-import dotenv from 'dotenv';
 
-import { EventQueueRabbit } from 'event/eventQueueRabbit';
 import { TradyLogger } from './common/logger';
 import { EventQueue } from './event/types';
+import { EventQueueRabbit } from './event/eventQueueRabbit';
 import { PortController } from './controller';
 import { PortService } from './service';
 
 useContainer(Container);
 
-dotenv.config();
+const appInitializer = () =>
+  new App(Container.get(EventQueueRabbit), Container.get(TradyLogger));
 
-@Service()
+@Service({ factory: appInitializer })
 export class App {
   app: any;
 
-  constructor(protected logger: TradyLogger) {
+  constructor(protected eventQueue: EventQueue, protected logger: TradyLogger) {
+    this.logger.info(`App.constructor] `);
     this.app = express();
 
     useExpressServer(this.app, {
@@ -26,6 +28,8 @@ export class App {
     });
 
     this.handleTest();
+
+    this.initEventQueue();
   }
 
   protected handleTest() {
@@ -43,11 +47,9 @@ export class App {
 
   protected initEventQueue() {
     this.logger.info(`App.initEventQueue] `);
-    // FIXME: handle dependecies
-    const eventQueue: EventQueue = Container.get(EventQueueRabbit);
     const portService = Container.get(PortService);
 
-    eventQueue.registerListener(portService);
-    eventQueue.run();
+    this.eventQueue.registerListener(portService);
+    this.eventQueue.run();
   }
 }
