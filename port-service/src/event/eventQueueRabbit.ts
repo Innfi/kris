@@ -49,7 +49,7 @@ export class EventQueueRabbit implements EventQueue {
 
         channel.assertQueue(this.queueName);
 
-        channel.consume(this.queueName, (msg: amqp.Message | null) => {
+        channel.consume(this.queueName, async (msg: amqp.Message | null) => {
           try {
             const rawMessage = msg?.content.toString();
             if (!rawMessage) return;
@@ -57,9 +57,15 @@ export class EventQueueRabbit implements EventQueue {
             const payload = JSON.parse(rawMessage) as EventPayload;
             // TODO: handling parse error
 
-            this.listeners.forEach((listener: EventListener) => {
-              listener.handleEvent(payload);
-            });
+            const promises: Promise<any>[] = this.listeners.map(
+              async (listener: EventListener) => listener.handleEvent(payload),
+            );
+
+            await Promise.all(promises);
+            this.logger.info(`consume finished`);
+            // this.listeners.forEach((listener: EventListener) => {
+            //   listener.handleEvent(payload);
+            // });
           } catch (err) {
             this.logger.error(`consume] ${(err as Error).stack}`);
           }

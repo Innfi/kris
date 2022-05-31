@@ -1,6 +1,10 @@
 import { Container, Service } from 'typedi';
 
-import { LoadPortfolioResult, SavePortfolioResult } from './model';
+import {
+  ClearPortfolioResult,
+  LoadPortfolioResult,
+  SavePortfolioResult,
+} from './model';
 import { AdapterBase } from './persistence/adapter.base';
 import { AdapterFile } from './persistence/adapter.file';
 import { AdapterMongo } from './persistence/adapter.mongo';
@@ -29,5 +33,11 @@ export class PortRepository {
     symbols: string[],
   ): Promise<SavePortfolioResult> {
     return this.adapter.writeUserPort(email, symbols);
+  }
+
+  // clearPortfolio
+  async clearPortfolio(email: string): Promise<ClearPortfolioResult> {
+    // TODO
+    return { err: 'ok' };
   }
 }

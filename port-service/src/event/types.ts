@@ -5,11 +5,11 @@ export interface EventPayload {
 
   // FIXME: coupling
   email: string;
-  ports: string[];
+  symbols: string[];
 }
 
 export interface EventListener {
-  handleEvent(payload: Readonly<EventPayload>): void;
+  handleEvent(payload: Readonly<EventPayload>): Promise<void>;
 }
 
 export interface EventQueue {

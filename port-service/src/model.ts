@@ -11,3 +11,7 @@ export interface AddPortfolioInput {
 export interface SavePortfolioResult {
   err: string;
 }
+
+export interface ClearPortfolioResult {
+  err: string;
+}
