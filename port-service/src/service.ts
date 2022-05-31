@@ -38,12 +38,15 @@ export class PortService implements EventListener {
 
     // if one more cases added, use factory.
     switch (payload.payloadType) {
-      case 'registerPort':
-        return this.handleRegisterPort(payload);
-      case 'clearPort':
-        return this.handleClearPort(payload);
-      default:
-        this.logger.error(`invalid type`);
+    case 'registerPort':
+      await this.handleRegisterPort(payload);
+      break;
+    case 'clearPort':
+      await this.handleClearPort(payload);
+      break;
+    default:
+      this.logger.error(`invalid type`);
+      break;
     }
   }
 
@@ -58,7 +61,7 @@ export class PortService implements EventListener {
 
       const result = await this.repo.savePortfolio(email, symbols);
       if (result.err !== 'ok') throw new Error('save failed');
-    } catch (err) {
+    } catch (err: unknown) {
       this.logger.error(
         `PortService.handleRegisterPort] ${(err as Error).stack}`,
       );
@@ -76,7 +79,7 @@ export class PortService implements EventListener {
 
       const result = await this.repo.clearPortfolio(email);
       if (result.err !== 'ok') throw new Error('clear failed');
-    } catch (err) {
+    } catch (err: unknown) {
       this.logger.error(`PortService.handleClearPort] ${(err as Error).stack}`);
     }
   }

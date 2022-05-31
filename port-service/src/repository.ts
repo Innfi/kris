@@ -37,7 +37,6 @@ export class PortRepository {
 
   // clearPortfolio
   async clearPortfolio(email: string): Promise<ClearPortfolioResult> {
-    // TODO
-    return { err: 'ok' };
+    return this.adapter.clearUserPort(email);
   }
 }

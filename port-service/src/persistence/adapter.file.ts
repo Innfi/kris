@@ -2,24 +2,36 @@ import { Service } from 'typedi';
 import fs from 'fs';
 
 import { TradyLogger } from '../common/logger';
-import { LoadPortfolioResult, SavePortfolioResult } from '../model';
+import {
+  ClearPortfolioResult,
+  LoadPortfolioResult,
+  SavePortfolioResult,
+} from '../model';
 import { AdapterBase } from './adapter.base';
 
 @Service()
 export class AdapterFile implements AdapterBase {
   readonly dataPath = './port';
 
-  constructor(protected logger: TradyLogger) {}
+  constructor(protected logger: TradyLogger) {
+    this.initPortDirectory();
+  }
+
+  protected initPortDirectory() {
+    if (fs.existsSync(this.dataPath)) return;
+
+    fs.mkdirSync(this.dataPath);
+  }
 
   // readUserPort
   async readUserPort(email: string): Promise<LoadPortfolioResult> {
     try {
-      const effectiveFilePath = this.toEffectiveFilepath(email);
-      if (!fs.existsSync(effectiveFilePath)) {
+      const effectivePath = this.toEffectiveFilepath(email);
+      if (!fs.existsSync(effectivePath)) {
         return { err: 'readUserPort] file not found' };
       }
 
-      const rawData = fs.readFileSync(effectiveFilePath, 'utf-8');
+      const rawData = fs.readFileSync(effectivePath, 'utf-8');
       const symbols: string[] = JSON.parse(rawData);
 
       return {
@@ -41,13 +53,9 @@ export class AdapterFile implements AdapterBase {
     symbols: string[],
   ): Promise<SavePortfolioResult> {
     try {
-      if (!fs.existsSync(this.dataPath)) {
-        fs.mkdirSync(this.dataPath);
-      }
+      const effectivePath = this.toEffectiveFilepath(email);
 
-      const effectiveFilePath = this.toEffectiveFilepath(email);
-
-      fs.writeFileSync(effectiveFilePath, JSON.stringify(symbols), 'utf-8');
+      fs.writeFileSync(effectivePath, JSON.stringify(symbols), 'utf-8');
 
       return { err: 'ok' };
     } catch (err: unknown) {
@@ -55,6 +63,23 @@ export class AdapterFile implements AdapterBase {
 
       return {
         err: 'write failed',
+      };
+    }
+  }
+
+  // clearUserPort
+  async clearUserPort(email: string): Promise<ClearPortfolioResult> {
+    try {
+      const effectivePath = this.toEffectiveFilepath(email);
+
+      fs.unlinkSync(effectivePath);
+
+      return { err: 'ok' };
+    } catch (err: unknown) {
+      this.logger.error(`AdapterFile.clearUserPort] ${(err as Error).stack}`);
+
+      return {
+        err: 'clear failed',
       };
     }
   }

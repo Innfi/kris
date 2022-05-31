@@ -2,7 +2,11 @@ import { Service } from 'typedi';
 import mongoose, { ConnectOptions, Document, Schema } from 'mongoose';
 
 import { TradyLogger } from '../common/logger';
-import { LoadPortfolioResult, SavePortfolioResult } from '../model';
+import {
+  ClearPortfolioResult,
+  LoadPortfolioResult,
+  SavePortfolioResult,
+} from '../model';
 import { AdapterBase } from './adapter.base';
 
 const mongoUrl = process.env.MONGO_URL
@@ -80,14 +84,35 @@ export class AdapterMongo implements AdapterBase {
         email,
         symbols,
       });
+
+      return { err: 'ok' };
     } catch (err: unknown) {
       this.logger.error(`AdapterMongo.writeUserPort] ${(err as Error).stack}`);
 
       return {
-        err: 'write mongo failed',
+        err: 'write failed',
       };
     }
+  }
 
-    return { err: 'ok' };
+  // clearUserPort
+  async clearUserPort(email: string): Promise<ClearPortfolioResult> {
+    try {
+      if (mongoose.connection.readyState !== mongoose.STATES.connected) {
+        this.connect();
+      }
+
+      await this.portModel.deleteOne({
+        email,
+      });
+
+      return { err: 'ok' };
+    } catch (err: unknown) {
+      this.logger.error(`AdapterMongo.clearUserPort] ${(err as Error).stack}`);
+
+      return {
+        err: 'clear failed',
+      };
+    }
   }
 }
