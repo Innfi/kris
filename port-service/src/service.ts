@@ -2,7 +2,7 @@ import { Service } from 'typedi';
 
 import { TradyLogger } from './common/logger';
 import { EventListener, EventPayload } from './event/types';
-import { LoadPortfolioResult, SavePortfolioResult } from './model';
+import { ClearPortfolioResult, LoadPortfolioResult, SavePortfolioResult } from './model';
 import { PortRepository } from './repository';
 
 @Service()
@@ -77,10 +77,15 @@ export class PortService implements EventListener {
       // what if the process fails?
       const { email } = payload;
 
-      const result = await this.repo.clearPortfolio(email);
+      const result = await this.clearPort(email);
       if (result.err !== 'ok') throw new Error('clear failed');
     } catch (err: unknown) {
       this.logger.error(`PortService.handleClearPort] ${(err as Error).stack}`);
     }
+  }
+
+  // clearPort
+  async clearPort(email: Readonly<string>): Promise<ClearPortfolioResult> {
+    return await this.repo.clearPortfolio(email);
   }
 }
