@@ -1,12 +1,12 @@
-use stock_tracker;
+// use stock_tracker;
 
-#[tokio::test]
-async fn health_check_works() {
-  spawn_app();
-}
+// #[tokio::test]
+// async fn health_check_works() {
+//   spawn_app();
+// }
 
-fn spawn_app() {
-  let server = stock_tracker::run().expect("failed to bind address");
+// fn spawn_app() {
+//   let server = stock_tracker::run().expect("failed to bind address");
 
-  let _ = tokio::spawn(server);
-}
+//   let _ = tokio::spawn(server);
+// }
