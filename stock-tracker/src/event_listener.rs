@@ -5,6 +5,12 @@ use amiquip::{
   QueueDeclareOptions, 
   Result
 };
+use log::{error, info};
+
+pub fn handle_message(payload: &Vec<u8>) {
+  //todo: create factory by payload type
+  info!("payload: {}", payload);
+}
 
 pub fn start_event_listener() -> Result<()> {
   let mut connection = Connection::insecure_open("amqp://127.0.0.1:5672")?;
@@ -19,9 +25,12 @@ pub fn start_event_listener() -> Result<()> {
   for (message) in consumer.receiver().iter() {
     match message {
       ConsumerMessage::Delivery(delivery) => {
-        todo!
+        handle_message(&delivery.body);
+        consumer.ack(delivery)?;
       },
-      _ => { break; }
+      _ => { 
+        error!("invalid message");
+      }
     }
   }
 

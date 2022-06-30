@@ -15,6 +15,7 @@ name = "stock_tracker"
 actix-web = "4"
 tokio = { version = "1", features = [ "macros", "rt-multi-thread" ] }
 amiquip = { version = "0.4", default-features = false }
+logger = "0.4"
 
 [dev-dependencies]
 reqwest = "0.11"
