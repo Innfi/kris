@@ -12,6 +12,7 @@ pub fn handle_message(payload: &Vec<u8>) {
   info!("payload: {}", payload);
 }
 
+
 pub fn start_event_listener() -> Result<()> {
   let mut connection = Connection::insecure_open("amqp://127.0.0.1:5672")?;
   let channel = connection.open_channel(None).expect(open_channel failed);
