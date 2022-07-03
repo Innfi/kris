@@ -3,7 +3,6 @@ use log::{error, info};
 
 pub fn start_event_listener() -> Result<()> {
   info!("start_event_listener");
-  println!("start_event_listener");
   let mut connection = Connection::insecure_open(
     "amqp://127.0.0.1:5672"
   )?;
@@ -14,8 +13,8 @@ pub fn start_event_listener() -> Result<()> {
     QueueDeclareOptions::default()
     ).expect("queue_declare failed");
 
+  info!("start_event_listener] waiting for messages");
   let consumer = queue.consume(ConsumerOptions::default())?;
-  println!("waiting for messages");
   for message in consumer.receiver().iter() {
     match message {
       ConsumerMessage::Delivery(delivery) => {

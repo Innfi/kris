@@ -1,25 +1,23 @@
-use log::info;
+use log::{info, error};
 
 use stock_tracker::event_listener::start_event_listener;
 use stock_tracker::startup::run_http_server;
 
-async fn test_runner() {
-  let result = start_event_listener();
-  match result {
-    Ok(()) => {}
-    _ => {}
-  }
-}
-
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
-  std::env::set_var("RUST_LOG", "actix_web=info,info");
+  std::env::set_var("RUST_LOG", "info");
   env_logger::init();
   
-  info!("main from info!");
+  info!("start stock_tracker");
 
   tokio::spawn(async {
-    test_runner().await
+    let result = start_event_listener();
+    match result {
+      Ok(()) => {},
+      other => {
+        error!("event_listener error: {}", other.unwrap_err());
+      }
+    }
   });
 
   run_http_server()?.await
