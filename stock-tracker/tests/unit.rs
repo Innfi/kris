@@ -1,6 +1,6 @@
-use serde::{Serialize, Deserialize};
-use serde_json::{to_string, from_str};
 use bincode;
+use serde::{Deserialize, Serialize};
+use serde_json::{from_str, to_string};
 
 #[derive(Serialize, Deserialize)]
 struct Payload {
@@ -12,7 +12,7 @@ struct Payload {
 fn serde_basic_behavior() {
   let payload = Payload {
     symbol: format!("TWTR"),
-    request_user: format!("innfi")
+    request_user: format!("innfi"),
   };
 
   let serialized = to_string(&payload).unwrap();
@@ -26,7 +26,7 @@ fn serde_basic_behavior() {
 fn working_with_vec_u8() {
   let payload = Payload {
     symbol: format!("TWTR"),
-    request_user: format!("innfi")
+    request_user: format!("innfi"),
   };
 
   let serialized = bincode::serialize(&payload).unwrap();
