@@ -35,5 +35,10 @@ pub fn start_event_listener() -> Result<()> {
 fn handle_message(payload: &Vec<u8>) {
   let deserialized: EventPayload = bincode::deserialize(payload).unwrap();
 
-  handler::handle_track_request(deserialized);
+  let result = handler::handle_track_request(deserialized);
+
+  match result {
+    Ok(()) => {},
+    Err(e) => { error!("handle_message: {}", e) },
+  }
 }

@@ -7,7 +7,6 @@ use crate::routes::health_check;
 
 pub fn run_http_server() -> Result<Server, std::io::Error> {
   info!("run_http_server");
-  println!("run_http_server");
   //FIXME: read address / port from env
   let listener = TcpListener::bind("127.0.0.1:1333")?;
 
