@@ -1,7 +1,7 @@
 use amiquip::{
   Connection, ConsumerMessage, ConsumerOptions, QueueDeclareOptions, Result,
 };
-use bincode;
+use serde_json::from_str;
 use log::{error, info};
 
 use crate::payload::EventPayload;
@@ -33,7 +33,8 @@ pub fn start_event_listener() -> Result<()> {
 }
 
 fn handle_message(payload: &Vec<u8>) {
-  let deserialized: EventPayload = bincode::deserialize(payload).unwrap();
+  let raw_string = String::from_utf8_lossy(payload);
+  let deserialized: EventPayload = from_str(&raw_string).unwrap();
 
   let result = handler::handle_track_request(deserialized);
 
