@@ -1,4 +1,5 @@
+pub mod chart_loader;
 pub mod configuration;
-pub mod stock_event;
 pub mod routes;
 pub mod startup;
+pub mod stock_event;

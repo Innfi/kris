@@ -18,8 +18,7 @@ pub struct MessageQueueSettings {
 pub fn load_configuration() -> Result<Settings, config::ConfigError> {
   let mut settings = config::Config::default();
 
-  let base_path = std::env::current_dir()
-    .expect("failed to load current dir");
+  let base_path = std::env::current_dir().expect("failed to load current dir");
   let config_dir = base_path.join("configuration");
 
   settings.merge(config::File::from(config_dir.join("base")).required(true))?;

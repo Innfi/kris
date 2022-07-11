@@ -1,12 +1,12 @@
 use amiquip::{
   Connection, ConsumerMessage, ConsumerOptions, QueueDeclareOptions, Result,
 };
-use serde_json::from_str;
 use log::{error, info};
+use serde_json::from_str;
 
 use crate::configuration::load_configuration;
-use crate::stock_event::payload::EventPayload;
 use crate::stock_event::handler;
+use crate::stock_event::payload::EventPayload;
 
 pub fn start_event_listener() -> Result<()> {
   info!("start_event_listener");
@@ -43,7 +43,9 @@ fn handle_message(payload: &Vec<u8>) {
   let result = handler::handle_track_request(deserialized);
 
   match result {
-    Ok(()) => {},
-    Err(e) => { error!("handle_message: {}", e) },
+    Ok(()) => {}
+    Err(e) => {
+      error!("handle_message: {}", e)
+    }
   }
 }

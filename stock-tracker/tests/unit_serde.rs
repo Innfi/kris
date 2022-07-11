@@ -35,8 +35,3 @@ fn working_with_vec_u8() {
   assert_eq!(deserialized.symbol, payload.symbol);
   assert_eq!(deserialized.request_user, payload.request_user);
 }
-
-#[test]
-fn init_test() {
-  assert_eq!(1, 1);
-}
