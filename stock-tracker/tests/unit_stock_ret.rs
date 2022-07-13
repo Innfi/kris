@@ -15,6 +15,6 @@ fn test_to_query_string() {
     instance
       .to_query_string(String::from("test_prefix"), String::from("key"))
       .as_str(),
-    "test_prefix?function=TIME_SERIES_DAILY&symbol=IBM&apiKey=key"
+    "test_prefix?function=TIME_SERIES_DAILY&symbol=IBM&apikey=key"
   );
 }

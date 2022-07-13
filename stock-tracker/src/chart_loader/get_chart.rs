@@ -1,6 +1,7 @@
+use reqwest::{self, Error};
+
 use crate::chart_loader::LoadChartInputTrait;
 use crate::configuration::load_configuration;
-use reqwest::{self, Error};
 
 pub async fn get_chart(
   input: &impl LoadChartInputTrait,
