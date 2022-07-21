@@ -1,13 +1,8 @@
-use core::panic;
-use std::fs;
+use json::JsonValue;
 use std::collections::HashMap;
+use std::fs;
 
-#[test]
-fn load_file() {
-  let raw_data = fs::read_to_string("sample/input.json").expect("read failed");
-
-  assert_eq!(raw_data.len() > 0, true);
-}
+use stock_tracker::chart_loader::parse_chart_json;
 
 #[test]
 fn json_parse() {
@@ -20,12 +15,6 @@ fn json_parse() {
 
   let unwrapped = result.unwrap();
   assert_eq!(unwrapped["Time Series (Daily)"].is_object(), true);
-
-  unwrapped["Time Series (Daily)"].entries()
-    .for_each(|x: (&str, &json::JsonValue)| {
-    println!("key: {}", x.0);
-    println!("open value: {}", x.1["1. open"]);
-  });
 
   let target_field = &unwrapped["Time Series (Daily)"]["2022-07-13"]["1. open"];
   assert_eq!(target_field.as_str().unwrap(), "34.9500");
@@ -41,4 +30,15 @@ fn json_object_dump() {
 
   let keys = scores.keys().collect::<Vec<&i32>>();
   assert_eq!(keys.len(), 3);
+}
+
+#[test]
+fn compatiable_with_json() {
+  let raw_data = fs::read_to_string("sample/input.json").expect("read failed");
+  let result: JsonValue =
+    parse_chart_json(String::from("Time Series (Daily)"), raw_data).unwrap();
+
+  assert_eq!(result.len() > 0, true);
+
+  //println!("result: {}", result.to_string());
 }

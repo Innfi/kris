@@ -1,4 +1,4 @@
-use crate::chart_loader::{LoadChartInputTrait};
+use crate::chart_loader::LoadChartInputTrait;
 
 pub struct InputIntraday {
   timeseries_type: String,
