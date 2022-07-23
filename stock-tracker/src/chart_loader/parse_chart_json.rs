@@ -3,7 +3,7 @@ use json::{self, object, JsonValue};
 pub fn parse_chart_json(
   timeseries_key: String,
   raw_data: String,
-) -> Result<JsonValue, &'static str> {
+) -> Result<String, &'static str> {
   let parsed = json::parse(&raw_data.as_str()).expect("parse error");
   let chart_data = &parsed[timeseries_key.as_str()];
 
@@ -12,13 +12,11 @@ pub fn parse_chart_json(
     .map(|x: (&str, &json::JsonValue)| to_timeseries_unit(x))
     .collect();
 
-  match !timeseries.is_empty() {
-    true => Ok(object! {
-      descriptor: String::from("test"),
-      timeseries: timeseries,
-    }),
-    _ => Err("empty chart data"),
+  if timeseries.is_empty() {
+    return Err("empty chart data");
   }
+
+  Ok(json::stringify(timeseries))
 }
 
 fn to_timeseries_unit(input: (&str, &json::JsonValue)) -> JsonValue {

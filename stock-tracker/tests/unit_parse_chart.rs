@@ -1,4 +1,3 @@
-use json::JsonValue;
 use std::collections::HashMap;
 use std::fs;
 
@@ -35,10 +34,8 @@ fn json_object_dump() {
 #[test]
 fn compatiable_with_json() {
   let raw_data = fs::read_to_string("sample/input.json").expect("read failed");
-  let result: JsonValue =
+  let result: String =
     parse_chart_json(String::from("Time Series (Daily)"), raw_data).unwrap();
 
   assert_eq!(result.len() > 0, true);
-
-  //println!("result: {}", result.to_string());
 }

@@ -8,7 +8,7 @@ use crate::configuration::load_configuration;
 use crate::stock_event::handler;
 use crate::stock_event::payload::EventPayload;
 
-pub fn start_event_listener() -> Result<()> {
+pub async fn start_event_listener() -> Result<()> {
   info!("start_event_listener");
   let conf = load_configuration().expect("failed to load conf");
   let mq_url = conf.message_queue.mq_url;
@@ -24,7 +24,7 @@ pub fn start_event_listener() -> Result<()> {
   for message in consumer.receiver().iter() {
     match message {
       ConsumerMessage::Delivery(delivery) => {
-        handle_message(&delivery.body);
+        handle_message(&delivery.body).await;
         consumer.ack(delivery)?;
       }
       _ => {
@@ -36,11 +36,11 @@ pub fn start_event_listener() -> Result<()> {
   connection.close()
 }
 
-fn handle_message(payload: &Vec<u8>) {
+async fn handle_message(payload: &Vec<u8>) {
   let raw_string = String::from_utf8_lossy(payload);
   let deserialized: EventPayload = from_str(&raw_string).unwrap();
 
-  let result = handler::handle_track_request(deserialized);
+  let result = handler::handle_track_request(deserialized).await;
 
   match result {
     Ok(()) => {}

@@ -1,4 +1,4 @@
-use log::{error, info};
+use log::info;
 
 use stock_tracker::configuration::load_configuration;
 use stock_tracker::startup::run_http_server;
@@ -19,13 +19,7 @@ async fn main() -> std::io::Result<()> {
   info!("message_queue: {}", configurations.message_queue.mq_url);
 
   tokio::spawn(async {
-    let result = start_event_listener();
-    match result {
-      Ok(()) => {}
-      other => {
-        error!("event_listener error: {}", other.unwrap_err());
-      }
-    }
+    let _ = start_event_listener();
   });
 
   run_http_server()?.await
