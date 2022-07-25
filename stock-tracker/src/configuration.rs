@@ -7,8 +7,7 @@ pub struct Settings {
 
 #[derive(serde::Deserialize)]
 pub struct DatabaseSettings {
-  pub redis_host: String,
-  pub redis_port: u16,
+  pub redis_url: String,
 }
 
 #[derive(serde::Deserialize)]
@@ -22,6 +21,7 @@ pub struct ChartReferenceSettings {
   pub api_key: String,
 }
 
+// FIXME: global object for configuration
 pub fn load_configuration() -> Result<Settings, config::ConfigError> {
   let mut settings = config::Config::default();
 

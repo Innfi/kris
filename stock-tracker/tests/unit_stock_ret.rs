@@ -1,4 +1,4 @@
-use stock_tracker::chart_loader::{Creator, InputDaily, LoadChartInputTrait};
+use stock_tracker::chart_input::{InputDaily, LoadChartInputTrait};
 
 #[test]
 fn to_timeseries_key() {

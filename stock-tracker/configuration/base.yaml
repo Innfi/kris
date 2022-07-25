@@ -1,5 +1,4 @@
 database:
-  redis_host: "127.0.0.1"
-  redis_port: 6379
+  redis_url: "127.0.0.1:6379"
 message_queue:
   mq_url: "amqp://127.0.0.1:5672"

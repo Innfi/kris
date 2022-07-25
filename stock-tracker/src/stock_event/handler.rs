@@ -1,19 +1,18 @@
 use log::{error, info};
 
-use crate::chart_loader::{
-  get_chart, parse_chart_json, ChartStorageRedis, Creator, InputDaily,
-  LoadChartInputTrait,
-};
-use crate::stock_event::payload::EventPayload;
+use crate::chart_input::create_input;
+use crate::chart_loader::{get_chart, parse_chart_json, ChartStorageRedis};
+use crate::configuration::load_configuration;
+use crate::stock_event::payload::EventPayloadTrackStock;
 
 pub async fn handle_track_request(
-  payload: EventPayload,
+  payload: EventPayloadTrackStock,
 ) -> Result<(), &'static str> {
   //TODO: refer track scheduler for duplicate request
 
-  //FIXME: daily for temporary timestamp type
-  let input = InputDaily::new(payload.symbol);
-  let get_chart_result = get_chart(&input).await;
+  let input =
+    create_input(payload.chart_type, payload.symbol, payload.interval);
+  let get_chart_result = get_chart(input.as_ref()).await;
 
   if get_chart_result.is_err() {
     error!("get_chart failed");
@@ -28,15 +27,20 @@ pub async fn handle_track_request(
   let chart_data = parse_result.unwrap();
 
   info!("saving chart data");
-
   //FIXME: need a central referece for redis client
-  let redis_storage = ChartStorageRedis::new("redis://localhost:6379");
-  let lifetime_as_sec: usize = 60 * 60 * 24;
-  let _: () = redis_storage.save_chart_data(
+  save_chart_data_to_redis(
     input.to_descriptor().as_str(),
     chart_data.as_str(),
-    lifetime_as_sec,
-  ).unwrap();
+    input.to_lifetime_as_seconds(),
+  );
 
   Ok(())
+}
+
+fn save_chart_data_to_redis(desc: &str, data: &str, lifetime: usize) {
+  let conf = load_configuration().expect("failed to load conf");
+  let redis_url = format!("{}", conf.database.redis_url);
+
+  let redis_storage = ChartStorageRedis::new(redis_url.as_str());
+  let _: () = redis_storage.save_chart_data(desc, data, lifetime).unwrap();
 }

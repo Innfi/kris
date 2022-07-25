@@ -6,7 +6,7 @@ use serde_json::from_str;
 
 use crate::configuration::load_configuration;
 use crate::stock_event::handler;
-use crate::stock_event::payload::EventPayload;
+use crate::stock_event::payload::EventPayloadTrackStock;
 
 pub async fn start_event_listener() -> Result<()> {
   info!("start_event_listener");
@@ -38,7 +38,7 @@ pub async fn start_event_listener() -> Result<()> {
 
 async fn handle_message(payload: &Vec<u8>) {
   let raw_string = String::from_utf8_lossy(payload);
-  let deserialized: EventPayload = from_str(&raw_string).unwrap();
+  let deserialized: EventPayloadTrackStock = from_str(&raw_string).unwrap();
 
   let result = handler::handle_track_request(deserialized).await;
 

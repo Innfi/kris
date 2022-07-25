@@ -1,22 +1,22 @@
-use crate::chart_loader::{Creator, LoadChartInputTrait};
+use crate::chart_input::LoadChartInputTrait;
 
-pub struct InputMonthly {
+pub struct InputDaily {
   timeseries_type: String,
   timeseries_key: String,
   symbol: String,
 }
 
-impl Creator for InputMonthly {
-  fn new(symbol: String) -> Self {
+impl InputDaily {
+  pub fn new(symbol: String) -> Self {
     Self {
-      timeseries_type: String::from("TIME_SERIES_MONTHLY"),
-      timeseries_key: String::from("Monthly Time Series"),
+      timeseries_type: String::from("TIME_SERIES_DAILY"),
+      timeseries_key: String::from("Time Series (Daily)"),
       symbol,
     }
   }
 }
 
-impl LoadChartInputTrait for InputMonthly {
+impl LoadChartInputTrait for InputDaily {
   fn to_descriptor(&self) -> String {
     format!("{}.{}", self.symbol, self.timeseries_type)
   }
@@ -30,5 +30,9 @@ impl LoadChartInputTrait for InputMonthly {
 
   fn to_timeseries_key(&self) -> String {
     self.timeseries_key.clone()
+  }
+
+  fn to_lifetime_as_seconds(&self) -> usize {
+    60 * 60 * 24
   }
 }

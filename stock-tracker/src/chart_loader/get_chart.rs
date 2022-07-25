@@ -1,10 +1,10 @@
 use reqwest::{self, Error};
 
-use crate::chart_loader::LoadChartInputTrait;
+use crate::chart_input::LoadChartInputTrait;
 use crate::configuration::load_configuration;
 
 pub async fn get_chart(
-  input: &impl LoadChartInputTrait,
+  input: &dyn LoadChartInputTrait,
 ) -> Result<String, Error> {
   let confs = load_configuration().expect("failed to load conf");
   let effective_url = input

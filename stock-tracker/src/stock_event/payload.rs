@@ -1,8 +1,9 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
-pub struct EventPayload {
-  // todo: type value ?
+pub struct EventPayloadTrackStock {
+  pub chart_type: String,
   pub symbol: String,
-  pub request_user: String,
+  pub interval: String,
+  // pub request_user: String,
 }

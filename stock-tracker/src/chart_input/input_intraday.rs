@@ -1,16 +1,13 @@
-use crate::chart_loader::LoadChartInputTrait;
+use crate::chart_input::LoadChartInputTrait;
 
 pub struct InputIntraday {
   timeseries_type: String,
   symbol: String,
   interval: String,
 }
-pub trait CreatorIntraday {
-  fn new(symbol: String, interval: String) -> Self;
-}
 
-impl CreatorIntraday for InputIntraday {
-  fn new(symbol: String, interval: String) -> Self {
+impl InputIntraday {
+  pub fn new(symbol: String, interval: String) -> Self {
     Self {
       timeseries_type: String::from("TIME_SERIES_INTRADAY"),
       symbol,
@@ -33,5 +30,9 @@ impl LoadChartInputTrait for InputIntraday {
 
   fn to_timeseries_key(&self) -> String {
     format!("Time Series ({})", self.interval)
+  }
+
+  fn to_lifetime_as_seconds(&self) -> usize {
+    60 * 1
   }
 }
