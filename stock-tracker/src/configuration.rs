@@ -13,6 +13,8 @@ pub struct DatabaseSettings {
 #[derive(serde::Deserialize)]
 pub struct MessageQueueSettings {
   pub mq_url: String,
+  pub track_request_queue: String,
+  pub emitter_queue: String,
 }
 
 #[derive(serde::Deserialize)]
