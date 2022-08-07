@@ -1,9 +1,12 @@
 use json::{self, object, JsonValue};
+use log::info;
 
 pub fn parse_chart_json(
   timeseries_key: String,
   raw_data: String,
 ) -> Result<String, &'static str> {
+  info!("parse_chart_json] key: {}", timeseries_key);
+  
   let parsed = json::parse(&raw_data.as_str()).expect("parse error");
   let chart_data = &parsed[timeseries_key.as_str()];
 
