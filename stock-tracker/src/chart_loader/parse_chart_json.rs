@@ -6,7 +6,7 @@ pub fn parse_chart_json(
   raw_data: String,
 ) -> Result<String, &'static str> {
   info!("parse_chart_json] key: {}", timeseries_key);
-  
+
   let parsed = json::parse(&raw_data.as_str()).expect("parse error");
   let chart_data = &parsed[timeseries_key.as_str()];
 

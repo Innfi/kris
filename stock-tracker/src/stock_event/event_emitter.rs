@@ -1,4 +1,4 @@
-use amiquip::{ Connection, Result, Exchange, Publish};
+use amiquip::{Connection, Exchange, Publish, Result};
 use log::info;
 
 use crate::configuration::load_configuration;
@@ -12,7 +12,7 @@ pub async fn emit_event(payload: &str) -> Result<()> {
   let mut connection = Connection::insecure_open(mq_url)?;
   let channel = connection.open_channel(None).expect("open_channel failed");
   let exchange = Exchange::direct(&channel);
-  
+
   exchange.publish(Publish::new(payload.as_bytes(), emitter_queue_name))?;
 
   connection.close()

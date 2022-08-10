@@ -1,9 +1,8 @@
 use log::info;
 
 use stock_tracker::startup::run_http_server;
-// use stock_tracker::stock_event::start_event_listener;
-use stock_tracker::configuration::load_configuration;
-use stock_tracker::stock_event::EventRunner;
+// use stock_tracker::configuration::load_configuration;
+use stock_tracker::stock_event_new::EventRunner;
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
@@ -12,13 +11,12 @@ async fn main() -> std::io::Result<()> {
 
   info!("start stock_tracker");
 
-  let conf = load_configuration().expect("failed to load conf");
-  let mq_url = conf.message_queue.mq_url;
-  let track_queue_name = conf.message_queue.track_request_queue.as_str();
-  let mut event_runner = EventRunner::new(mq_url.as_str());
-  event_runner.init_channel(track_queue_name);
-  event_runner.try_consume().await;
+  let mq_url: &str = "amqp://127.0.0.1:5672";
+  let queue_name: &str = "trady_stock_register";
+  let mut instance = EventRunner::new(mq_url);
 
-  //let _ = start_event_listener().await;
+  instance.init_channel(queue_name);
+  instance.listen().await;
+
   run_http_server()?.await
 }

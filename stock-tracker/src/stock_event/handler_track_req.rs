@@ -13,8 +13,11 @@ pub async fn handle_track_request(
 ) -> Result<(), &'static str> {
   //TODO: refer track scheduler for duplicate request
 
-  let input =
-    create_input(payload.chart_type.clone(), payload.symbol.clone(), payload.interval);
+  let input = create_input(
+    payload.chart_type.clone(),
+    payload.symbol.clone(),
+    payload.interval,
+  );
   let get_chart_result = get_chart(input.as_ref()).await;
 
   if get_chart_result.is_err() {

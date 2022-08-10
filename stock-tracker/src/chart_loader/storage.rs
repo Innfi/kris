@@ -1,5 +1,5 @@
-use redis::{self, Commands};
 use log::info;
+use redis::{self, Commands};
 
 pub struct ChartStorageRedis {
   client: redis::Client,
