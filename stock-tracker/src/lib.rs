@@ -4,4 +4,3 @@ pub mod configuration;
 pub mod routes;
 pub mod startup;
 pub mod stock_event;
-pub mod stock_event_new;

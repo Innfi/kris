@@ -1,8 +1,8 @@
 use log::info;
 
+use stock_tracker::configuration::load_configuration;
 use stock_tracker::startup::run_http_server;
-// use stock_tracker::configuration::load_configuration;
-use stock_tracker::stock_event_new::EventRunner;
+use stock_tracker::stock_event::EventRunnerRabbitMQ;
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
@@ -11,12 +11,14 @@ async fn main() -> std::io::Result<()> {
 
   info!("start stock_tracker");
 
-  let mq_url: &str = "amqp://127.0.0.1:5672";
-  let queue_name: &str = "trady_stock_register";
-  let mut instance = EventRunner::new(mq_url);
+  let confs = load_configuration().expect("load_configuration failed");
+  let mq_url = confs.message_queue.mq_url.as_str();
+  let queue_name = confs.message_queue.track_request_queue.as_str();
 
-  instance.init_channel(queue_name);
-  instance.listen().await;
+  let _ = run_http_server()?;
 
-  run_http_server()?.await
+  let mut event_runner = EventRunnerRabbitMQ::new(mq_url);
+  let _ = event_runner.process_event(queue_name).await;
+
+  Ok(())
 }
