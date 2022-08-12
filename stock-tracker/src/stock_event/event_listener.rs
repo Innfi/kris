@@ -1,5 +1,6 @@
 use amiquip::{
-  Connection, ConsumerMessage, ConsumerOptions, QueueDeclareOptions, Result,
+  Connection, ConsumerMessage, ConsumerOptions, Error, QueueDeclareOptions,
+  Result,
 };
 use log::{error, info};
 use serde_json::from_str;
@@ -18,7 +19,7 @@ impl EventRunnerRabbitMQ {
     }
   }
 
-  pub async fn process_event(&mut self, queue_name: &str) -> Result<()> {
+  pub async fn process_event(&mut self, queue_name: &str) -> Result<(), Error> {
     let channel = self
       .connection
       .open_channel(None)

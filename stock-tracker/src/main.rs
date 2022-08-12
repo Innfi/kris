@@ -1,3 +1,4 @@
+use futures::join;
 use log::info;
 
 use stock_tracker::configuration::load_configuration;
@@ -10,15 +11,16 @@ async fn main() -> std::io::Result<()> {
   env_logger::init();
 
   info!("start stock_tracker");
+  let http_result = run_http_server()?;
 
   let confs = load_configuration().expect("load_configuration failed");
   let mq_url = confs.message_queue.mq_url.as_str();
   let queue_name = confs.message_queue.track_request_queue.as_str();
 
-  let _ = run_http_server()?;
-
   let mut event_runner = EventRunnerRabbitMQ::new(mq_url);
-  let _ = event_runner.process_event(queue_name).await;
+  let event_runner_result = event_runner.process_event(queue_name);
+
+  let _ = join!(http_result, event_runner_result);
 
   Ok(())
 }
