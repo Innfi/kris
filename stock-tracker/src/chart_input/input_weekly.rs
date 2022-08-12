@@ -21,7 +21,7 @@ impl LoadChartInputTrait for InputWeekly {
     format!("{}.{}", self.symbol, self.timeseries_type)
   }
 
-  fn to_query_string(&self, prefix: String, apikey: String) -> String {
+  fn to_query_string(&self, prefix: &str, apikey: &str) -> String {
     format!(
       "{}?function={}&symbol={}&apikey={}",
       prefix, self.timeseries_type, self.symbol, apikey

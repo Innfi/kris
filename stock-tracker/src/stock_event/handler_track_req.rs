@@ -4,7 +4,7 @@ use serde_json;
 
 use crate::chart_input::create_input;
 use crate::chart_loader::{get_chart, parse_chart_json, ChartStorageRedis};
-use crate::configuration::load_configuration;
+use crate::configuration::StockTrackerConfs;
 use crate::stock_event::payload::EventPayloadTrackStock;
 use crate::stock_event::{event_emitter, EventPayloadTrackStockResponse};
 
@@ -52,8 +52,9 @@ pub async fn handle_track_request(
 }
 
 fn save_chart_data_to_redis(desc: &str, data: &str, lifetime: usize) {
-  let conf = load_configuration().expect("failed to load conf");
-  let redis_url = format!("{}", conf.database.redis_url);
+  let stock_tracker_confs = StockTrackerConfs::new();
+  let confs = stock_tracker_confs.get_conf();
+  let redis_url = format!("{}", confs.database.redis_url);
 
   let redis_storage = ChartStorageRedis::new(redis_url.as_str());
   let _: () = redis_storage.save_chart_data(desc, data, lifetime).unwrap();

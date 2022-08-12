@@ -23,8 +23,23 @@ pub struct ChartReferenceSettings {
   pub api_key: String,
 }
 
-// FIXME: global object for configuration
-pub fn load_configuration() -> Result<Settings, config::ConfigError> {
+pub struct StockTrackerConfs {
+  settings: Settings,
+}
+
+impl StockTrackerConfs {
+  pub fn new() -> Self {
+    Self {
+      settings: load_configuration().expect("load_conf failed"),
+    }
+  }
+
+  pub fn get_conf(&self) -> &Settings {
+    &self.settings
+  }
+}
+
+fn load_configuration() -> Result<Settings, config::ConfigError> {
   let mut settings = config::Config::default();
 
   let base_path = std::env::current_dir().expect("failed to load current dir");
