@@ -12,9 +12,7 @@ fn to_query_string() {
   let instance = InputDaily::new(String::from("IBM"));
 
   assert_eq!(
-    instance
-      .to_query_string("test_prefix", "key")
-      .as_str(),
+    instance.to_query_string("test_prefix", "key").as_str(),
     "test_prefix?function=TIME_SERIES_DAILY&symbol=IBM&apikey=key"
   );
 }

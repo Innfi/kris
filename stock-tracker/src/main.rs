@@ -17,9 +17,11 @@ async fn main() -> std::io::Result<()> {
   let confs = stock_tracker_confs.get_conf();
   let mq_url = confs.message_queue.mq_url.as_str();
   let queue_name = confs.message_queue.track_request_queue.as_str();
+  let emitter_queue_name = confs.message_queue.emitter_queue.as_str();
 
   let mut event_runner = EventRunnerRabbitMQ::new(mq_url);
-  let event_runner_result = event_runner.process_event(queue_name);
+  let event_runner_result =
+    event_runner.process_event(queue_name, emitter_queue_name);
 
   let _ = join!(http_result, event_runner_result);
 

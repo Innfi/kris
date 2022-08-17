@@ -1,24 +1,21 @@
-FROM rust:1.61.0 as builder
+FROM rust:1.63.0-slim-buster as build
 
-WORKDIR /usr/src
+RUN User=root cargo new --bin stock_tracker
+WORKDIR ./build
+COPY ./Cargo.toml ./Cargo.toml
+RUN cargo build --release
+RUN rm src/*.rs
 
-RUN ["USER=root", "cargo", "new", "stock_tracker_build"]
+ADD ./src ./src
+RUN rm ./target/release/deps/stock_tracker*
+RUN cargo build --release
 
-COPY ["./Cargo.toml", "./Cargo.lock", "/usr/src/stock_tracker_build/"]
+FROM debian:buster-slim
 
-WORKDIR /usr/src/stock_tracker_build
-
-RUN ["rustup", "target", "add", "x86_64-unknown-linux-musl"]
-RUN ["cargo", "build", "--target", "x86_64-unknown-linux-musl", "--release"]
-
-COPY ["src", "/usr/src/stock_tracker_build"]
-RUN ["touch" "/usr/src/stock_tracker_build/src/main.rs"]
-RUN ["cargo", "build", "--target", "x86_64-unknown-linux-musl", "--release"]
-
-FROM alpine:3.16.0 AS runtime
-
-COPY --from=builder /usr/src/stock_tracker_build/target/x86_64-unknown-linux-musl/release/stock_tracker /usr/local/bin
+WORKDIR /usr/bin/app
+COPY --from=build ./tester/target/release/stock_tracker .
+COPY ./conf ./conf 
 
 EXPOSE 1333
 
-# CMD ["/usr/local/bin/stock_tracker"]
+ENTRYPOINT ["/usr/bin/app/stock_tracker"]
