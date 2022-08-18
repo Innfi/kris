@@ -62,17 +62,15 @@ impl EventRunnerRabbitMQ {
     let deserialized: EventPayloadTrackStock = from_str(&raw_string).unwrap();
 
     let result = handler_track_req::handle_track_request(deserialized).await;
-
-    // TODO: receive response from handle_track_request and emit
-    let response_payload = "";
-    let _ = self.emit_event(response_payload, emitter_queue_name).await;
-
-    match result {
-      Ok(()) => {}
-      Err(e) => {
-        error!("handle_message: {}", e)
-      }
+    if result.is_err() {
+      error!("handle_track_request error");
+      return;
     }
+
+    let to_string = serde_json::to_string(&result.unwrap()).unwrap();
+    let _ = self
+      .emit_event(to_string.as_str(), emitter_queue_name)
+      .await;
   }
 
   async fn emit_event(

@@ -1,18 +1,15 @@
-use event_emitter::emit_event;
 use log::{error, info};
-use serde_json;
 
+use crate::configuration::StockTrackerConfs;
 use crate::chart_input::create_input;
 use crate::chart_loader::{get_chart, parse_chart_json, ChartStorageRedis};
-use crate::configuration::StockTrackerConfs;
 use crate::stock_event::payload::EventPayloadTrackStock;
-use crate::stock_event::{event_emitter, EventPayloadTrackStockResponse};
+use crate::stock_event::EventPayloadTrackStockResponse;
 
 pub async fn handle_track_request(
   payload: EventPayloadTrackStock,
-) -> Result<(), &'static str> {
+) -> Result<EventPayloadTrackStockResponse, &'static str> {
   //TODO: refer track scheduler for duplicate request
-
   let input = create_input(
     payload.chart_type.clone(),
     payload.symbol.clone(),
@@ -40,15 +37,11 @@ pub async fn handle_track_request(
     input.to_lifetime_as_seconds(),
   );
 
-  let emit_payload = EventPayloadTrackStockResponse {
+  Ok(EventPayloadTrackStockResponse {
     chart_type: payload.chart_type,
     symbol: payload.symbol,
     err_message: String::from("ok"),
-  };
-  let emit_payload_string = serde_json::to_string(&emit_payload).unwrap();
-  let _ = emit_event(emit_payload_string.as_str()).await;
-
-  Ok(())
+  })
 }
 
 fn save_chart_data_to_redis(desc: &str, data: &str, lifetime: usize) {
