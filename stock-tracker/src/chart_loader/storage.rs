@@ -32,4 +32,17 @@ impl ChartStorageRedis {
 
     Ok(())
   }
+
+  pub fn exists(&self, key: &str) -> Result<bool, &'static str> {
+    info!("ChartStorageRedis::exists] ");
+
+    let mut conn: redis::Connection = self
+      .client
+      .get_connection()
+      .expect("failed to get connection");
+
+    let result: bool = conn.exists(key).expect("conn.exists error");
+
+    Ok(result)
+  }
 }

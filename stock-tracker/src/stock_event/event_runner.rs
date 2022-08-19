@@ -5,17 +5,19 @@ use amiquip::{
 use log::{error, info};
 use serde_json::from_str;
 
-use crate::stock_event::handler_track_req;
 use crate::stock_event::payload::EventPayloadTrackStock;
+use crate::stock_event::TrackRequestHandler;
 
-pub struct EventRunnerRabbitMQ {
+pub struct EventRunnerRabbitMQ<'b: 'a, 'a> {
   connection: Connection,
+  track_req_handler: &'b mut TrackRequestHandler<'a>,
 }
 
-impl EventRunnerRabbitMQ {
-  pub fn new(url: &str) -> Self {
+impl<'b, 'a> EventRunnerRabbitMQ<'b, 'a> {
+  pub fn new(url: &str, req_handler: &'b mut TrackRequestHandler<'a>) -> Self {
     Self {
       connection: Connection::insecure_open(url).expect("insecure_open failed"),
+      track_req_handler: req_handler,
     }
   }
 
@@ -61,7 +63,7 @@ impl EventRunnerRabbitMQ {
     let raw_string = String::from_utf8_lossy(payload);
     let deserialized: EventPayloadTrackStock = from_str(&raw_string).unwrap();
 
-    let result = handler_track_req::handle_track_request(deserialized).await;
+    let result = self.track_req_handler.handle_request(deserialized).await;
     if result.is_err() {
       error!("handle_track_request error");
       return;
