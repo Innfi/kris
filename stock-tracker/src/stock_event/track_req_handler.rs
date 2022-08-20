@@ -1,6 +1,6 @@
 use log::{error, info};
 
-use crate::chart_input::create_input;
+use crate::chart_input::{create_input, LoadChartInputTrait};
 use crate::chart_loader::{get_chart, parse_chart_json, ChartStorageRedis};
 use crate::stock_event::payload::EventPayloadTrackStock;
 use crate::stock_event::EventPayloadTrackStockResponse;
@@ -21,11 +21,16 @@ impl<'a> TrackRequestHandler<'a> {
     payload: EventPayloadTrackStock,
   ) -> Result<EventPayloadTrackStockResponse, &'static str> {
     info!("TrackRequestHandler.handle_request] ");
-    let input = create_input(
+    let create_result = create_input(
       payload.chart_type.clone(),
       payload.symbol.clone(),
       payload.interval,
     );
+    if create_result.is_err() {
+      return Err("create input failed");
+    }
+
+    let input: Box<dyn LoadChartInputTrait> = create_result.unwrap();
 
     if self.client.exists(input.to_descriptor().as_str()).unwrap() {
       return Ok(EventPayloadTrackStockResponse {

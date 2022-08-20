@@ -6,12 +6,12 @@ pub fn create_input(
   chart_type: String,
   symbol: String,
   interval: String,
-) -> Box<dyn LoadChartInputTrait> {
+) -> Result<Box<dyn LoadChartInputTrait>, &'static str> {
   match chart_type.as_str() {
-    "intraday" => Box::new(InputIntraday::new(symbol, interval)),
-    "daily" => Box::new(InputDaily::new(symbol)),
-    "weekly" => Box::new(InputWeekly::new(symbol)),
-    "monthly" => Box::new(InputMonthly::new(symbol)),
-    _ => Box::new(InputDaily::new(symbol)), // temporary
+    "intraday" => Ok(Box::new(InputIntraday::new(symbol, interval))),
+    "daily" => Ok(Box::new(InputDaily::new(symbol))),
+    "weekly" => Ok(Box::new(InputWeekly::new(symbol))),
+    "monthly" => Ok(Box::new(InputMonthly::new(symbol))),
+    _ => Err("invalid chart type"),
   }
 }
