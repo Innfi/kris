@@ -1,5 +1,5 @@
 use amiquip::{
-  Connection, ConsumerMessage, ConsumerOptions, Error, Exchange, Publish,
+  Connection, ConsumerMessage, ConsumerOptions, Exchange, Publish,
   QueueDeclareOptions, Result,
 };
 use log::{error, info};
@@ -25,7 +25,7 @@ impl<'b, 'a> EventRunnerRabbitMQ<'b, 'a> {
     &mut self,
     queue_name: &str,
     emitter_queue_name: &str,
-  ) -> Result<(), Error> {
+  ) {
     let channel = self
       .connection
       .open_channel(None)
@@ -44,15 +44,13 @@ impl<'b, 'a> EventRunnerRabbitMQ<'b, 'a> {
           self
             .handle_message(&delivery.body, emitter_queue_name)
             .await;
-          consumer.ack(delivery)?;
+          consumer.ack(delivery).expect("consumer.ack error");
         }
         _ => {
           error!("invalid message");
         }
       }
     }
-
-    Ok(())
   }
 
   async fn handle_message(

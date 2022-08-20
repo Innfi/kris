@@ -171,30 +171,30 @@ mod unit_input_factory {
 
   #[test]
   fn other_types_dont_care_interval() {
-  	let create_result = create_input(
-  		String::from("daily"),
-  		String::from("TWTR"),
-  		String::from("30min")
-  	);
+    let create_result = create_input(
+      String::from("daily"),
+      String::from("TWTR"),
+      String::from("30min"),
+    );
     if create_result.is_err() {
       panic!("failed");
     }
 
     let chart_input: Box<dyn LoadChartInputTrait> = create_result.unwrap();
-  	let expected = String::from("TWTR.TIME_SERIES_DAILY");
+    let expected = String::from("TWTR.TIME_SERIES_DAILY");
 
-  	let descriptor = chart_input.to_descriptor();
+    let descriptor = chart_input.to_descriptor();
 
-  	assert_eq!(descriptor, expected);
+    assert_eq!(descriptor, expected);
   }
 
   #[test]
   fn invalid_type_fails() {
     let create_result = create_input(
-  		String::from("not-supported"),
-  		String::from("TWTR"),
-  		String::from("30min")
-  	);
+      String::from("not-supported"),
+      String::from("TWTR"),
+      String::from("30min"),
+    );
 
     assert_eq!(create_result.is_err(), true);
   }

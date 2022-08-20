@@ -1,21 +1,21 @@
 use std::collections::HashMap;
-use std::fs;
+// use std::fs;
 
-#[test]
-fn json_parse() {
-  let raw_data = fs::read_to_string("sample/input.json").expect("read failed");
+// #[test]
+// fn json_parse() {
+//   let raw_data = fs::read_to_string("sample/input.json").expect("read failed");
 
-  let result = json::parse(&raw_data.as_str());
-  if result.is_err() {
-    panic!("parse failed");
-  }
+//   let result = json::parse(&raw_data.as_str());
+//   if result.is_err() {
+//     panic!("parse failed");
+//   }
 
-  let unwrapped = result.unwrap();
-  assert_eq!(unwrapped["Time Series (Daily)"].is_object(), true);
+//   let unwrapped = result.unwrap();
+//   assert_eq!(unwrapped["Time Series (Daily)"].is_object(), true);
 
-  let target_field = &unwrapped["Time Series (Daily)"]["2022-07-13"]["1. open"];
-  assert_eq!(target_field.as_str().unwrap(), "34.9500");
-}
+//   let target_field = &unwrapped["Time Series (Daily)"]["2022-07-13"]["1. open"];
+//   assert_eq!(target_field.as_str().unwrap(), "34.9500");
+// }
 
 #[test]
 fn json_object_dump() {

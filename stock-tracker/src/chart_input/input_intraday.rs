@@ -1,7 +1,7 @@
 use crate::chart_input::LoadChartInputTrait;
 
 pub struct InputIntraday {
-  timeseries_type: String,
+  timeseries_type: &'static str,
   symbol: String,
   interval: String,
 }
@@ -9,7 +9,7 @@ pub struct InputIntraday {
 impl InputIntraday {
   pub fn new(symbol: String, interval: String) -> Self {
     Self {
-      timeseries_type: String::from("TIME_SERIES_INTRADAY"),
+      timeseries_type: "TIME_SERIES_INTRADAY",
       symbol,
       interval,
     }
