@@ -23,11 +23,7 @@ impl<'a> TrackRequestHandler<'a> {
     info!("TrackRequestHandler.handle_request] ");
 
     // create input
-    let create_result = create_input(
-      payload.chart_type.clone(),
-      payload.symbol.clone(),
-      payload.interval,
-    );
+    let create_result = create_input(&payload);
     if create_result.is_err() {
       return Err("create input failed");
     }
@@ -42,20 +38,11 @@ impl<'a> TrackRequestHandler<'a> {
       });
     }
 
-    // fetch raw data from reference
-    let get_chart_result = get_chart(input.as_ref()).await;
+    let get_chart_result = self.get_chart(&input).await;
     if get_chart_result.is_err() {
-      error!("get_chart failed");
-      return Err("get_chart failed");
-    }
-    let raw_data = get_chart_result.unwrap();
-
-    // parse data to usable format
-    let parse_result = parse_chart_json(input.to_timeseries_key(), raw_data);
-    if parse_result.is_err() {
       return Err("parse_chart_json failed");
     }
-    let chart_data = parse_result.unwrap();
+    let chart_data = get_chart_result.unwrap();
 
     // save data to the database
     let _ = self.client.save_chart_data(
@@ -70,5 +57,21 @@ impl<'a> TrackRequestHandler<'a> {
       symbol: payload.symbol,
       err_message: String::from("ok"),
     })
+  }
+
+  async fn get_chart(
+    &mut self,
+    input: &Box<dyn LoadChartInputTrait>,
+  ) -> Result<String, &str> {
+    // fetch raw data from reference
+    let get_chart_result = get_chart(input.as_ref()).await;
+    if get_chart_result.is_err() {
+      error!("get_chart failed");
+      return Err("get_chart failed");
+    }
+    let raw_data = get_chart_result.unwrap();
+
+    // parse data to usable format
+    parse_chart_json(input.to_timeseries_key(), raw_data)
   }
 }
