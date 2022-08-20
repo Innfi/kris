@@ -1,13 +1,18 @@
-use crate::chart_input::{
-  InputDaily, InputIntraday, InputMonthly, InputWeekly, LoadChartInputTrait,
+use crate::{
+  chart_input::{
+    InputDaily, InputIntraday, InputMonthly, InputWeekly, LoadChartInputTrait,
+  },
+  stock_event::EventPayloadTrackStock,
 };
 
 pub fn create_input(
-  chart_type: String,
-  symbol: String,
-  interval: String,
+  payload: &EventPayloadTrackStock,
 ) -> Result<Box<dyn LoadChartInputTrait>, &'static str> {
-  match chart_type.as_str() {
+  let symbol = payload.symbol.clone();
+  let interval = payload.interval.clone();
+  let chart_type = payload.chart_type.as_str();
+
+  match chart_type {
     "intraday" => Ok(Box::new(InputIntraday::new(symbol, interval))),
     "daily" => Ok(Box::new(InputDaily::new(symbol))),
     "weekly" => Ok(Box::new(InputWeekly::new(symbol))),

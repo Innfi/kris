@@ -148,14 +148,19 @@ mod unit_chart_input_monthly {
 
 #[cfg(test)]
 mod unit_input_factory {
-  use stock_tracker::chart_input::{create_input, LoadChartInputTrait};
+  use stock_tracker::{
+    chart_input::{create_input, LoadChartInputTrait},
+    stock_event::EventPayloadTrackStock,
+  };
   #[test]
   fn create_intraday() {
-    let create_result = create_input(
-      String::from("intraday"),
-      String::from("TWTR"),
-      String::from("30min"),
-    );
+    let input = EventPayloadTrackStock {
+      chart_type: String::from("intraday"),
+      symbol: String::from("TWTR"),
+      interval: String::from("30min"),
+    };
+
+    let create_result = create_input(&input);
 
     if create_result.is_err() {
       panic!("failed");
@@ -171,11 +176,14 @@ mod unit_input_factory {
 
   #[test]
   fn other_types_dont_care_interval() {
-    let create_result = create_input(
-      String::from("daily"),
-      String::from("TWTR"),
-      String::from("30min"),
-    );
+    let input = EventPayloadTrackStock {
+      chart_type: String::from("daily"),
+      symbol: String::from("TWTR"),
+      interval: String::from("30min"),
+    };
+
+    let create_result = create_input(&input);
+
     if create_result.is_err() {
       panic!("failed");
     }
@@ -190,11 +198,13 @@ mod unit_input_factory {
 
   #[test]
   fn invalid_type_fails() {
-    let create_result = create_input(
-      String::from("not-supported"),
-      String::from("TWTR"),
-      String::from("30min"),
-    );
+    let input = EventPayloadTrackStock {
+      chart_type: String::from("not-supported"),
+      symbol: String::from("TWTR"),
+      interval: String::from(""),
+    };
+
+    let create_result = create_input(&input);
 
     assert_eq!(create_result.is_err(), true);
   }
