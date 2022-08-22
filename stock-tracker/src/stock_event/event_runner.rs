@@ -5,6 +5,7 @@ use amiquip::{
 use log::{error, info};
 use serde_json::from_str;
 
+use crate::configuration::CONFS;
 use crate::stock_event::payload::EventPayloadTrackStock;
 use crate::stock_event::TrackRequestHandler;
 
@@ -14,18 +15,20 @@ pub struct EventRunnerRabbitMQ<'b: 'a, 'a> {
 }
 
 impl<'b, 'a> EventRunnerRabbitMQ<'b, 'a> {
-  pub fn new(url: &str, req_handler: &'b mut TrackRequestHandler<'a>) -> Self {
+  pub fn new(req_handler: &'b mut TrackRequestHandler<'a>) -> Self {
+    let url = CONFS.message_queue.mq_url.as_str();
+    info!("mq_url: {}", url);
+
     Self {
       connection: Connection::insecure_open(url).expect("insecure_open failed"),
       track_req_handler: req_handler,
     }
   }
 
-  pub async fn process_event(
-    &mut self,
-    queue_name: &str,
-    emitter_queue_name: &str,
-  ) {
+  pub async fn process_event(&mut self) {
+    let queue_name = CONFS.message_queue.track_request_queue.as_str();
+    info!("queue_name: {}", queue_name);
+
     let channel = self
       .connection
       .open_channel(None)
@@ -41,9 +44,7 @@ impl<'b, 'a> EventRunnerRabbitMQ<'b, 'a> {
     for message in consumer.receiver().iter() {
       match message {
         ConsumerMessage::Delivery(delivery) => {
-          self
-            .handle_message(&delivery.body, emitter_queue_name)
-            .await;
+          self.handle_message(&delivery.body).await;
           consumer.ack(delivery).expect("consumer.ack error");
         }
         _ => {
@@ -53,11 +54,7 @@ impl<'b, 'a> EventRunnerRabbitMQ<'b, 'a> {
     }
   }
 
-  async fn handle_message(
-    &mut self,
-    payload: &Vec<u8>,
-    emitter_queue_name: &str,
-  ) {
+  async fn handle_message(&mut self, payload: &Vec<u8>) {
     let raw_string = String::from_utf8_lossy(payload);
     let deserialized: EventPayloadTrackStock = from_str(&raw_string).unwrap();
 
@@ -68,17 +65,13 @@ impl<'b, 'a> EventRunnerRabbitMQ<'b, 'a> {
     }
 
     let to_string = serde_json::to_string(&result.unwrap()).unwrap();
-    let _ = self
-      .emit_event(to_string.as_str(), emitter_queue_name)
-      .await;
+    let _ = self.emit_event(to_string.as_str()).await;
   }
 
-  async fn emit_event(
-    &mut self,
-    payload: &str,
-    emitter_queue_name: &str,
-  ) -> Result<()> {
+  async fn emit_event(&mut self, payload: &str) -> Result<()> {
     info!("emit_event");
+    let emitter_queue_name = CONFS.message_queue.emitter_queue.as_str();
+    info!("emitter_queue_name: {}", emitter_queue_name);
 
     let channel = self
       .connection

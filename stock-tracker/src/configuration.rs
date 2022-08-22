@@ -1,3 +1,6 @@
+use config::Config;
+use lazy_static::lazy_static;
+
 #[derive(serde::Deserialize)]
 pub struct Settings {
   pub database: DatabaseSettings,
@@ -23,30 +26,18 @@ pub struct ChartReferenceSettings {
   pub api_key: String,
 }
 
-pub struct StockTrackerConfs {
-  settings: Settings,
-}
-
-impl StockTrackerConfs {
-  pub fn new() -> Self {
-    Self {
-      settings: load_configuration().expect("load_conf failed"),
-    }
-  }
-
-  pub fn get_conf(&self) -> &Settings {
-    &self.settings
-  }
-}
-
 fn load_configuration() -> Result<Settings, config::ConfigError> {
-  let mut settings = config::Config::default();
-
   let base_path = std::env::current_dir().expect("failed to load current dir");
   let config_dir = base_path.join("configuration");
+  let config = Config::builder()
+    .add_source(config::File::from(config_dir.join("base")).required(true))
+    .add_source(config::File::from(config_dir.join("ref")).required(true))
+    .build()
+    .unwrap();
 
-  settings.merge(config::File::from(config_dir.join("base")).required(true))?;
-  settings.merge(config::File::from(config_dir.join("ref")).required(true))?;
+  config.try_deserialize()
+}
 
-  settings.try_into()
+lazy_static! {
+  pub static ref CONFS: Settings = load_configuration().unwrap();
 }

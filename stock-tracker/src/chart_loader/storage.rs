@@ -1,13 +1,17 @@
 use log::info;
 use redis::{self, Commands};
 
+use crate::configuration::CONFS;
+
 pub struct ChartStorageRedis {
   client: redis::Client,
 }
 
 impl ChartStorageRedis {
-  pub fn new(url: &str) -> Self {
+  pub fn new() -> Self {
     info!("ChartStorageRedis::new] ");
+    let url = CONFS.database.redis_url.as_str();
+
     Self {
       client: redis::Client::open(url).expect("connect redis error"),
     }
