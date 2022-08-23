@@ -17,7 +17,6 @@ pub struct EventRunnerRabbitMQ<'b: 'a, 'a> {
 impl<'b, 'a> EventRunnerRabbitMQ<'b, 'a> {
   pub fn new(req_handler: &'b mut TrackRequestHandler<'a>) -> Self {
     let url = CONFS.message_queue.mq_url.as_str();
-    info!("mq_url: {}", url);
 
     Self {
       connection: Connection::insecure_open(url).expect("insecure_open failed"),
@@ -27,8 +26,6 @@ impl<'b, 'a> EventRunnerRabbitMQ<'b, 'a> {
 
   pub async fn process_event(&mut self) {
     let queue_name = CONFS.message_queue.track_request_queue.as_str();
-    info!("queue_name: {}", queue_name);
-
     let channel = self
       .connection
       .open_channel(None)
@@ -71,7 +68,6 @@ impl<'b, 'a> EventRunnerRabbitMQ<'b, 'a> {
   async fn emit_event(&mut self, payload: &str) -> Result<()> {
     info!("emit_event");
     let emitter_queue_name = CONFS.message_queue.emitter_queue.as_str();
-    info!("emitter_queue_name: {}", emitter_queue_name);
 
     let channel = self
       .connection

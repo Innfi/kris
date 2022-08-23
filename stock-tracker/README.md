@@ -4,9 +4,6 @@ periodical stock tracker for trady
 
 # Todos
 
-- emit completion events
-- error handling
-
 # Done
 
 - define message constracts
@@ -15,3 +12,5 @@ periodical stock tracker for trady
 - save stock data to database
 - configurations
 - logging
+- emit completion events
+- error handling

@@ -6,6 +6,7 @@ pub struct Settings {
   pub database: DatabaseSettings,
   pub message_queue: MessageQueueSettings,
   pub chart_reference: ChartReferenceSettings,
+  pub healthcheck: HealthCheckSettings,
 }
 
 #[derive(serde::Deserialize)]
@@ -24,6 +25,11 @@ pub struct MessageQueueSettings {
 pub struct ChartReferenceSettings {
   pub url: String,
   pub api_key: String,
+}
+
+#[derive(serde::Deserialize)]
+pub struct HealthCheckSettings {
+  pub addr: String,
 }
 
 fn load_configuration() -> Result<Settings, config::ConfigError> {
