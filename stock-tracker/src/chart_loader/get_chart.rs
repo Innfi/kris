@@ -1,7 +1,7 @@
 use reqwest::{self, Error};
 
-use crate::configuration::CONFS;
 use crate::chart_input::LoadChartInputTrait;
+use crate::configuration::CONFS;
 
 pub async fn get_chart(
   input: &dyn LoadChartInputTrait,

@@ -1,5 +1,6 @@
 use config::Config;
 use lazy_static::lazy_static;
+use std::env;
 
 #[derive(serde::Deserialize)]
 pub struct Settings {
@@ -44,6 +45,33 @@ fn load_configuration() -> Result<Settings, config::ConfigError> {
   config.try_deserialize()
 }
 
+fn load_configuration_prod() -> Result<Settings, &'static str> {
+  let result = Settings {
+    database: DatabaseSettings {
+      redis_url: env::var("REDIS_URL").unwrap(),
+    },
+    message_queue: MessageQueueSettings {
+      mq_url: env::var("REDIS_URL").unwrap(),
+      track_request_queue: env::var("REDIS_URL").unwrap(),
+      emitter_queue: env::var("REDIS_URL").unwrap(),
+    },
+    chart_reference: ChartReferenceSettings {
+      url: env::var("REDIS_URL").unwrap(),
+      api_key: env::var("REDIS_URL").unwrap(),
+    },
+    healthcheck: HealthCheckSettings {
+      addr: env::var("REDIS_URL").unwrap(),
+    },
+  };
+
+  Ok(result)
+}
+
 lazy_static! {
-  pub static ref CONFS: Settings = load_configuration().unwrap();
+  pub static ref CONFS: Settings =
+    if env::var("MODE") == Ok(String::from("PROD")) {
+      load_configuration_prod().unwrap()
+    } else {
+      load_configuration().unwrap()
+    };
 }

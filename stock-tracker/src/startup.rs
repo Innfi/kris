@@ -11,9 +11,11 @@ pub async fn run_http_server() -> Result<Server, std::io::Error> {
   let addr = CONFS.healthcheck.addr.as_str();
   let listener = TcpListener::bind(addr)?;
 
-  Ok(HttpServer::new(move || {
-    App::new().route("/health_check", web::get().to(health_check))
-  })
-  .listen(listener)?
-  .run())
+  Ok(
+    HttpServer::new(move || {
+      App::new().route("/health_check", web::get().to(health_check))
+    })
+    .listen(listener)?
+    .run(),
+  )
 }
