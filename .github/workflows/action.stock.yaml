@@ -1,0 +1,49 @@
+name: action.stock
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "stock-tracker/**"
+      - .github/workflows/action.stock.yaml
+
+jobs:
+  check:
+    name: Check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./stock-tracker
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Install stable toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+
+      - name: Cargo check
+        uses: actions-rs/cargo@v1
+        with:
+          command: check
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Install stable toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+
+      - name: Run test
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
