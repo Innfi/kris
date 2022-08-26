@@ -14,7 +14,6 @@ FROM debian:buster-slim
 
 WORKDIR /usr/bin/app
 COPY --from=build ./tester/target/release/stock_tracker .
-COPY ./conf ./conf 
 
 EXPOSE 1333
 
