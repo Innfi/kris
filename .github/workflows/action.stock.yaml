@@ -11,9 +11,8 @@ jobs:
   check:
     name: Check
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./stock-tracker
+    env:
+      working-directory: ./stock-tracker
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -29,21 +28,21 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: check
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # test:
+  #   name: Test
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
       
-      - name: Install stable toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          override: true
+  #     - name: Install stable toolchain
+  #       uses: actions-rs/toolchain@v1
+  #       with:
+  #         profile: minimal
+  #         toolchain: stable
+  #         override: true
 
-      - name: Run test
-        uses: actions-rs/cargo@v1
-        with:
-          command: test
+  #     - name: Run test
+  #       uses: actions-rs/cargo@v1
+  #       with:
+  #         command: test
