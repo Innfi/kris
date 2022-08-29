@@ -31,8 +31,9 @@ jobs:
         run: cargo check
       - name: Test
         run: cargo test
-      - name: Build Release
+      - name: Install pkg-config
         run: apt install pkg-config
+      - name: Build Release
         run: cargo build --release
 
   push:
