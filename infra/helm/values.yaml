@@ -6,6 +6,12 @@ trady:
   replicaCount: 2
   port: 8080
 
+stock-tracker:
+  image: innfi/stock-tracker:latest
+  pullPolicy: Always
+  replicaCount: 1
+  port: 1333
+
 redis:
   image: redis:latest
   replicaCount: 2
