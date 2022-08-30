@@ -1,0 +1,30 @@
+version: "3"
+services:
+  redis-server:
+    image: redis
+    volumes:
+      - ./redis_server.conf:/usr/local/etc/redis/redis.conf
+      - ./redis_data:/data
+    ports:
+      - "6379:6379"
+
+  rabbitmq:
+    image: rabbitmq
+    ports:
+      - "5672:5672"
+
+  stock-tracker:
+    image: innfi/stock-tracker:0.1.0
+    depends_on:
+      - redis-server
+      - rabbitmq
+    environment:
+      - REDIS_URL=127.0.0.1:6379
+      - MQ_URL=127.0.01:5672
+      - TRACK_REQ_NAME=track_stock_register
+      - EMITTER_NAME=trady_tracker_event
+      - REF=https://insert-ref.com
+      - API_KEY=dummy-key
+      - HEALTH_URL=127.0.0.1:1333
+    ports:
+      - "1333:1333"

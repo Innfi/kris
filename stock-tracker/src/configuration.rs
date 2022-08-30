@@ -51,16 +51,16 @@ fn load_configuration_prod() -> Result<Settings, &'static str> {
       redis_url: env::var("REDIS_URL").unwrap(),
     },
     message_queue: MessageQueueSettings {
-      mq_url: env::var("REDIS_URL").unwrap(),
-      track_request_queue: env::var("REDIS_URL").unwrap(),
-      emitter_queue: env::var("REDIS_URL").unwrap(),
+      mq_url: env::var("MQ_URL").unwrap(),
+      track_request_queue: env::var("TRACK_REQ_NAME").unwrap(),
+      emitter_queue: env::var("EMITTER_NAME").unwrap(),
     },
     chart_reference: ChartReferenceSettings {
-      url: env::var("REDIS_URL").unwrap(),
-      api_key: env::var("REDIS_URL").unwrap(),
+      url: env::var("REF_URL").unwrap(),
+      api_key: env::var("API_KEY").unwrap(),
     },
     healthcheck: HealthCheckSettings {
-      addr: env::var("REDIS_URL").unwrap(),
+      addr: env::var("HEALTH_URL").unwrap(),
     },
   };
 
