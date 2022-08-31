@@ -1,4 +1,4 @@
-FROM ubuntu:latest as build
+FROM ubuntu:22.04 as build
 
 RUN apt-get -qq update
 RUN apt-get install -y -q build-essential curl
@@ -18,7 +18,7 @@ ADD ./src ./src
 RUN rm ./target/release/deps/stock_tracker*
 RUN cargo build --release
 
-FROM debian:buster-slim
+FROM ubuntu:22.04
 
 WORKDIR /usr/bin/app
 COPY --from=build ./build/target/release/stock_tracker .
