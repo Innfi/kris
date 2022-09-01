@@ -16,7 +16,10 @@ services:
     #   - rabbit-net
 
   stock-tracker:
-    image: innfi/stock-tracker:0.1.6
+    image: tester:0.1.4
+    # build:
+    #   context: ../../stock-tracker
+    #   dockerfile: ./Dockerfile
     depends_on:
       - redis-server
       - rabbitmq-server

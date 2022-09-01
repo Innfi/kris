@@ -1,9 +1,9 @@
-use futures::join;
 use log::info;
+// use futures::join;
 
-use stock_tracker::chart_loader::ChartStorageRedis;
+// use stock_tracker::chart_loader::ChartStorageRedis;
+// use stock_tracker::stock_event::{EventRunnerRabbitMQ, TrackRequestHandler};
 use stock_tracker::startup::run_http_server;
-use stock_tracker::stock_event::{EventRunnerRabbitMQ, TrackRequestHandler};
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
@@ -11,14 +11,13 @@ async fn main() -> std::io::Result<()> {
   env_logger::init();
 
   info!("start stock_tracker");
-  let storage_redis = ChartStorageRedis::new();
-  let mut track_req_handler = TrackRequestHandler::new(&storage_redis);
-  let mut event_runner = EventRunnerRabbitMQ::new(&mut track_req_handler);
-  let event_runner_result = event_runner.process_event();
+  // let storage_redis = ChartStorageRedis::new();
+  // let mut track_req_handler = TrackRequestHandler::new(&storage_redis);
+  // let mut event_runner = EventRunnerRabbitMQ::new(&mut track_req_handler);
+  // let event_runner_result = event_runner.process_event();
 
-  let http_result = run_http_server();
+  // let _ = join!(event_runner_result, run_http_server()?);
 
-  let _ = join!(event_runner_result, http_result);
-
-  Ok(())
+  // Ok(())
+  run_http_server()?.await
 }
