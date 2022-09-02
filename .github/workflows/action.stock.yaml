@@ -29,7 +29,7 @@ jobs:
         run: sudo apt-get install libglib2.0-0 libglib2.0-data libicu70 
 
       - name: Install base libs 4
-        run: libxml2 shared-mime-info xdg-user-dirs pkg-config libssl-dev
+        run: sudo apt-get install libxml2 shared-mime-info xdg-user-dirs pkg-config libssl-dev
 
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
