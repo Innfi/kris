@@ -4,6 +4,7 @@ use amiquip::{
 };
 use log::{error, info};
 use serde_json::from_str;
+use retry::{retry, delay::Fixed};
 
 use crate::configuration::CONFS;
 use crate::stock_event::payload::EventPayloadTrackStock;
@@ -17,12 +18,23 @@ pub struct EventRunnerRabbitMQ<'b: 'a, 'a> {
 impl<'b, 'a> EventRunnerRabbitMQ<'b, 'a> {
   pub fn new(req_handler: &'b mut TrackRequestHandler<'a>) -> Self {
     let url = CONFS.message_queue.mq_url.as_str();
-    info!("url: {}", url);
+
+    //let connection = Connection::insecure_open(url).expect("insecure_open failed");
 
     Self {
-      connection: Connection::insecure_open(url).expect("insecure_open failed"),
+      connection: EventRunnerRabbitMQ::try_connect(url),
       track_req_handler: req_handler,
     }
+  }
+
+  fn try_connect(url: &str) -> Connection {
+    retry(Fixed::from_millis(3000).take(5), || {
+      let result = Connection::insecure_open(url);
+      match result.is_ok() {
+        true => { Ok(result.unwrap()) },
+        _ => { Err("connect failed") }
+      }
+    }).unwrap()
   }
 
   pub async fn process_event(&mut self) {

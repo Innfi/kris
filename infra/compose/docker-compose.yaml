@@ -12,14 +12,9 @@ services:
     image: rabbitmq
     ports:
       - "5672:5672"
-    # networks:
-    #   - rabbit-net
 
   stock-tracker:
-    image: tester:0.1.4
-    # build:
-    #   context: ../../stock-tracker
-    #   dockerfile: ./Dockerfile
+    image: innfi/stock-tracker:0.0.1
     depends_on:
       - redis-server
       - rabbitmq-server
@@ -34,7 +29,3 @@ services:
       - HEALTH_URL=0.0.0.0:1333
     ports:
       - "1333:1333"
-
-# networks:
-#   rabbit-net:
-#     driver: bridge
