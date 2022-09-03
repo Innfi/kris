@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stock-tracker
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.stock-tracker.replicaCount }}
+  selector:
+    matchLabels:
+      name: stock-tracker
+  template:
+    metadata:
+      labels:
+        name: stock-tracker
+    spec:
+      containers:
+      - name: stock-tracker-instance
+        image: {{ .Values.stock-tracker.image }}
+        imagePullPolicy: {{ .Values.stock-tracker.pullPolicy }}
+        env:
+        - name: REDIS_URL
+          value: {{ .Values.redis.url }}
+        - name: MONGO_URL
+          value: {{ .Values.mongo.url }}
+        - name: ES_URL
+          value: {{ .Values.elasticsearch.url }}
+        ports:
+        - containerPort: {{ .Values.port }}

@@ -1,17 +1,5 @@
 namespace: default
 
-trady:
-  image: innfi/trady-backend:latest
-  pullPolicy: Always
-  replicaCount: 2
-  port: 8080
-
-stock-tracker:
-  image: innfi/stock-tracker:latest
-  pullPolicy: Always
-  replicaCount: 1
-  port: 1333
-
 redis:
   image: redis:latest
   replicaCount: 2
@@ -26,3 +14,9 @@ elasticsearch:
   image: elasticsearch:latest
   replicaCount: 2
   url: es://elasticsearch.default.svc.cluster.local:9200
+
+stock-tracker:
+  image: innfi/stock-tracker:latest
+  pullPolicy: Always
+  replicaCount: 1
+  port: 1333
