@@ -18,11 +18,23 @@ spec:
         image: {{ .Values.stock-tracker.image }}
         imagePullPolicy: {{ .Values.stock-tracker.pullPolicy }}
         env:
+        - name: MODE
+          value: "PROD"
         - name: REDIS_URL
           value: {{ .Values.redis.url }}
-        - name: MONGO_URL
-          value: {{ .Values.mongo.url }}
-        - name: ES_URL
-          value: {{ .Values.elasticsearch.url }}
+        - name: MQ_URL
+          value: {{ .Values.rabbitmq.url }}
+        - name: TRACK_REQ_NAME
+          value: {{ .values.stock-tracker.trackReqName }}
+        - name: EMITTER_NAME
+          value: {{ .values.stock-tracker.emitterName }}
+        - name: REF_URL
+          value: {{ .values.stock-tracker.refUrl }}
+        - name: API_KEY
+          value: {{ .values.stock-tracker.apiKey }}
+        - name: HEALTH_URL
+          value: {{ .Values.mongo.healthUrl }}
+        - name: MQ_URL
+          value: {{ .Values.rabbitmq.url }}
         ports:
         - containerPort: {{ .Values.port }}
