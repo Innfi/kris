@@ -7,9 +7,9 @@ on:
       - "stock-tracker/**"
       - .github/workflows/action.stock.yaml
 
-# defaults:
-#   run:
-#     working-directory: ./stock-tracker
+defaults:
+  run:
+    working-directory: ./stock-tracker
 
 env:
   CARGO_TERM_COLOR: always
@@ -19,17 +19,17 @@ jobs:
     name: Test
     runs-on: ubuntu:22.04
     steps:
-      - name: Install base libs 1
-        run: sudo apt-get -qq update
+      # - name: Install base libs 1
+      #   run: sudo apt-get -qq update
 
-      - name: Install base libs 2
-        run: sudo apt-get install -y -q build-essential curl
+      # - name: Install base libs 2
+      #   run: sudo apt-get install -y -q build-essential curl
 
-      - name: Install base libs 3
-        run: sudo apt-get install libglib2.0-0 libglib2.0-data libicu70 
+      # - name: Install base libs 3
+      #   run: sudo apt-get install libglib2.0-0 libglib2.0-data libicu70 
 
-      - name: Install base libs 4
-        run: sudo apt-get install libxml2 shared-mime-info xdg-user-dirs pkg-config libssl-dev
+      # - name: Install base libs 4
+      #   run: sudo apt-get install libxml2 shared-mime-info xdg-user-dirs pkg-config libssl-dev
 
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
