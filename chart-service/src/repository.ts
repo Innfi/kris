@@ -7,13 +7,13 @@ import { AdapterBase } from './persistence/adapter.base';
 import { AdapterFile } from './persistence/adapter.file';
 import { AdapterRedis } from './persistence/adapter.redis';
 
-const createRepositoryLocal = (): ChartRepository => 
+const createRepositoryLocal = (): ChartRepository =>
   new ChartRepository(Container.get(AdapterFile), Container.get(TradyLogger));
 
-const createRepositoryCompose = (): ChartRepository => 
+const createRepositoryCompose = (): ChartRepository =>
   new ChartRepository(Container.get(AdapterRedis), Container.get(TradyLogger));
 
-const initializer: CallableFunction = 
+const initializer: CallableFunction =
   process.env.ENV === 'local' ? createRepositoryLocal : createRepositoryCompose;
 
 @Service({ factory: initializer })

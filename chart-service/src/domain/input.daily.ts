@@ -21,10 +21,10 @@ export class LoadChartInputDaily implements LoadChartInputBase {
     apiKey: Readonly<string>,
   ): Readonly<string> {
     return (
-      `${prefix}`
-      + `?function=${this.timeSeriesType}`
-      + `&symbol=${this.symbol}`
-      + `&apikey=${apiKey}`
+      `${prefix}` +
+      `?function=${this.timeSeriesType}` +
+      `&symbol=${this.symbol}` +
+      `&apikey=${apiKey}`
     );
   }
 

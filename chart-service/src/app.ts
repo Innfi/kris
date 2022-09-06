@@ -17,7 +17,7 @@ export class App {
   constructor(protected tradyLogger: TradyLogger) {
     this.app = express();
 
-    useExpressServer(this.app, {
+    this.app = useExpressServer({
       cors: true,
       controllers: [ChartController],
     });
