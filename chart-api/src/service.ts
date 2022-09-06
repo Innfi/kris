@@ -1,19 +1,22 @@
 import { Service } from 'typedi';
 
 import { TradyLogger } from './common/logger';
-import { ChartData, LoadChartDataResult } from './model';
+import { LoadChartDataResult } from './model';
 import { LoadChartInputBase } from './domain/input.base';
 import { LoadChartInputIntraday } from './domain/input.intraday';
 import { LoadChartInputDaily } from './domain/input.daily';
 import { LoadChartInputWeekly } from './domain/input.weekly';
 import { LoadChartInputMonthly } from './domain/input.monthly';
-import { parseStockData } from './domain/stock.parser';
 import { ChartRepository } from './repository';
-import { getDataFromReference } from './persistence/data.ref';
+import { RabbitMQService } from './event-queue/service';
 
 @Service()
 export class ChartService {
-  constructor(protected repo: ChartRepository, protected logger: TradyLogger) {}
+  constructor(
+    protected repo: ChartRepository,
+    protected mqService: RabbitMQService,
+    protected logger: TradyLogger,
+  ) {}
 
   // loadIntraday
   async loadIntraday(
@@ -81,21 +84,33 @@ export class ChartService {
     const loadResult = await this.repo.loadChartData(input);
     if (loadResult.err === 'ok') return loadResult;
 
-    const rawData = await getDataFromReference(input);
-    const parseResult = parseStockData(input.toTimeSeriesKey(), rawData);
-    if (parseResult.err !== 'ok') return { err: 'server error' };
+    const sendResult = await this.mqService.sendTrackRequest({
+      chart_type: 'dummy_type',
+      symbol: 'dummy_symbol',
+      interval: '',
+    });
 
-    const chartData: Readonly<ChartData> = {
-      descriptor: input.toDescriptor(),
-      timeSeries: parseResult.timeSeries,
-    };
-
-    // temporary: write chart data via adapter
-    await this.repo.saveChartData(chartData);
+    if (sendResult.err !== 'ok') return { err: sendResult.err };
 
     return {
-      err: 'ok',
-      chartData,
+      err: 'fetch requested',
     };
+
+    // const rawData = await getDataFromReference(input);
+    // const parseResult = parseStockData(input.toTimeSeriesKey(), rawData);
+    // if (parseResult.err !== 'ok') return { err: 'server error' };
+
+    // const chartData: Readonly<ChartData> = {
+    //   descriptor: input.toDescriptor(),
+    //   timeSeries: parseResult.timeSeries,
+    // };
+
+    // // temporary: write chart data via adapter
+    // await this.repo.saveChartData(chartData);
+
+    // return {
+    //   err: 'ok',
+    //   chartData,
+    // };
   }
 }

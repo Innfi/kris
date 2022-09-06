@@ -9,7 +9,9 @@ export type ChartError =
   | 'parse failed'
   | 'data unavailable'
   | 'write failed'
-  | 'read failed';
+  | 'read failed'
+  | 'fetch requested'
+  | 'send event failed';
 
 export interface TimeSeriesUnit {
   x: Date;
