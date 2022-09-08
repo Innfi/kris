@@ -23,7 +23,11 @@ export class ChartController {
     @Param('symbol') symbol: string,
     @QueryParam('interval') interval: string,
   ): Promise<Response> {
-    const result = await this.service.loadIntraday(symbol, interval);
+    const result = await this.service.loadChart({
+      chartType: 'intraday',
+      symbol,
+      interval,
+    });
 
     return res.status(200).send(result);
   }
@@ -34,7 +38,10 @@ export class ChartController {
     @Res() res: Response,
     @Param('symbol') symbol: string,
   ): Promise<Response> {
-    const result = await this.service.loadDaily(symbol);
+    const result = await this.service.loadChart({
+      chartType: 'daily',
+      symbol,
+    });
 
     return res.status(200).send(result);
   }
@@ -45,7 +52,10 @@ export class ChartController {
     @Res() res: Response,
     @Param('symbol') symbol: string,
   ): Promise<Response> {
-    const result = await this.service.loadWeekly(symbol);
+    const result = await this.service.loadChart({
+      chartType: 'weekly',
+      symbol,
+    });
 
     return res.status(200).send(result);
   }
@@ -56,7 +66,10 @@ export class ChartController {
     @Res() res: Response,
     @Param('symbol') symbol: string,
   ): Promise<Response> {
-    const result = await this.service.loadMonthly(symbol);
+    const result = await this.service.loadChart({
+      chartType: 'monthly',
+      symbol,
+    });
 
     return res.status(200).send(result);
   }

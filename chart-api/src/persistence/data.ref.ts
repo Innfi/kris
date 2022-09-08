@@ -1,7 +1,7 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
 
-import { LoadChartInputBase } from '../domain/input.base';
+import { LoadChartInputBase } from '../chart-input/input.base';
 
 dotenv.config();
 

@@ -12,6 +12,11 @@ export type ChartError =
   | 'read failed'
   | 'fetch requested'
   | 'send event failed';
+export type ChartType = 
+  | 'intraday'
+  | 'daily'
+  | 'weekly'
+  | 'monthly';
 
 export interface TimeSeriesUnit {
   x: Date;
@@ -35,4 +40,10 @@ export interface SaveChartDataResult {
 export interface ParseStockDataResult {
   err: ChartError;
   timeSeries?: Readonly<TimeSeriesUnit>[];
+}
+
+export interface ChartRequestInput {
+  chartType: ChartType;
+  symbol: string;
+  interval?: string;
 }

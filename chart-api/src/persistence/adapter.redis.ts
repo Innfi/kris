@@ -3,7 +3,7 @@ import { createClient } from 'redis';
 import dotenv from 'dotenv';
 
 import { TradyLogger } from '../common/logger';
-import { LoadChartInputBase } from '../domain/input.base';
+import { LoadChartInputBase } from '../chart-input/input.base';
 import {
   ChartData,
   LoadChartDataResult,

@@ -2,7 +2,7 @@ import { Container, Service } from 'typedi';
 
 import { TradyLogger } from './common/logger';
 import { ChartData, LoadChartDataResult, SaveChartDataResult } from './model';
-import { LoadChartInputBase } from './domain/input.base';
+import { LoadChartInputBase } from './chart-input/input.base';
 import { AdapterBase } from './persistence/adapter.base';
 import { AdapterFile } from './persistence/adapter.file';
 import { AdapterRedis } from './persistence/adapter.redis';
