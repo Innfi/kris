@@ -16,7 +16,7 @@ const trackRequestQueueName = process.env.TRACK_REQ_NAME
 //   : 'trady_tracker_event';
 
 @Service()
-export class RabbitMQService {
+export class MessageQueueService {
   constructor(protected logger: TradyLogger) {
     this.logger.info(`RabbitMQService] `);
   }

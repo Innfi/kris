@@ -2,7 +2,7 @@ import { Service } from 'typedi';
 import fs from 'fs';
 
 import { TradyLogger } from '../common/logger';
-import { LoadChartInputBase } from '../domain/input.base';
+import { LoadChartInputBase } from '../chart-input/input.base';
 import {
   ChartData,
   LoadChartDataResult,
