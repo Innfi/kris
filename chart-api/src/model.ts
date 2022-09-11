@@ -12,11 +12,7 @@ export type ChartError =
   | 'read failed'
   | 'fetch requested'
   | 'send event failed';
-export type ChartType = 
-  | 'intraday'
-  | 'daily'
-  | 'weekly'
-  | 'monthly';
+export type ChartType = 'intraday' | 'daily' | 'weekly' | 'monthly';
 
 export interface TimeSeriesUnit {
   x: Date;

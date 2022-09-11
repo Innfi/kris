@@ -6,6 +6,7 @@ import { LoadChartInputBase } from './chart-input/input.base';
 import { toLoadChartInput } from './chart-input/factory';
 import { ChartRepository } from './repository';
 import { MessageQueueService } from './message-queue/service';
+import { toEventPayloadTrackStockRequest } from './util';
 
 @Service()
 export class ChartService {
@@ -25,11 +26,9 @@ export class ChartService {
       const loadResult = await this.repo.loadChartData(input);
       if (loadResult.err === 'ok') return loadResult;
 
-      const sendResult = await this.mqService.sendTrackRequest({
-        chart_type: reqInput.chartType, //FIXME
-        symbol: reqInput.symbol,
-        interval: reqInput.interval as string,
-      });
+      const sendResult = await this.mqService.sendTrackRequest(
+        toEventPayloadTrackStockRequest(reqInput),
+      );
 
       if (sendResult.err !== 'ok') return { err: sendResult.err };
 
