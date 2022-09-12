@@ -3,20 +3,15 @@ import { createClient } from 'redis';
 import dotenv from 'dotenv';
 
 import { TradyLogger } from '../common/logger';
-import { LoadChartInputBase } from '../chart-input/input.base';
-import {
-  ChartData,
-  LoadChartDataResult,
-  SaveChartDataResult,
-  TimeSeriesUnit,
-} from '../model';
-import { AdapterBase } from './adapter.base';
+import { LoadChartDataResult, TimeSeriesUnit } from '../model/model';
 
 dotenv.config();
-const redisUrl = process.env.REDIS_URL;
+const redisUrl = process.env.REDIS_URL
+  ? process.env.REDIS_URL
+  : 'redis://127.0.0.1:6379';
 
 @Service()
-export class AdapterRedis implements AdapterBase {
+export class AdapterRedis {
   protected readonly client = createClient({ url: redisUrl });
 
   protected connected: boolean = false;
@@ -41,25 +36,22 @@ export class AdapterRedis implements AdapterBase {
   }
 
   // readChartData
-  async readChartData(
-    key: Readonly<LoadChartInputBase>,
-  ): Promise<Readonly<LoadChartDataResult>> {
+  async readChartData(key: string): Promise<Readonly<LoadChartDataResult>> {
     try {
       if (!this.connected) {
         this.logger.info('AdapterRedis.readChartData] calling connect');
         await this.client.connect();
       }
 
-      const descriptor = key.toDescriptor();
-      const rawData = await this.client.get(descriptor);
-      if (typeof rawData !== 'string') return { err: 'read failed' };
+      const rawData = await this.client.get(key);
+      if (typeof rawData !== 'string') return { err: 'not exist' };
 
       const timeSeries = JSON.parse(rawData) as TimeSeriesUnit[];
 
       return {
         err: 'ok',
         chartData: {
-          descriptor,
+          descriptor: key,
           timeSeries,
         },
       };
@@ -67,29 +59,5 @@ export class AdapterRedis implements AdapterBase {
       this.logger.info(`AdapterRedis.readChartData] ${(err as Error).stack}`);
       return { err: 'read failed' };
     }
-  }
-
-  // writeChartData
-  async writeChartData(
-    chartData: Readonly<ChartData>,
-  ): Promise<SaveChartDataResult> {
-    try {
-      if (!this.connected) {
-        this.logger.info('AdapterRedis.writeChartData] calling connect');
-        await this.client.connect();
-      }
-
-      const descriptor = chartData.descriptor as string;
-      await this.client.setEx(
-        descriptor,
-        60,
-        JSON.stringify(chartData.timeSeries),
-      );
-    } catch (err: unknown) {
-      this.logger.info(`AdapterRedis.writeChartData] ${(err as Error).stack}`);
-      return { err: 'write failed' };
-    }
-
-    return { err: 'ok' };
   }
 }

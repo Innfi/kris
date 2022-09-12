@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 
 import { TradyLogger } from '../common/logger';
 import { EventPayloadTrackStockRequest, SendEventResult } from './model';
+import { MessageQueueBase } from './queue.base';
 
 dotenv.config();
 
@@ -16,7 +17,7 @@ const trackRequestQueueName = process.env.TRACK_REQ_NAME
 //   : 'trady_tracker_event';
 
 @Service()
-export class MessageQueueService {
+export class MessageQueueRabbit implements MessageQueueBase {
   constructor(protected logger: TradyLogger) {
     this.logger.info(`RabbitMQService] `);
   }

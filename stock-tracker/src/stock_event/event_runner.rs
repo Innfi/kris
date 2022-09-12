@@ -19,8 +19,6 @@ impl<'b, 'a> EventRunnerRabbitMQ<'b, 'a> {
   pub fn new(req_handler: &'b mut TrackRequestHandler<'a>) -> Self {
     let url = CONFS.message_queue.mq_url.as_str();
 
-    //let connection = Connection::insecure_open(url).expect("insecure_open failed");
-
     Self {
       connection: EventRunnerRabbitMQ::try_connect(url),
       track_req_handler: req_handler,

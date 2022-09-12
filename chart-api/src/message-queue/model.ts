@@ -1,4 +1,4 @@
-import { ChartError } from '../model';
+import { ChartError } from '../model/model';
 
 export interface EventPayloadTrackStockRequest {
   chart_type: string;

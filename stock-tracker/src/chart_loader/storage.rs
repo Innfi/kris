@@ -19,7 +19,7 @@ impl ChartStorageRedis {
 
   pub fn save_chart_data(
     &self,
-    desc: &str,
+    key: &str,
     chart_data: &str,
     lifetime_as_sec: usize,
   ) -> Result<(), &'static str> {
@@ -31,7 +31,7 @@ impl ChartStorageRedis {
       .expect("failed to get connection");
 
     let _: () = conn
-      .set_ex(desc, chart_data, lifetime_as_sec)
+      .set_ex(key, chart_data, lifetime_as_sec)
       .expect("set failed");
 
     Ok(())

@@ -1,18 +1,45 @@
-import { Service } from 'typedi';
+import Container, { Service } from 'typedi';
 
+import { ChartRepositoryBase } from 'persistence/repository.base';
 import { TradyLogger } from './common/logger';
-import { ChartRequestInput, LoadChartDataResult } from './model';
-import { LoadChartInputBase } from './chart-input/input.base';
-import { toLoadChartInput } from './chart-input/factory';
-import { ChartRepository } from './repository';
-import { MessageQueueService } from './message-queue/service';
-import { toEventPayloadTrackStockRequest } from './util';
+import { ChartRequestInput, LoadChartDataResult } from './model/model';
+import { ChartRepository } from './persistence/repository';
+import { EventPayloadTrackStockRequest } from './message-queue/model';
+import { MessageQueueBase } from './message-queue/queue.base';
+import { MessageQueueRabbit } from './message-queue/queue.rabbit';
 
-@Service()
+const toChartKey = (input: Readonly<ChartRequestInput>): string => {
+  const { chartType, symbol, interval } = input;
+
+  if (!interval) return `${chartType}.${symbol}.${interval}`;
+
+  return `${chartType}.${symbol}`;
+};
+
+const toEventPayloadTrackStockRequest = (
+  input: Readonly<ChartRequestInput>,
+): Readonly<EventPayloadTrackStockRequest> => {
+  const { chartType, symbol, interval } = input;
+
+  return {
+    chart_type: chartType,
+    symbol,
+    interval: interval as string,
+  };
+};
+
+const createService = (): ChartService =>
+  new ChartService(
+    Container.get(ChartRepository),
+    Container.get(MessageQueueRabbit),
+    Container.get(TradyLogger),
+  );
+
+@Service({ factory: createService })
 export class ChartService {
   constructor(
-    protected repo: ChartRepository,
-    protected mqService: MessageQueueService,
+    protected repo: ChartRepositoryBase,
+    protected mqService: MessageQueueBase,
     protected logger: TradyLogger,
   ) {}
 
@@ -21,9 +48,9 @@ export class ChartService {
     reqInput: Readonly<ChartRequestInput>,
   ): Promise<Readonly<LoadChartDataResult>> {
     try {
-      const input: LoadChartInputBase = toLoadChartInput(reqInput);
+      const key = toChartKey(reqInput);
 
-      const loadResult = await this.repo.loadChartData(input);
+      const loadResult = await this.repo.loadChartData(key);
       if (loadResult.err === 'ok') return loadResult;
 
       const sendResult = await this.mqService.sendTrackRequest(
