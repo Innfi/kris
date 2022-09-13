@@ -13,6 +13,36 @@ services:
     ports:
       - "5672:5672"
 
+  es-server1:
+    image: elasticsearch
+    container_name: es01
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - node.name=es01
+      - cluster.name=es-cluster
+      - discovery.seed_hosts=es02
+      - cluster.initial_master_nodes=es01,es02
+      - "ES_JAVA_OPTS=-Xms512m -Xms512m"
+    volumes:
+      - ./elasticsearch/data01:/usr/share/elasticsearch/data
+
+  es-server2:
+    image: elasticsearch
+    container_name: es02
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - node.name=es02
+      - cluster.name=es-cluster
+      - discovery.seed_hosts=es01
+      - cluster.initial_master_nodes=es01,es02
+      - "ES_JAVA_OPTS=-Xms512m -Xms512m"
+    volumes:
+      - ./elasticsearch/data02:/usr/share/elasticsearch/data
+
   stock-tracker:
     image: innfi/stock-tracker:0.0.1
     depends_on:
@@ -29,3 +59,16 @@ services:
       - HEALTH_URL=0.0.0.0:1333
     ports:
       - "1333:1333"
+
+  chart-api:
+    image: innfi/trady-chart:latest
+    depends_on:
+      - redis-server
+      - es-server
+    environment:
+      - PORT=1330
+      - REDIS_URL=redis://redis-server:6379
+      - MQ_URL=amqp://rabbitmq-server:5672
+      - ES_URL=es://es-server:9200
+    ports:
+      - "1330:1330"
