@@ -1,0 +1,28 @@
+name: action.stock
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "stock-tracker/**"
+      - .github/workflows/action.stock.yaml
+
+defaults:
+  run:
+    working-directory: ./stock-tracker
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu:22.04
+      - name: Install base libs 1
+        run: sudo apt-get -qq update
+    
+      # - uses: actions/checkout@v2
+      # - uses: actions-rs/toolchain@v1
+      #   with:
+      #     toolchain: stable
+      #     profile: minimal
