@@ -6,19 +6,12 @@ import {
   SavePortfolioResult,
 } from './model';
 import { AdapterBase } from './persistence/adapter.base';
-import { AdapterFile } from './persistence/adapter.file';
 import { AdapterMongo } from './persistence/adapter.mongo';
 
-const createRepositoryLocal = (): PortRepository =>
-  new PortRepository(Container.get(AdapterFile));
-
-const createRepositoryCompose = (): PortRepository =>
+const createRepository = (): PortRepository =>
   new PortRepository(Container.get(AdapterMongo));
 
-const initializer: CallableFunction =
-  process.env.ENV === 'local' ? createRepositoryLocal : createRepositoryCompose;
-
-@Service({ factory: initializer })
+@Service({ factory: createRepository })
 export class PortRepository {
   constructor(private adapter: AdapterBase) {}
 

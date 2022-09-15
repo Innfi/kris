@@ -2,7 +2,11 @@ import { Service } from 'typedi';
 
 import { TradyLogger } from './common/logger';
 import { EventListener, EventPayload } from './event/types';
-import { ClearPortfolioResult, LoadPortfolioResult, SavePortfolioResult } from './model';
+import {
+  ClearPortfolioResult,
+  LoadPortfolioResult,
+  SavePortfolioResult,
+} from './model';
 import { PortRepository } from './repository';
 
 @Service()
@@ -86,6 +90,6 @@ export class PortService implements EventListener {
 
   // clearPort
   async clearPort(email: Readonly<string>): Promise<ClearPortfolioResult> {
-    return await this.repo.clearPortfolio(email);
+    return this.repo.clearPortfolio(email);
   }
 }
