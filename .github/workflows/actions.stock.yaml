@@ -22,8 +22,9 @@ jobs:
       - name: Install base libs 1
         run: sudo apt-get -qq update
     
-      # - uses: actions/checkout@v2
-      # - uses: actions-rs/toolchain@v1
-      #   with:
-      #     toolchain: stable
-      #     profile: minimal
+      - name: Checkout
+        uses: actions/checkout@v2
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal

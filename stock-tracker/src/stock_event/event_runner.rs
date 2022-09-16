@@ -64,6 +64,7 @@ impl<'b, 'a> EventRunnerRabbitMQ<'b, 'a> {
   }
 
   async fn handle_message(&mut self, payload: &Vec<u8>) {
+    info!("handle_message] ");
     let raw_string = String::from_utf8_lossy(payload);
     let deserialized: EventPayloadTrackStock = from_str(&raw_string).unwrap();
 
@@ -78,7 +79,7 @@ impl<'b, 'a> EventRunnerRabbitMQ<'b, 'a> {
   }
 
   async fn emit_event(&mut self, payload: &str) -> Result<()> {
-    info!("emit_event");
+    info!("emit_event] ");
     let emitter_queue_name = CONFS.message_queue.emitter_queue.as_str();
 
     let channel = self
