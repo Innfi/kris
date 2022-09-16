@@ -36,6 +36,7 @@ impl<'b, 'a> EventRunnerRabbitMQ<'b, 'a> {
   }
 
   pub async fn process_event(&mut self) {
+    info!("process_event] starts");
     let queue_name = CONFS.message_queue.track_request_queue.as_str();
     let channel = self
       .connection
@@ -45,7 +46,7 @@ impl<'b, 'a> EventRunnerRabbitMQ<'b, 'a> {
       .queue_declare(queue_name, QueueDeclareOptions::default())
       .expect("queue_declare failed");
 
-    info!("start_event_listener] waiting for messages");
+    info!("process_event] waiting for messages");
     let consumer = queue
       .consume(ConsumerOptions::default())
       .expect("consume failed");
