@@ -13,6 +13,11 @@ services:
     ports:
       - "5672:5672"
 
+  mongo-server:
+    image: mongo
+    ports:
+      - "27017:27017"
+
   es-server1:
     image: elasticsearch
     container_name: es01
@@ -72,3 +77,17 @@ services:
       - ES_URL=es://es-server:9200
     ports:
       - "1330:1330"
+    
+  port-api:
+    image: innfi/trady-port:latest
+    depends_on:
+      - rabbitmq-server
+      - mongo-server
+      - es-server
+    environment:
+      - PORT_QUEUE=port_queue
+      - MQ_URL=amqp://rabbitmq-server:5672
+      - ES_URL=es://es-server:9200
+      - MONGO_URL=mongodb://mongo-server:27017
+    ports:
+      - "3000:3000"
