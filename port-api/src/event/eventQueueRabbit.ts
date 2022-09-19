@@ -4,7 +4,9 @@ import amqp from 'amqplib/callback_api';
 import { TradyLogger } from '../common/logger';
 import { EventListener, EventPayload, EventQueue } from './types';
 
-const mqUrl = process.env.MQ_URL ? process.env.MQ_URL : 'amqp://localhost';
+const mqUrl = process.env.MQ_URL ? process.env.MQ_URL : 'amqp://127.0.0.1:5672';
+
+const queueName = process.env.PORT_QUEUE ? process.env.PORT_QUEUE : 'port_queue';
 
 const createEventQueue = () =>
   new EventQueueRabbit(mqUrl, Container.get(TradyLogger));
@@ -14,8 +16,6 @@ export class EventQueueRabbit implements EventQueue {
   listeners: EventListener[] = [];
 
   readonly url: string;
-
-  readonly queueName: string = 'port_queue'; // FIXME: multiple queue?
 
   constructor(url: string, protected logger: TradyLogger) {
     this.url = url;
@@ -47,9 +47,10 @@ export class EventQueueRabbit implements EventQueue {
           throw createErr;
         }
 
-        channel.assertQueue(this.queueName);
+        channel.assertQueue(queueName);
 
-        channel.consume(this.queueName, async (msg: amqp.Message | null) => {
+        // FIXME: REWRITE THIS
+        channel.consume(queueName, async (msg: amqp.Message | null) => {
           try {
             const rawMessage = msg?.content.toString();
             if (!rawMessage) return;
@@ -63,9 +64,10 @@ export class EventQueueRabbit implements EventQueue {
 
             await Promise.all(promises);
             this.logger.info(`consume finished`);
-            // this.listeners.forEach((listener: EventListener) => {
-            //   listener.handleEvent(payload);
-            // });
+
+            this.listeners.forEach((listener: EventListener) => {
+              listener.handleEvent(payload);
+            });
           } catch (err) {
             this.logger.error(`consume] ${(err as Error).stack}`);
           }

@@ -8,7 +8,7 @@ import { MessageQueueBase } from './queue.base';
 
 dotenv.config();
 
-const mqUrl = process.env.MQ_URL ? process.env.MQ_URL : '127.0.0.1:5672';
+const mqUrl = process.env.MQ_URL ? process.env.MQ_URL : 'amqp://127.0.0.1:5672';
 const trackRequestQueueName = process.env.TRACK_REQ_NAME
   ? process.env.TRACK_REQ_NAME
   : 'trady_stock_register';
@@ -28,6 +28,7 @@ export class MessageQueueRabbit implements MessageQueueBase {
     this.logger.info(`RabbitMQService.sendTrackRequest] `);
     // TODO: retry logic as rabbitmq server takes time to run
     const conn = await amqplib.connect(mqUrl);
+
     const channel = await conn.createChannel();
 
     const sendResult = channel.sendToQueue(
