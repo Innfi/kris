@@ -32,7 +32,7 @@ jobs:
   push:
     needs: test
     name: Push
-    runs-on: ubuntu:22.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
