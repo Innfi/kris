@@ -34,12 +34,18 @@ A trade advisor to help stock trading decisions
 - [Typescript](https://www.typescriptlang.org/)
 - [TypeDI](https://github.com/typestack/typedi)
 - [Routing-controllers](https://github.com/typestack/routing-controllers)
+- [Tokio](https://tokio.rs/)
+- [Actix-web](https://actix.rs/)
 
 ## Intrastructure
+
+- [Redis](https://redis.io/)
+- [MongoDB](https://www.mongodb.com/)
+- [RabbitMQ](https://www.rabbitmq.com/)
+- [Elasticsearch](https://www.elastic.co/kr/elasticsearch/)
 - [Docker](https://www.docker.com/)
 - [Kubernetes](https://kubernetes.io/ko/) on [EKS](https://aws.amazon.com/ko/eks/)
 - [Helm Chart](https://helm.sh/)
-- [Redis](https://redis.io/)
 
 ## CI/CD
 
