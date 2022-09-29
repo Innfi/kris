@@ -19,75 +19,83 @@ services:
       - "27017:27017"
 
   es-server1:
-    image: elasticsearch
-    container_name: es01
+    image: elasticsearch:7.17.6
+    container_name: es-server1
     ports:
       - "9200:9200"
       - "9300:9300"
     environment:
-      - node.name=es01
+      - node.name=es-server1
       - cluster.name=es-cluster
-      - discovery.seed_hosts=es02
-      - cluster.initial_master_nodes=es01,es02
+      - discovery.seed_hosts=es-server2
+      - cluster.initial_master_nodes=es-server1,es-server2
       - "ES_JAVA_OPTS=-Xms512m -Xms512m"
     volumes:
       - ./elasticsearch/data01:/usr/share/elasticsearch/data
+    networks:
+      - elastic
 
   es-server2:
-    image: elasticsearch
-    container_name: es02
+    image: elasticsearch:7.17.6
+    container_name: es-server2
     ports:
-      - "9200:9200"
-      - "9300:9300"
+      - "9201:9200"
+      - "9301:9300"
     environment:
-      - node.name=es02
+      - node.name=es-server2
       - cluster.name=es-cluster
-      - discovery.seed_hosts=es01
-      - cluster.initial_master_nodes=es01,es02
+      - discovery.seed_hosts=es-server1
+      - cluster.initial_master_nodes=es-server1,es-server2
       - "ES_JAVA_OPTS=-Xms512m -Xms512m"
     volumes:
       - ./elasticsearch/data02:/usr/share/elasticsearch/data
+    networks:
+      - elastic
 
-  stock-tracker:
-    image: innfi/stock-tracker:0.0.1
-    depends_on:
-      - redis-server
-      - rabbitmq-server
-    environment:
-      - MODE=PROD
-      - REDIS_URL=redis://redis-server:6379
-      - MQ_URL=amqp://rabbitmq-server:5672
-      - TRACK_REQ_NAME=track_stock_register
-      - EMITTER_NAME=trady_tracker_event
-      - REF_URL=https://insert-ref.com
-      - API_KEY=dummy-key
-      - HEALTH_URL=0.0.0.0:1333
-    ports:
-      - "1333:1333"
+networks:
+  elastic:
+    driver: bridge
 
-  chart-api:
-    image: innfi/trady-chart:latest
-    depends_on:
-      - redis-server
-      - es-server
-    environment:
-      - PORT=1330
-      - REDIS_URL=redis://redis-server:6379
-      - MQ_URL=amqp://rabbitmq-server:5672
-      - ES_URL=es://es-server:9200
-    ports:
-      - "1330:1330"
+  # stock-tracker:
+  #   image: innfi/stock-tracker:0.0.1
+  #   depends_on:
+  #     - redis-server
+  #     - rabbitmq-server
+  #   environment:
+  #     - MODE=PROD
+  #     - REDIS_URL=redis://redis-server:6379
+  #     - MQ_URL=amqp://rabbitmq-server:5672
+  #     - TRACK_REQ_NAME=track_stock_register
+  #     - EMITTER_NAME=trady_tracker_event
+  #     - REF_URL=https://insert-ref.com
+  #     - API_KEY=dummy-key
+  #     - HEALTH_URL=0.0.0.0:1333
+  #   ports:
+  #     - "1333:1333"
+
+  # chart-api:
+  #   image: innfi/trady-chart:0.0.1
+  #   depends_on:
+  #     - redis-server
+  #     - es-server
+  #   environment:
+  #     - PORT=1330
+  #     - REDIS_URL=redis://redis-server:6379
+  #     - MQ_URL=amqp://rabbitmq-server:5672
+  #     - ES_URL=es://es-server:9200
+  #   ports:
+  #     - "1330:1330"
     
-  port-api:
-    image: innfi/trady-port:latest
-    depends_on:
-      - rabbitmq-server
-      - mongo-server
-      - es-server
-    environment:
-      - PORT_QUEUE=port_queue
-      - MQ_URL=amqp://rabbitmq-server:5672
-      - ES_URL=es://es-server:9200
-      - MONGO_URL=mongodb://mongo-server:27017
-    ports:
-      - "3000:3000"
+  # port-api:
+  #   image: innfi/trady-port:0.0.1
+  #   depends_on:
+  #     - rabbitmq-server
+  #     - mongo-server
+  #     - es-server
+  #   environment:
+  #     - PORT_QUEUE=port_queue
+  #     - MQ_URL=amqp://rabbitmq-server:5672
+  #     - ES_URL=es://es-server:9200
+  #     - MONGO_URL=mongodb://mongo-server:27017
+  #   ports:
+  #     - "3000:3000"

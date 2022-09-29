@@ -1,3 +1,4 @@
 node_modules
 redis_data
 infra/compose/redis_data
+infra/compose/elasticsearch
