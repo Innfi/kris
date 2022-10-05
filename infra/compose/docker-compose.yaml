@@ -27,11 +27,15 @@ services:
     environment:
       - node.name=es-server1
       - cluster.name=es-cluster
-      - discovery.seed_hosts=es-server2
-      - cluster.initial_master_nodes=es-server1,es-server2
+      - discovery.seed_hosts=es-server2,es-server3
+      - cluster.initial_master_nodes=es-server1,es-server2,es-server3
       - "ES_JAVA_OPTS=-Xms512m -Xms512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
     volumes:
-      - ./elasticsearch/data01:/usr/share/elasticsearch/data
+      - data01:/usr/share/elasticsearch/data
     networks:
       - elastic
 
@@ -39,22 +43,48 @@ services:
     image: elasticsearch:7.17.6
     container_name: es-server2
     ports:
-      - "9201:9200"
       - "9301:9300"
     environment:
       - node.name=es-server2
       - cluster.name=es-cluster
-      - discovery.seed_hosts=es-server1
-      - cluster.initial_master_nodes=es-server1,es-server2
+      - discovery.seed_hosts=es-server1,es-server3
+      - cluster.initial_master_nodes=es-server1,es-server2,es-server3
       - "ES_JAVA_OPTS=-Xms512m -Xms512m"
     volumes:
-      - ./elasticsearch/data02:/usr/share/elasticsearch/data
+      - data02:/usr/share/elasticsearch/data
     networks:
       - elastic
 
-networks:
-  elastic:
-    driver: bridge
+  es-server3:
+    image: elasticsearch:7.17.6
+    container_name: es-server3
+    ports:
+      - "9302:9300"
+    environment:
+      - node.name=es-server3
+      - cluster.name=es-cluster
+      - discovery.seed_hosts=es-server1,es-server2
+      - cluster.initial_master_nodes=es-server1,es-server2,es-server3
+      - "ES_JAVA_OPTS=-Xms512m -Xms512m"
+    volumes:
+      - data03:/usr/share/elasticsearch/data
+    networks:
+      - elastic
+
+  kibana:
+    container_name: kibana
+    image: kibana:7.17.6
+    depends_on:
+      - es-server1
+      - es-server2
+      - es-server3
+    environment:
+      SERVER_NAME: kibana
+      ELASTICSEARCH_HOSTS: http://es-server1:9200
+    ports:
+      - "5601:5601"
+    networks:
+      - elastic
 
   # stock-tracker:
   #   image: innfi/stock-tracker:0.0.1
@@ -73,18 +103,18 @@ networks:
   #   ports:
   #     - "1333:1333"
 
-  # chart-api:
-  #   image: innfi/trady-chart:0.0.1
-  #   depends_on:
-  #     - redis-server
-  #     - es-server
-  #   environment:
-  #     - PORT=1330
-  #     - REDIS_URL=redis://redis-server:6379
-  #     - MQ_URL=amqp://rabbitmq-server:5672
-  #     - ES_URL=es://es-server:9200
-  #   ports:
-  #     - "1330:1330"
+  chart-api:
+    image: innfi/trady-chart:0.0.1
+    depends_on:
+      - redis-server
+      - es-server
+    environment:
+      - PORT=1330
+      - REDIS_URL=redis://redis-server:6379
+      - MQ_URL=amqp://rabbitmq-server:5672
+      - ES_URL=http://127.0.0.1:9200
+    ports:
+      - "1330:1330"
     
   # port-api:
   #   image: innfi/trady-port:0.0.1
@@ -99,3 +129,17 @@ networks:
   #     - MONGO_URL=mongodb://mongo-server:27017
   #   ports:
   #     - "3000:3000"
+
+volumes:
+  data01:
+    driver: local
+  data02:
+    driver: local
+  data03:
+    driver: local
+  kibana:
+    driver: local
+
+networks:
+  elastic:
+    driver: bridge
