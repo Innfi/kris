@@ -2,7 +2,7 @@ name: action.port
 on:
   push:
     branches:
-      - release
+      - port/release
     paths:
       - "port-api/**"
       - .github/workflows/action.port.yaml

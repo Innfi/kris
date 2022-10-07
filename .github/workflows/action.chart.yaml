@@ -2,7 +2,7 @@ name: action.chart
 on:
   push:
     branches:
-      - release
+      - chart/release
     paths:
       - "chart-api/**"
       - .github/workflows/action.chart.yaml

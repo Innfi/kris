@@ -2,7 +2,7 @@ name: action.frontend
 on:
   push:
     branches:
-      - release
+      - frontend/release
     paths:
       - "trady-frontend/**"
       - .github/workflows/action.frontend.yaml
