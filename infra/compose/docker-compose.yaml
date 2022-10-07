@@ -18,56 +18,67 @@ services:
     ports:
       - "27017:27017"
 
-  es-server1:
+  es01:
     image: elasticsearch:7.17.6
-    container_name: es-server1
-    ports:
-      - "9200:9200"
-      - "9300:9300"
+    container_name: es01
     environment:
-      - node.name=es-server1
-      - cluster.name=es-cluster
-      - discovery.seed_hosts=es-server2,es-server3
-      - cluster.initial_master_nodes=es-server1,es-server2,es-server3
-      - "ES_JAVA_OPTS=-Xms512m -Xms512m"
+      - node.name=es01
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=es02,es03
+      - cluster.initial_master_nodes=es01,es02,es03
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
       memlock:
         soft: -1
         hard: -1
     volumes:
       - data01:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300
     networks:
       - elastic
 
-  es-server2:
+  es02:
     image: elasticsearch:7.17.6
-    container_name: es-server2
-    ports:
-      - "9301:9300"
+    container_name: es02
     environment:
-      - node.name=es-server2
-      - cluster.name=es-cluster
-      - discovery.seed_hosts=es-server1,es-server3
-      - cluster.initial_master_nodes=es-server1,es-server2,es-server3
-      - "ES_JAVA_OPTS=-Xms512m -Xms512m"
+      - node.name=es02
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=es01,es03
+      - cluster.initial_master_nodes=es01,es02,es03
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
     volumes:
       - data02:/usr/share/elasticsearch/data
+    ports:
+      - 9301:9300
     networks:
       - elastic
 
-  es-server3:
+  es03:
     image: elasticsearch:7.17.6
-    container_name: es-server3
-    ports:
-      - "9302:9300"
+    container_name: es03
     environment:
-      - node.name=es-server3
-      - cluster.name=es-cluster
-      - discovery.seed_hosts=es-server1,es-server2
-      - cluster.initial_master_nodes=es-server1,es-server2,es-server3
-      - "ES_JAVA_OPTS=-Xms512m -Xms512m"
+      - node.name=es03
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=es01,es02
+      - cluster.initial_master_nodes=es01,es02,es03
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
     volumes:
       - data03:/usr/share/elasticsearch/data
+    ports:
+      - 9302:9300
     networks:
       - elastic
 
@@ -75,17 +86,17 @@ services:
     container_name: kibana
     image: kibana:7.17.6
     depends_on:
-      - es-server1
-      - es-server2
-      - es-server3
+      - es01
+      - es02
+      - es03
     environment:
       SERVER_NAME: kibana
-      ELASTICSEARCH_HOSTS: http://es-server1:9200
+      ELASTICSEARCH_HOSTS: http://es01:9200
     ports:
-      - "5601:5601"
+      - 5601:5601
     networks:
       - elastic
-
+  
   # stock-tracker:
   #   image: innfi/stock-tracker:0.0.1
   #   depends_on:
@@ -104,10 +115,10 @@ services:
   #     - "1333:1333"
 
   chart-api:
-    image: innfi/trady-chart:0.0.1
+    image: trady-chart:0.0.1
     depends_on:
       - redis-server
-      - es-server
+      - es01
     environment:
       - PORT=1330
       - REDIS_URL=redis://redis-server:6379
