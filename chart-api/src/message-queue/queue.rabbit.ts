@@ -25,19 +25,26 @@ export class MessageQueueRabbit implements MessageQueueBase {
   async sendTrackRequest(
     payload: Readonly<EventPayloadTrackStockRequest>,
   ): Promise<SendEventResult> {
-    this.logger.info(`RabbitMQService.sendTrackRequest] `);
-    // TODO: retry logic as rabbitmq server takes time to run
-    const conn = await amqplib.connect(mqUrl);
+    try {
+      this.logger.info(`MessageQueueRabbit.sendTrackRequest] `);
+      // TODO: retry logic as rabbitmq server takes time to run
+      const conn = await amqplib.connect(mqUrl);
 
-    const channel = await conn.createChannel();
+      const channel = await conn.createChannel();
 
-    const sendResult = channel.sendToQueue(
-      trackRequestQueueName,
-      Buffer.from(JSON.stringify(payload)),
-    );
+      const sendResult = channel.sendToQueue(
+        trackRequestQueueName,
+        Buffer.from(JSON.stringify(payload)),
+      );
 
-    if (sendResult) return { err: 'ok' };
+      if (sendResult) return { err: 'ok' };
 
-    return { err: 'send event failed' };
+      return { err: 'send event failed' };
+    } catch (err: unknown) {
+      this.logger.error(
+        `MessageQueueRabbit.sendTrackRequest] ${(err as Error).stack}`,
+      );
+      return { err: 'server error' };
+    }
   }
 }

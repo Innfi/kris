@@ -9,12 +9,13 @@ import {
   JsonController,
 } from 'routing-controllers';
 
+import { TradyLogger } from './common/logger';
 import { ChartService } from './service';
 
 @Service()
 @JsonController('/chart')
 export class ChartController {
-  constructor(protected service: ChartService) {}
+  constructor(protected service: ChartService, protected logger: TradyLogger) {}
 
   @Get('/intraday/:symbol')
   async getIntradayChart(
@@ -23,6 +24,7 @@ export class ChartController {
     @Param('symbol') symbol: string,
     @QueryParam('interval') interval: string,
   ): Promise<Response> {
+    this.logger.info(`ChartController.getIntradayChart] ${symbol}:${interval}`);
     const result = await this.service.loadChart({
       chartType: 'intraday',
       symbol,
@@ -38,6 +40,7 @@ export class ChartController {
     @Res() res: Response,
     @Param('symbol') symbol: string,
   ): Promise<Response> {
+    this.logger.info(`ChartController.getDailyChart] ${symbol}`);
     const result = await this.service.loadChart({
       chartType: 'daily',
       symbol,
@@ -52,6 +55,7 @@ export class ChartController {
     @Res() res: Response,
     @Param('symbol') symbol: string,
   ): Promise<Response> {
+    this.logger.info(`ChartController.getDailyChart] ${symbol}`);
     const result = await this.service.loadChart({
       chartType: 'weekly',
       symbol,
@@ -66,6 +70,7 @@ export class ChartController {
     @Res() res: Response,
     @Param('symbol') symbol: string,
   ): Promise<Response> {
+    this.logger.info(`ChartController.getMonthlyChart] ${symbol}`);
     const result = await this.service.loadChart({
       chartType: 'monthly',
       symbol,

@@ -49,10 +49,15 @@ export class ChartService {
   ): Promise<Readonly<LoadChartDataResult>> {
     try {
       const key = toChartKey(reqInput);
+      this.logger.info(`ChartService.loadChart] ${key}`);
 
       const loadResult = await this.repo.loadChartData(key);
-      if (loadResult.err === 'ok') return loadResult;
+      if (loadResult.err === 'ok') {
+        this.logger.info(`ChartService.loadChart] ${key}: data from cache`);
+        return loadResult;
+      }
 
+      this.logger.info(`ChartService.loadChart] ${key}: sending track request`);
       const sendResult = await this.mqService.sendTrackRequest(
         toEventPayloadTrackStockRequest(reqInput),
       );

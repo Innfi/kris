@@ -11,6 +11,8 @@ const esUrl = process.env.ES_URL ? process.env.ES_URL : 'http://localhost:9200';
 
 @Service()
 export class TradyLogger {
+  readonly apiName = 'Trady.ChartAPI';
+
   protected esTransportOptions: ElasticsearchTransportOptions = {
     level: 'info',
     clientOpts: { node: esUrl },
@@ -34,15 +36,24 @@ export class TradyLogger {
     );
   }
 
-  info(msg: unknown) {
-    this.logger.info(msg);
+  info(msg: string) {
+    this.logger.info({
+      actor: this.apiName,
+      msg,
+    });
   }
 
-  debug(msg: unknown) {
-    this.logger.info(msg);
+  debug(msg: string) {
+    this.logger.info({
+      actor: this.apiName,
+      msg,
+    });
   }
 
-  error(msg: unknown) {
-    this.logger.error(msg);
+  error(msg: string) {
+    this.logger.error({
+      actor: this.apiName,
+      msg,
+    });
   }
 }
