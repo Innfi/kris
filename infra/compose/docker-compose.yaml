@@ -7,16 +7,22 @@ services:
       - ./redis_data:/data
     ports:
       - "6379:6379"
+    networks:
+      - elastic
 
   rabbitmq-server:
     image: rabbitmq
     ports:
       - "5672:5672"
+    networks:
+      - elastic
 
   mongo-server:
     image: mongo
     ports:
       - "27017:27017"
+    networks:
+      - elastic
 
   es01:
     image: elasticsearch:7.17.6
@@ -114,18 +120,18 @@ services:
   #   ports:
   #     - "1333:1333"
 
-  chart-api:
-    image: trady-chart:0.0.1
-    depends_on:
-      - redis-server
-      - es01
-    environment:
-      - PORT=1330
-      - REDIS_URL=redis://redis-server:6379
-      - MQ_URL=amqp://rabbitmq-server:5672
-      - ES_URL=http://127.0.0.1:9200
-    ports:
-      - "1330:1330"
+  # chart-api:
+  #   image: trady-chart:0.0.2
+  #   depends_on:
+  #     - redis-server
+  #     - es01
+  #   environment:
+  #     - PORT=1330
+  #     - REDIS_URL=redis://redis-server:6379
+  #     - MQ_URL=amqp://rabbitmq-server:5672
+  #     - ES_URL=http://127.0.0.1:9200
+  #   ports:
+  #     - "1330:1330"
     
   # port-api:
   #   image: innfi/trady-port:0.0.1

@@ -10,6 +10,8 @@ useContainer(Container);
 
 dotenv.config();
 
+const port = process.env.PORT ? process.env.PORT : 1330;
+
 @Service()
 export class App {
   app: any;
@@ -17,7 +19,7 @@ export class App {
   constructor(protected tradyLogger: TradyLogger) {
     this.app = express();
 
-    this.app = useExpressServer({
+    useExpressServer(this.app, {
       cors: true,
       controllers: [ChartController],
     });
@@ -32,9 +34,8 @@ export class App {
   }
 
   start() {
-    const port = process.env.PORT;
     this.app.listen(port, () => {
-      this.tradyLogger.info(`Trady.stat] listening ${port}`);
+      this.tradyLogger.info(`listening ${port}`);
     });
   }
 }

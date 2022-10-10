@@ -11,7 +11,7 @@ const esUrl = process.env.ES_URL ? process.env.ES_URL : 'http://localhost:9200';
 
 @Service()
 export class TradyLogger {
-  readonly apiName = 'Trady.ChartAPI';
+  readonly logPrefix = 'chart-api';
 
   protected esTransportOptions: ElasticsearchTransportOptions = {
     level: 'info',
@@ -21,39 +21,45 @@ export class TradyLogger {
   protected esTransport = new ElasticsearchTransport(this.esTransportOptions);
 
   protected logger: Readonly<winston.Logger> = winston.createLogger({
-    transports: [this.esTransport],
+    transports: [
+      this.esTransport,
+      new winston.transports.Console({
+        handleExceptions: true,
+      })
+    ],
   });
 
   constructor() {
-    this.logger.info('TradyLogger] ');
-
-    if (process.env.NODE_ENV !== 'local') return;
-
-    this.logger.add(
-      new winston.transports.Console({
-        format: winston.format.simple(),
-      }),
-    );
+    this.logger.info('logger init');
   }
 
-  info(msg: string) {
+  info(msg: string, actor?: string) {
     this.logger.info({
-      actor: this.apiName,
-      msg,
+      message: `${this.logPrefix}] ${msg}`,
+      meta: {
+        app: this.logPrefix,
+        actor,
+      }
     });
   }
 
-  debug(msg: string) {
-    this.logger.info({
-      actor: this.apiName,
-      msg,
+  debug(msg: string, actor?: string) {
+    this.logger.debug({
+      message: `${this.logPrefix}] ${msg}`,
+      meta: {
+        app: this.logPrefix,
+        actor,
+      }
     });
   }
 
-  error(msg: string) {
+  error(msg: string, actor?: string) {
     this.logger.error({
-      actor: this.apiName,
-      msg,
+      message: `${this.logPrefix}] ${msg}`,
+      meta: {
+        app: this.logPrefix,
+        actor,
+      }
     });
   }
 }
