@@ -6,7 +6,9 @@ import { EventListener, EventPayload, EventQueue } from './types';
 
 const mqUrl = process.env.MQ_URL ? process.env.MQ_URL : 'amqp://127.0.0.1:5672';
 
-const queueName = process.env.PORT_QUEUE ? process.env.PORT_QUEUE : 'port_queue';
+const queueName = process.env.PORT_QUEUE
+  ? process.env.PORT_QUEUE
+  : 'port_queue';
 
 const createEventQueue = () =>
   new EventQueueRabbit(mqUrl, Container.get(TradyLogger));

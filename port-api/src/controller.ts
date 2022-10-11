@@ -10,6 +10,7 @@ import {
   Param,
 } from 'routing-controllers';
 
+import { TradyLogger } from './common/logger';
 import {
   AddPortfolioInput,
   LoadPortfolioResult,
@@ -20,7 +21,7 @@ import { PortService } from './service';
 @Service()
 @JsonController('/port')
 export class PortController {
-  constructor(private service: PortService) {}
+  constructor(private service: PortService, protected logger: TradyLogger) {}
 
   @Post('/add')
   async addPortfolio(
@@ -28,9 +29,14 @@ export class PortController {
     @Res() res: Response,
     @Body() body: AddPortfolioInput,
   ): Promise<Response> {
+    const { email, symbols } = body;
+
+    this.logger.info(
+      `PortController.addPortfolio] ${email}: ${JSON.stringify(symbols)}`,
+    );
     const result: SavePortfolioResult = await this.service.savePort(
-      body.email,
-      body.symbols,
+      email,
+      symbols,
     );
 
     if (result.err !== 'ok') return res.status(400).send({ err: result.err });
@@ -44,6 +50,7 @@ export class PortController {
     @Res() res: Response,
     @Param('email') email: string, // TODO: need auth
   ): Promise<Response> {
+    this.logger.info(`PortController.listPortfolio] ${email}`);
     const result: LoadPortfolioResult = await this.service.listPort(email);
 
     if (result.err !== 'ok') return res.status(400).send({ err: result.err });

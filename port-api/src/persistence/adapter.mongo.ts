@@ -41,6 +41,7 @@ export class AdapterMongo implements AdapterBase {
 
   // connect
   connect() {
+    this.logger.info(`AdapterMongo.connect]`);
     mongoose.connect(this.dbUrl, this.options, () => {
       this.logger.info('AdapterMongo] connected');
     });

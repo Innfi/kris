@@ -103,6 +103,33 @@ services:
     networks:
       - elastic
   
+  chart-api:
+    image: innfi/trady-chart:latest
+    depends_on:
+      - redis-server
+      - es01
+    environment:
+      - PORT=1330
+      - REDIS_URL=redis://127.0.0.1:6379
+      - MQ_URL=amqp://127.0.0.1:5672
+      - ES_URL=http://127.0.0.1:9200
+    ports:
+      - "1330:1330"
+    
+  # port-api:
+  #   image: innfi/trady-port:0.0.1
+  #   depends_on:
+  #     - rabbitmq-server
+  #     - mongo-server
+  #     - es-server
+  #   environment:
+  #     - PORT_QUEUE=port_queue
+  #     - MQ_URL=amqp://rabbitmq-server:5672
+  #     - ES_URL=es://es-server:9200
+  #     - MONGO_URL=mongodb://mongo-server:27017
+  #   ports:
+  #     - "3000:3000"
+
   # stock-tracker:
   #   image: innfi/stock-tracker:0.0.1
   #   depends_on:
@@ -119,33 +146,6 @@ services:
   #     - HEALTH_URL=0.0.0.0:1333
   #   ports:
   #     - "1333:1333"
-
-  # chart-api:
-  #   image: trady-chart:0.0.2
-  #   depends_on:
-  #     - redis-server
-  #     - es01
-  #   environment:
-  #     - PORT=1330
-  #     - REDIS_URL=redis://redis-server:6379
-  #     - MQ_URL=amqp://rabbitmq-server:5672
-  #     - ES_URL=http://127.0.0.1:9200
-  #   ports:
-  #     - "1330:1330"
-    
-  # port-api:
-  #   image: innfi/trady-port:0.0.1
-  #   depends_on:
-  #     - rabbitmq-server
-  #     - mongo-server
-  #     - es-server
-  #   environment:
-  #     - PORT_QUEUE=port_queue
-  #     - MQ_URL=amqp://rabbitmq-server:5672
-  #     - ES_URL=es://es-server:9200
-  #     - MONGO_URL=mongodb://mongo-server:27017
-  #   ports:
-  #     - "3000:3000"
 
 volumes:
   data01:

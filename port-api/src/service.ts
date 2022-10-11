@@ -38,7 +38,7 @@ export class PortService implements EventListener {
 
   // handleEvent implements EventListener method
   async handleEvent(payload: Readonly<EventPayload>): Promise<void> {
-    this.logger.info(`payload: ${JSON.stringify(payload)}`);
+    this.logger.info(`PortService.handleEvent] : ${JSON.stringify(payload)}`);
 
     // if one more cases added, use factory.
     switch (payload.payloadType) {
@@ -57,7 +57,9 @@ export class PortService implements EventListener {
   protected async handleRegisterPort(
     payload: Readonly<EventPayload>,
   ): Promise<void> {
-    this.logger.info(`handleRegisterPort`);
+    this.logger.info(
+      `PortService.handleRegisterPort] ${JSON.stringify(payload)}`,
+    );
 
     try {
       // what if the process fails?
@@ -75,7 +77,7 @@ export class PortService implements EventListener {
   protected async handleClearPort(
     payload: Readonly<EventPayload>,
   ): Promise<void> {
-    this.logger.info(`handleClearPort`);
+    this.logger.info(`PortService.handleClearPort] ${JSON.stringify(payload)}`);
 
     try {
       // what if the process fails?

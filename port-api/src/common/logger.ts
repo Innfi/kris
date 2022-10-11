@@ -7,13 +7,12 @@ import {
 import dotenv from 'dotenv';
 
 dotenv.config();
-
-const esUrl = process.env.ES_URL
-  ? process.env.ES_URL
-  : 'http://localhost://9200';
+const esUrl = process.env.ES_URL ? process.env.ES_URL : 'http://localhost:9200';
 
 @Service()
 export class TradyLogger {
+  readonly logPrefix = 'port-api';
+
   protected esTransportOptions: ElasticsearchTransportOptions = {
     level: 'info',
     clientOpts: { node: esUrl },
@@ -26,28 +25,36 @@ export class TradyLogger {
   });
 
   constructor() {
-    this.logger.info('TradyLogger] ');
-
-    // if (!esUrl) throw new Error(`elasticsearch url invalid`);
-
-    if (process.env.ENV !== 'local') return;
-
-    this.logger.add(
-      new winston.transports.Console({
-        format: winston.format.simple(),
-      }),
-    );
+    this.logger.info('port-api: logger init');
   }
 
-  info(msg: unknown) {
-    this.logger.info(msg);
+  info(msg: string, actor?: string) {
+    this.logger.info({
+      message: `${this.logPrefix}] ${msg}`,
+      meta: {
+        app: this.logPrefix,
+        actor,
+      },
+    });
   }
 
-  debug(msg: unknown) {
-    this.logger.info(msg);
+  debug(msg: string, actor?: string) {
+    this.logger.debug({
+      message: `${this.logPrefix}] ${msg}`,
+      meta: {
+        app: this.logPrefix,
+        actor,
+      },
+    });
   }
 
-  error(msg: unknown) {
-    this.logger.error(msg);
+  error(msg: string, actor?: string) {
+    this.logger.error({
+      message: `${this.logPrefix}] ${msg}`,
+      meta: {
+        app: this.logPrefix,
+        actor,
+      },
+    });
   }
 }

@@ -30,7 +30,7 @@ export class TradyLogger {
   });
 
   constructor() {
-    this.logger.info('logger init');
+    this.logger.info('chart-api: logger init');
   }
 
   info(msg: string, actor?: string) {
