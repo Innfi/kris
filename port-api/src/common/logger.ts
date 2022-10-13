@@ -21,7 +21,12 @@ export class TradyLogger {
   protected esTransport = new ElasticsearchTransport(this.esTransportOptions);
 
   protected logger: Readonly<winston.Logger> = winston.createLogger({
-    transports: [this.esTransport],
+    transports: [
+      this.esTransport,
+      new winston.transports.Console({
+        handleExceptions: true,
+      }),
+    ],
   });
 
   constructor() {

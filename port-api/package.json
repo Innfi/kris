@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha -r ts-node/register --exit test/*.ts",
+    "dev": "npx ts-node src/index.ts",
     "build": "rimraf dist && tsc --build",
     "start": "node dist/src/index.js",
     "pre": "npx prettier --write src",

@@ -116,19 +116,16 @@ services:
     ports:
       - "1330:1330"
     
-  # port-api:
-  #   image: innfi/trady-port:0.0.1
-  #   depends_on:
-  #     - rabbitmq-server
-  #     - mongo-server
-  #     - es-server
-  #   environment:
-  #     - PORT_QUEUE=port_queue
-  #     - MQ_URL=amqp://rabbitmq-server:5672
-  #     - ES_URL=es://es-server:9200
-  #     - MONGO_URL=mongodb://mongo-server:27017
-  #   ports:
-  #     - "3000:3000"
+  port-api:
+    image: innfi/trady-port:latest
+    depends_on:
+      - rabbitmq-server
+      - mongo-server
+      - es-server
+    environment:
+      - MONGO_URL=mongodb://127.0.0.1:27017
+    ports:
+      - "3000:3000"
 
   # stock-tracker:
   #   image: innfi/stock-tracker:0.0.1
