@@ -127,22 +127,22 @@ services:
     ports:
       - "3000:3000"
 
-  # stock-tracker:
-  #   image: innfi/stock-tracker:0.0.1
-  #   depends_on:
-  #     - redis-server
-  #     - rabbitmq-server
-  #   environment:
-  #     - MODE=PROD
-  #     - REDIS_URL=redis://redis-server:6379
-  #     - MQ_URL=amqp://rabbitmq-server:5672
-  #     - TRACK_REQ_NAME=track_stock_register
-  #     - EMITTER_NAME=trady_tracker_event
-  #     - REF_URL=https://insert-ref.com
-  #     - API_KEY=dummy-key
-  #     - HEALTH_URL=0.0.0.0:1333
-  #   ports:
-  #     - "1333:1333"
+  stock-tracker:
+    image: innfi/stock-tracker:latest
+    depends_on:
+      - redis-server
+      - rabbitmq-server
+    environment:
+      - MODE=PROD
+      - REDIS_URL=redis://redis-server:6379
+      - MQ_URL=amqp://rabbitmq-server:5672
+      - TRACK_REQ_NAME=track_stock_register
+      - EMITTER_NAME=trady_tracker_event
+      - REF_URL=https://insert-ref.com
+      - API_KEY=dummy-key
+      - HEALTH_URL=0.0.0.0:1333
+    ports:
+      - "1333:1333"
 
 volumes:
   data01:
