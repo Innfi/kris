@@ -1,0 +1,42 @@
+version: "3"
+services:
+  chart-api:
+    image: innfi/trady-chart:latest
+    # depends_on:
+    #   - redis-server
+    #   - es01
+    environment:
+      - PORT=1330
+      - REDIS_URL=redis://127.0.0.1:6379
+      - MQ_URL=amqp://127.0.0.1:5672
+      - ES_URL=http://127.0.0.1:9200
+    ports:
+      - "1330:1330"
+    
+  port-api:
+    image: innfi/trady-port:latest
+    # depends_on:
+    #   - rabbitmq-server
+    #   - mongo-server
+    #   - es01
+    environment:
+      - MONGO_URL=mongodb://127.0.0.1:27017
+    ports:
+      - "3000:3000"
+
+  stock-tracker:
+    image: innfi/stock-tracker:latest
+    # depends_on:
+    #   - redis-server
+    #   - rabbitmq-server
+    environment:
+      - MODE=PROD
+      - REDIS_URL=redis://127.0.0.1:6379
+      - MQ_URL=amqp://127.0.0.1:5672
+      - TRACK_REQ_NAME=track_stock_register
+      - EMITTER_NAME=trady_tracker_event
+      - REF_URL=https://insert-ref.com
+      - API_KEY=dummy-key
+      - HEALTH_URL=0.0.0.0:1333
+    ports:
+      - "1333:1333"
