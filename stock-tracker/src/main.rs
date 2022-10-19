@@ -14,7 +14,7 @@ async fn main() -> std::io::Result<()> {
   let new_logger_instance = Logger::new("http://localhost:9200");
   let _ = new_logger_instance.info(LogPayload {
     msg: "test log"
-  });
+  }).await;
 
   info!("start stock_tracker");
   let storage_redis = ChartStorageRedis::new();
