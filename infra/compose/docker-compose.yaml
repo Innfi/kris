@@ -90,18 +90,22 @@ services:
 
   logstash:
   image: logstash:7.17.6
+    container_name=logstash
     depends_on:
       - es01
       - es02
       - es03
+    environment:
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - ./logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
     ports:
       - "5044:5044"
       - "50000:50000/tcp"
       - "50000:50000/udp"
       - "9600:9600"
-    environment:
-      - node.name=es03
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    networks:
+      - elastic
 
   kibana:
     container_name: kibana
