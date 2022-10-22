@@ -1,28 +1,28 @@
 version: "3"
 services:
-  redis-server:
-    image: redis
-    volumes:
-      - ./redis_server.conf:/usr/local/etc/redis/redis.conf
-      - ./redis_data:/data
-    ports:
-      - "6379:6379"
-    networks:
-      - elastic
+  # redis-server:
+  #   image: redis
+  #   volumes:
+  #     - ./redis_server.conf:/usr/local/etc/redis/redis.conf
+  #     - ./redis_data:/data
+  #   ports:
+  #     - "6379:6379"
+  #   networks:
+  #     - elastic
 
-  rabbitmq-server:
-    image: rabbitmq
-    ports:
-      - "5672:5672"
-    networks:
-      - elastic
+  # rabbitmq-server:
+  #   image: rabbitmq
+  #   ports:
+  #     - "5672:5672"
+  #   networks:
+  #     - elastic
 
-  mongo-server:
-    image: mongo
-    ports:
-      - "27017:27017"
-    networks:
-      - elastic
+  # mongo-server:
+  #   image: mongo
+  #   ports:
+  #     - "27017:27017"
+  #   networks:
+  #     - elastic
 
   es01:
     image: elasticsearch:7.17.6
@@ -89,14 +89,15 @@ services:
       - elastic
 
   logstash:
-  image: logstash:7.17.6
-    container_name=logstash
+    image: logstash:7.17.6
+    container_name: logstash
     depends_on:
       - es01
       - es02
       - es03
     environment:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ELASTICSEARCH_HOSTS=http://localhost:9200"
     volumes:
       - ./logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
     ports:
@@ -104,8 +105,6 @@ services:
       - "50000:50000/tcp"
       - "50000:50000/udp"
       - "9600:9600"
-    networks:
-      - elastic
 
   kibana:
     container_name: kibana
