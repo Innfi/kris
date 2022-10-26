@@ -3,28 +3,43 @@ namespace: default
 # FIXME: generate url based on namespace and port
 
 redis:
-  image: redis:latest
-  replicaCount: 2
+  image: redis
+  replicaCount: 1
   port: 6379
   url: redis://redis.default.svc.cluster.local:6379
 
 mongo:
-  image: mongo:latest
-  replicaCount: 2
+  image: mongo
+  replicaCount: 1
   port: 27017
   url: mongodb://mongo.default.svc.cluster.local:27017
 
-elasticsearch:
-  image: elasticsearch:latest
-  replicaCount: 2
-  port: 9200
-  url: es://elasticsearch.default.svc.cluster.local:9200
+# elasticsearch:
+#   image: elasticsearch:7.17.6
+#   replicaCount: 2
+#   port: 9200
+#   url: es://elasticsearch.default.svc.cluster.local:9200
 
 rabbitmq:
   image: rabbitmq
   replicaCount: 1
   port: 5672
   url: amqp://rabbitmq.default.svc.cluster.local:5672
+
+chart-api:
+  image: innfi/trady-chart:latest
+  pullPolicy: Always
+  replicaCount: 1
+  port: 1330
+  redisUrl: redis://redis.default.svc.cluster.local:6379
+  mqUrl: amqp://rabbitmq.default.svc.cluster.local:5672
+
+port-api:
+  image: innfi/trady-port:latest
+  pullPolicy: Always
+  replicaCount: 1
+  port: 3000
+  mongoUrl: mongodb://mongo.default.svc.cluster.local:27017
 
 stock-tracker:
   image: innfi/stock-tracker:latest
