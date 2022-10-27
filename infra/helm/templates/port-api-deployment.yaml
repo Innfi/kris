@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: port-api
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.port-api.replicaCount }}
+  selector:
+    matchLabels:
+      name: port-api
+  template:
+    metadata:
+      labels:
+        name: port-api
+    spec:
+      containers:
+      - name: port-api-instance
+        image: {{ .Values.port-api.image }}
+        imagePullPolicy: {{ .Values.port-api.pullPolicy }}
+        env:
+        - name: REDIS_URL
+          value: {{ .Values.redis.url }}
+        - name: MQ_URL
+          value: {{ .Values.rabbitmq.url }}
+        ports:
+        - containerPort: {{ .Values.port-api.port }}
