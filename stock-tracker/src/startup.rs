@@ -17,14 +17,5 @@ pub fn run_http_server() -> Result<Server, std::io::Error> {
   .listen(listener)?
   .run();
 
-  //result;
-
   Ok(server)
-  // Ok(
-  //   HttpServer::new(move || {
-  //     App::new().route("/health_check", web::get().to(health_check))
-  //   })
-  //   .listen(listener)?
-  //   .run(),
-  // )
 }

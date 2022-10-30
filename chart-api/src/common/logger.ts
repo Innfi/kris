@@ -1,28 +1,28 @@
 import { Service } from 'typedi';
 import winston from 'winston';
-import {
-  ElasticsearchTransport,
-  ElasticsearchTransportOptions,
-} from 'winston-elasticsearch';
+// import {
+//   ElasticsearchTransport,
+//   ElasticsearchTransportOptions,
+// } from 'winston-elasticsearch';
 import dotenv from 'dotenv';
 
 dotenv.config();
-const esUrl = process.env.ES_URL ? process.env.ES_URL : 'http://localhost:9200';
+// const esUrl = process.env.ES_URL ? process.env.ES_URL : 'http://localhost:9200';
 
 @Service()
 export class TradyLogger {
   readonly logPrefix = 'chart-api';
 
-  protected esTransportOptions: ElasticsearchTransportOptions = {
-    level: 'info',
-    clientOpts: { node: esUrl },
-  };
+  // protected esTransportOptions: ElasticsearchTransportOptions = {
+  //   level: 'info',
+  //   clientOpts: { node: esUrl },
+  // };
 
-  protected esTransport = new ElasticsearchTransport(this.esTransportOptions);
+  // protected esTransport = new ElasticsearchTransport(this.esTransportOptions);
 
   protected logger: Readonly<winston.Logger> = winston.createLogger({
     transports: [
-      this.esTransport,
+      // this.esTransport,
       new winston.transports.Console({
         handleExceptions: true,
       })
