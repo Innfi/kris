@@ -34,6 +34,7 @@ A trade advisor to help stock trading decisions
 - [Typescript](https://www.typescriptlang.org/)
 - [TypeDI](https://github.com/typestack/typedi)
 - [Routing-controllers](https://github.com/typestack/routing-controllers)
+- [Rust](https://www.rust-lang.org)
 - [Tokio](https://tokio.rs/)
 - [Actix-web](https://actix.rs/)
 
