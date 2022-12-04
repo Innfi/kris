@@ -6,7 +6,7 @@ provider "aws" {
 
 locals {
   name            = "eks-innfi"
-  cluster_version = "1.21"
+  cluster_version = "1.23"
   region          = "ap-northeast-2"
 
   tags = {
