@@ -1,0 +1,14 @@
+namespace: default
+
+redis:
+  image: redis
+  replicaCount: 1
+  port: 6379
+  url: redis://redis.default.svc.cluster.local:6379
+
+# rabbitmq:
+#   image: rabbitmq
+#   replicaCount: 1
+#   port: 5672
+#   url: amqp://rabbitmq.default.svc.cluster.local:5672
+
