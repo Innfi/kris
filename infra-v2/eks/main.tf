@@ -55,7 +55,7 @@ module "vpc" {
 }
 
 module "eks" {
-source = "terraform-aws-modules/eks/aws"
+  source = "terraform-aws-modules/eks/aws"
 
   cluster_name                    = local.name
   cluster_version                 = local.cluster_version
@@ -96,4 +96,8 @@ source = "terraform-aws-modules/eks/aws"
   }
 
   tags = local.tags
+}
+
+module "ecr_trady" {
+  source = "./modules/ecr_trady"
 }

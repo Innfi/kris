@@ -5,3 +5,7 @@ output "from_eks" {
 output "from_vpc" {
   value = module.vpc.*
 }
+
+output "from_ecr" {
+  value = module.ecr_trady.*
+}
