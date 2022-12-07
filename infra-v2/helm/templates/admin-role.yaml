@@ -1,0 +1,33 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: k8s-admin-role
+  namespace: default
+rules:
+  - verbs:
+      - create
+      - delete
+      - describe
+      - get
+      - list
+      - patch
+      - update
+    apiGroups:
+      - ''
+      - apps
+      - batch
+      - extensions
+    resources:
+      - configmaps
+      - cronjobs
+      - deployments
+      - events
+      - ingresses
+      - jobs
+      - pods
+      - pods/attach
+      - pods/exec
+      - pods/log
+      - pods/portforward
+      - secrets
+      - services
