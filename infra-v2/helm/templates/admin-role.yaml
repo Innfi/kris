@@ -2,7 +2,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: k8s-admin-role
-  namespace: default
+  namespace: {{ .Values.namespace }}
 rules:
   - verbs:
       - create
@@ -28,6 +28,5 @@ rules:
       - pods/attach
       - pods/exec
       - pods/log
-      - pods/portforward
       - secrets
       - services
