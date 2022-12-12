@@ -16,7 +16,7 @@ async fn main() -> std::io::Result<()> {
   //   msg: "test log"
   // }).await;
 
-  info!("start stock_tracker");
+  info!("start stock_tracker (test for workflow trigger)");
   let storage_redis = ChartStorageRedis::new();
   let mut track_req_handler = TrackRequestHandler::new(&storage_redis);
   let mut event_runner = EventRunnerRabbitMQ::new(&mut track_req_handler);
