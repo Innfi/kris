@@ -12,13 +12,13 @@ rabbitmq:
   port: 5672
   url: amqp://rabbitmq.default.svc.cluster.local:5672
 
-# stock-tracker:
-#   image: innfi/stock-tracker:latest
-#   pullPolicy: Always
-#   replicaCount: 1
-#   port: 1333
-#   trackReqName: "track_stock_register"
-#   emitterName: "trady_tracker_event"
-#   refUrl: "https://insert-ref.com"
-#   apiKey: "dummy-key"
-#   healthUrl: "0.0.0.0:1333"
+tracker:
+  image: innfi/stock-tracker:latest
+  pullPolicy: Always
+  replicaCount: 1
+  port: 1333
+  trackReqName: "track_stock_register"
+  emitterName: "trady_tracker_event"
+  refUrl: "https://insert-ref.com"
+  apiKey: "dummy-key"
+  healthUrl: "0.0.0.0:1333"

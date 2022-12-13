@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: stock-tracker
+  name: tracker
   namespace: {{ .Values.namespace }}
 spec:
-  replicas: {{ .Values.stock-tracker.replicaCount }}
+  replicas: {{ .Values.tracker.replicaCount }}
   selector:
     matchLabels:
-      name: stock-tracker
+      name: tracker
   template:
     metadata:
       labels:
-        name: stock-tracker
+        name: tracker
     spec:
       containers:
-      - name: stock-tracker-instance
-        image: {{ .Values.stock-tracker.image }}
-        imagePullPolicy: {{ .Values.stock-tracker.pullPolicy }}
+      - name: tracker
+        image: {{ .Values.tracker.image }}
+        imagePullPolicy: {{ .Values.tracker.pullPolicy }}
         env:
         - name: MODE
           value: "PROD"
@@ -25,16 +25,16 @@ spec:
         - name: MQ_URL
           value: {{ .Values.rabbitmq.url }}
         - name: TRACK_REQ_NAME
-          value: {{ .values.stock-tracker.trackReqName }}
+          value: {{ .Values.tracker.trackReqName }}
         - name: EMITTER_NAME
-          value: {{ .values.stock-tracker.emitterName }}
+          value: {{ .Values.tracker.emitterName }}
         - name: REF_URL
-          value: {{ .values.stock-tracker.refUrl }}
+          value: {{ .Values.tracker.refUrl }}
         - name: API_KEY
-          value: {{ .values.stock-tracker.apiKey }}
+          value: {{ .Values.tracker.apiKey }}
         - name: HEALTH_URL
-          value: {{ .Values.mongo.healthUrl }}
-        - name: MQ_URL
-          value: {{ .Values.rabbitmq.url }}
+          value: {{ .Values.tracker.healthUrl }}
         ports:
-        - containerPort: {{ .Values.port }}
+        - containerPort: {{ .Values.tracker.port }}
+      imagePullSecrets:
+        - name: regcred

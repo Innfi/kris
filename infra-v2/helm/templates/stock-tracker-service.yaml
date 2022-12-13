@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: stock-tracker
+  name: tracker
   namespace: {{ .Values.namespace }}
 spec:
   selector:
-    name: stock-tracker
+    name: tracker
   type: LoadBalancer
   ports:
-  - port: {{ .Values.stock-tracker.port }}
-    targetPort: {{ .Values.trstock-trackerady.port }}
+  - port: {{ .Values.tracker.port }}
+    targetPort: {{ .Values.tracker.port }}
     protocol: TCP
