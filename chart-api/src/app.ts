@@ -28,6 +28,7 @@ export class App {
   }
 
   protected handleTest() {
+    this.tradyLogger.info(`App.handleTest] `);
     this.app.get('/', (_req: Request, res: Response) => {
       res.status(200).send({ err: 'ok' }).end();
     });

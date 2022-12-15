@@ -45,19 +45,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup Docker Buildx
-        uses: docker/setup-buildx-action@v1
+      - name: login to ecr
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Login
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build and push
-        uses: docker/build-push-action@v2
-        with:
-          context: ./chart-api
-          file: ./chart-api/Dockerfile
-          push: true
-          tags: docker.io/innfi/trady-chart:latest
+      - name: push to ecr
+        id: build-image
+        env: 
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: chart-api
+          IMAGE_TAG: latest
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ${{ github.run_number }} ./chart-api
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
