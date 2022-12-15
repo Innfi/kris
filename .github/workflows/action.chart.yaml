@@ -56,5 +56,5 @@ jobs:
           ECR_REPOSITORY: chart-api
           IMAGE_TAG: latest
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ${{ github.run_number }} ./chart-api
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t ${{ github.run_number }} ./chart-api
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
