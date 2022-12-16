@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: redis
+  name: mongo
   namespace: {{ .Values.namespace }}
 spec:
-  replicas: {{ .Values.redis.replicaCount }}
+  replicas: {{ .Values.mongo.replicaCount }}
   selector:
     matchLabels:
-      name: redis
+      name: mongo
   template:
     metadata:
       labels:
-        name: redis
+        name: mongo
     spec:
       containers:
       - name: leader
-        image: {{ .Values.redis.image }}
+        image: {{ .Values.mongo.image }}
         resources:
           requests:
             cpu: 200m
