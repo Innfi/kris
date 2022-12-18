@@ -2,20 +2,34 @@ namespace: default
 
 redis:
   image: redis
-  replicaCount: 1
+  replicaCount: 2
   port: 6379
   url: redis://redis.default.svc.cluster.local:6379
 
+mongo:
+  image: mongo
+  replicaCount: 2
+  port: 27017
+  url: mongodb://mongo.default.svc.cluster.local:27017
+
 rabbitmq:
   image: rabbitmq
-  replicaCount: 1
+  replicaCount: 2
   port: 5672
   url: amqp://rabbitmq.default.svc.cluster.local:5672
 
-tracker:
-  image: innfi/stock-tracker:latest
+chartapi:
+  image: chartapi #custom image
   pullPolicy: Always
-  replicaCount: 1
+  replicaCount: 2
+  port: 1330
+  redisUrl: redis://redis.default.svc.cluster.local:6379
+  mqUrl: amqp://rabbitmq.default.svc.cluster.local:5672
+
+tracker:
+  image: tracker #custom image
+  pullPolicy: Always
+  replicaCount: 2
   port: 1333
   trackReqName: "track_stock_register"
   emitterName: "trady_tracker_event"
