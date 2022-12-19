@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: portapi
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.portapi.replicaCount }}
+  selector:
+    matchLabels:
+      name: portapi
+  template:
+    metadata:
+      labels:
+        name: portapi
+    spec:
+      containers:
+      - name: portapi-instance
+        image: {{ .Values.portapi.image }}
+        imagePullPolicy: {{ .Values.portapi.pullPolicy }}
+        env:
+        - name: REDIS_URL
+          value: {{ .Values.redis.url }}
+        - name: MQ_URL
+          value: {{ .Values.rabbitmq.url }}
+        ports:
+        - containerPort: {{ .Values.portapi.port }}
+      imagePullSecrets:
+        - name: regcred

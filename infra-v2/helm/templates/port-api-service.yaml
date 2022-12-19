@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: portapi
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    name: portapi
+  type: LoadBalancer
+  ports:
+  - port: {{ .Values.portapi.port }}
+    targetPort: {{ .Values.portapi.port }}
+    procotol: TCP
+
+  

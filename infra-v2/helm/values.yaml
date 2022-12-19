@@ -26,6 +26,13 @@ chartapi:
   redisUrl: redis://redis.default.svc.cluster.local:6379
   mqUrl: amqp://rabbitmq.default.svc.cluster.local:5672
 
+portapi:
+  image: portapi #custom image
+  pullPolicy: Always
+  replicaCount: 1
+  port: 3000
+  mongoUrl: mongodb://mongo.default.svc.cluster.local:27017
+
 tracker:
   image: tracker #custom image
   pullPolicy: Always

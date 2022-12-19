@@ -36,12 +36,12 @@ spec:
           value: {{ .Values.tracker.healthUrl }}
         ports:
         - containerPort: {{ .Values.tracker.port }}
+        resources:
+          requests:
+            cpu: 200m
+            memory: 200Mi
+          limits:
+            cpu: 400m
+            memory: 400Mi
       imagePullSecrets:
         - name: regcred
-      resources:
-        requests:
-          cpu: 200m
-          memory: 200Mi
-        limits:
-          cpu: 400m
-          memory: 400Mi

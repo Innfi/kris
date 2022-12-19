@@ -23,13 +23,13 @@ spec:
         - name: MQ_URL
           value: {{ .Values.rabbitmq.url }}
         ports:
-        - containerPort: {{ .Values.chartapitracker.port }}
+        - containerPort: {{ .Values.chartapi.port }}
+        resources:
+          requests:
+            cpu: 200m
+            memory: 200Mi
+          limits:
+            cpu: 400m
+            memory: 400Mi
       imagePullSecrets:
         - name: regcred
-      resources:
-        requests:
-          cpu: 200m
-          memory: 200Mi
-        limits:
-          cpu: 400m
-          memory: 400Mi
