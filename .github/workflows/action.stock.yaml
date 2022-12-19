@@ -3,9 +3,6 @@ on:
   push:
     branches:
       - stock/release
-    paths:
-      - "stock-tracker/**"
-      - .github/workflows/action.stock.yaml
 
 defaults:
   run:
