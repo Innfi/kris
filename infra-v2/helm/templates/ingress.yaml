@@ -15,4 +15,11 @@ metadata:
             service: 
               name: chartapi
               port:
-                number: 1330
+                number: {{ .Values.chartapi.port }}
+        - pathType: prefix
+          path: "/port"
+          backend:
+            service:
+              name: portapi
+              port:
+                number: {{ .Values.portapi.port }}
