@@ -54,49 +54,73 @@ locals {
 #   tags = local.tags
 # }
 
-# module "eks" {
-#   source = "terraform-aws-modules/eks/aws"
+module "eks" {
+  source = "terraform-aws-modules/eks/aws"
 
-#   cluster_name                    = local.name
-#   cluster_version                 = local.cluster_version
-#   cluster_endpoint_private_access = true
-#   cluster_endpoint_public_access  = true
+  cluster_name                    = local.name
+  cluster_version                 = local.cluster_version
+  cluster_endpoint_private_access = true
+  cluster_endpoint_public_access  = true
 
-#   cluster_addons = {
-#     coredns = {
-#       resolve_conflicts = "OVERWRITE"
-#     }
-#     kube-proxy = {}
-#     vpc-cni = {
-#       resolve_conflicts = "OVERWRITE"
-#     }
-#   }
+  cluster_addons = {
+    coredns = {
+      resolve_conflicts = "OVERWRITE"
+    }
+    kube-proxy = {}
+    vpc-cni = {
+      resolve_conflicts = "OVERWRITE"
+    }
+  }
 
-#   cluster_encryption_config = [{
-#     provider_key_arn = aws_kms_key.eks.arn
-#     resources        = ["secrets"]
-#   }]
+  cluster_encryption_config = [{
+    provider_key_arn = aws_kms_key.eks.arn
+    resources        = ["secrets"]
+  }]
 
-#   vpc_id     = module.vpc.vpc_id
-#   subnet_ids = module.vpc.private_subnets
+  vpc_id     = module.vpc.vpc_id
+  subnet_ids = module.vpc.private_subnets
 
-#   eks_managed_node_groups = {
-#     basic = {
-#       name = "basic_node_group"
-#       min_size = 1
-#       desired_size = 2
-#       max_size= 3
-#       capacity_type = "SPOT"
+  eks_managed_node_groups = {
+    basic = {
+      name = "basic_node_group"
+      min_size = 1
+      desired_size = 2
+      max_size= 3
+      capacity_type = "SPOT"
 
-#       instance_types = ["t3.medium"]
-#       labels = {
-#         ClusterTag = local.tags.ClusterTag
-#       }
-#     }
-#   }
+      instance_types = ["t3.medium"]
+      labels = {
+        ClusterTag = local.tags.ClusterTag
+      }
+    }
+  }
 
-#   tags = local.tags
-# }
+  cluster_identity_providers = {
+    sts = {
+      client_id = "sts.amazonaws.com"
+    }
+  }
+
+  tags = local.tags
+}
+
+module "alb_controller_role" {
+  source = "terraform-aws-modules/iam/aws/modules/iam-assumable-role-with-oidc"
+
+  create_role = true
+
+  role_name        = "loadbalancer-controller-role"
+  role_path        = "/"
+  role_description = ""
+
+  provider_url = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
+  oidc_fully_qualified_subjects = [
+    "system:serviceaccount:kube-system:balancer"
+  ]
+  oidc_fully_qualified_audiences = [
+    "sts.amazonaws.com"
+  ]
+}
 
 module "ecr_trady" {
   source = "./modules/ecr_trady"
