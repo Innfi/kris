@@ -3,6 +3,9 @@ kind: Ingress
 metadata:
   name: trady-ingress
   annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/scheme: internet-facing
     nginx.ingress.kubernetes.io/rewrite-target: /
   spec:
     rules:
