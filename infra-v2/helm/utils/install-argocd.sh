@@ -1,3 +1,3 @@
 #!/bin/sh
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install argocd-release my-repo/argo-cd -n argocd
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/core-install.yaml
