@@ -14,51 +14,47 @@ locals {
   }
 }
 
-# resource "aws_kms_key" "eks" {
-#   description             = "EKS Secret Encryption Key"
-#   deletion_window_in_days = 7
-#   enable_key_rotation     = true
+module "ecr_trady" {
+  source = "./modules/ecr_trady"
+}
 
-#   tags = local.tags
-# }
+module "vpc" {
+  source = "terraform-aws-modules/vpc/aws"
+  version = "~> 3.0"
 
-# module "vpc" {
-#   source = "terraform-aws-modules/vpc/aws"
-#   version = "~> 3.0"
+  name = local.name
+  cidr = var.vpc_cidr
 
-#   name = local.name
-#   cidr = var.vpc_cidr
+  azs             = ["${local.region}a", "${local.region}b"]
+  private_subnets = var.private_subnets
+  public_subnets  = var.public_subnets
 
-#   azs             = ["${local.region}a", "${local.region}b"]
-#   private_subnets = var.private_subnets
-#   public_subnets  = var.public_subnets
+  enable_nat_gateway   = true
+  single_nat_gateway   = true
+  enable_dns_hostnames = true
 
-#   enable_nat_gateway   = true
-#   single_nat_gateway   = true
-#   enable_dns_hostnames = true
+  enable_flow_log                      = true
+  create_flow_log_cloudwatch_iam_role  = true
+  create_flow_log_cloudwatch_log_group = true
 
-#   enable_flow_log                      = true
-#   create_flow_log_cloudwatch_iam_role  = true
-#   create_flow_log_cloudwatch_log_group = true
+  public_subnet_tags = {
+    "kubernetes.io/cluster/${local.name}" = "shared"
+    "kubernetes.io/role/elb"              = 1
+  }
 
-#   public_subnet_tags = {
-#     "kubernetes.io/cluster/${local.name}" = "shared"
-#     "kubernetes.io/role/elb"              = 1
-#   }
+  private_subnet_tags = {
+    "kubernetes.io/cluster/${local.name}" = "shared"
+    "kubernetes.io/role/internal-elb"     = 1
+  }
 
-#   private_subnet_tags = {
-#     "kubernetes.io/cluster/${local.name}" = "shared"
-#     "kubernetes.io/role/internal-elb"     = 1
-#   }
-
-#   tags = local.tags
-# }
+  tags = local.tags
+}
 
 module "eks" {
   source = "terraform-aws-modules/eks/aws"
 
-  cluster_name                    = local.name
-  cluster_version                 = local.cluster_version
+  cluster_name = local.name
+  cluster_version = local.cluster_version
   cluster_endpoint_private_access = true
   cluster_endpoint_public_access  = true
 
@@ -72,10 +68,12 @@ module "eks" {
     }
   }
 
+  create_kms_key = true
   cluster_encryption_config = [{
-    provider_key_arn = aws_kms_key.eks.arn
     resources        = ["secrets"]
   }]
+  kms_key_description = "eks key"
+  kms_key_enable_default_policy = true
 
   vpc_id     = module.vpc.vpc_id
   subnet_ids = module.vpc.private_subnets
@@ -104,24 +102,9 @@ module "eks" {
   tags = local.tags
 }
 
-module "alb_controller_role" {
-  source = "terraform-aws-modules/iam/aws/modules/iam-assumable-role-with-oidc"
+# module "oidc_provider" {
+#   source = "./modules/oidc_provider"
 
-  create_role = true
-
-  role_name        = "loadbalancer-controller-role"
-  role_path        = "/"
-  role_description = ""
-
-  provider_url = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
-  oidc_fully_qualified_subjects = [
-    "system:serviceaccount:kube-system:balancer"
-  ]
-  oidc_fully_qualified_audiences = [
-    "sts.amazonaws.com"
-  ]
-}
-
-module "ecr_trady" {
-  source = "./modules/ecr_trady"
-}
+#   cert_fingerprint = ""
+#   issuer = module.eks.identity.0.oidc.0.issuer
+# }
